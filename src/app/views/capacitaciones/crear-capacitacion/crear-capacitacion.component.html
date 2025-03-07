@@ -1,0 +1,98 @@
+
+<h5 class="text-center ">Evaluacion del mes de  {{this.mes}} </h5>
+
+
+
+
+
+<div class="div">
+
+    <p-tabs value="0">
+
+    <p-tablist>
+        <p-tab value="0">Evaluacion Lider</p-tab>
+        <p-tab value="1">Evaluacion cgpower</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+        <p-tabpanel value="0">
+
+<div class="card mb-1">
+    <div class="card-body">
+        <div class="row">
+
+        <div class="col-md-6 ">
+        <p class="card-text"> Hola {{this.usuario.usuario}}   Bienvenido a la evaluacion del mes de  <strong>{{this.mes}}</strong>   Porfavor lee las instrucciones antes de seguir:  </p>
+        <ul class="card-list">
+            
+            <li class="card-list-item">1.Descarga el archivo de evaluacion</li>
+            <li class="card-list-item">2. completa el archivo de excel</li>
+            <li class="card-list-item">3. Sube el archivo de Excel completo</li>
+
+        </ul>
+        </div>
+        <!-- <div class="col-md-6 align-self-start">
+            <p>tipo de evaluacion:</p>
+        </div> -->
+        <div class="col-md-6 ">
+
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    Tipo de Evaluacion: <strong>Lider</strong>
+                </div>
+                <div class="col-md-12 mb-2">
+                    Nombre del Evaluador: <strong> {{this.usuario.nombre}} {{this.usuario.apellido_paterno}} {{this.usuario.apellido_materno}} </strong>
+                </div>
+                <div class="col-md-12 mb-2">
+                    Evalua a : <strong> {{this.jefeDirecto.jefe_nombre_completo}} </strong>
+                </div>
+                <div class="col-md-6">
+                      <a href="">  Descargar Evaluacion Excel</a>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+
+        <div class="col-md-4">
+
+        <h5 class="card-title">Subir archivo de Excel</h5>
+        <p class="card-text"> Subir solo 1 Archivo de excel   </p>
+        <p-toast />
+        </div>
+
+        <div class="col-md-4 ">
+            <p-fileupload  #fu mode="basic" chooseLabel="Escoger archivo" (onSelect)="onFileSelect($event)"
+             chooseIcon="pi pi-upload" name="demo[]"  accept=".xlsx, .xls" maxFileSize="1000000"
+             />
+             <p>{{ fileName || 'Ningún archivo seleccionado' }}</p>
+        </div>
+        <div class="col-md-4">
+            <p-button label="Subir Archivo"  (onClick)="uploadFile(fu)" severity="secondary" />
+        </div>
+
+        </div>
+    </div>
+</div>
+
+</p-tabpanel>
+
+
+<p-tabpanel value="1">
+
+    <app-crear-capacitacion-cgpower *ngIf="this.datosUsuario"  [esLider]="this.datosUsuario"></app-crear-capacitacion-cgpower>
+    
+</p-tabpanel>
+
+</p-tabpanels>
+
+
+</p-tabs>
+</div>
+

@@ -1,0 +1,125 @@
+
+<form [formGroup]="this.formEvaluacion" >
+<div *ngIf="(esLider=='Jefe' || esLider== 'Empleado y Jefe') && !todasPendientes" class="div">
+
+<div class="card mb-1">
+    <div class="card-body">
+        <div class="row">
+
+        <div class="col-md-6 ">
+        <p class="card-text"> Hola ! <strong> {{this.usuario.usuario}} </strong>   Bienvenido a la evaluacion del mes <strong> {{this.mes}} </strong>    Porfavor lee las instrucciones antes de seguir:  </p>
+        <ul class="card-list">
+            
+            <li class="card-list-item">1.Descarga el archivo de evaluacion</li>
+            <li class="card-list-item">2. completa el archivo de excel</li>
+            <li class="card-list-item">3. Sube el archivo de Excel completo</li>
+
+        </ul>
+        </div>
+        <!-- <div class="col-md-6 align-self-start">
+            <p>tipo de evaluacion:</p>
+        </div> -->
+        <div class="col-md-6 ">
+
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    Tipo de Evaluacion: <strong>cgpower</strong>
+                </div>
+                <div class="col-md-12 mb-2">
+                    Puesto: <strong> {{this.departamentoUsuario.puesto}} </strong>
+                </div>
+                <div class="col-md-12 mb-2">
+                    Nombre del Evaluador: <strong> {{this.usuario.nombre}} {{this.usuario.apellido_paterno}} {{this.usuario.apellido_materno}} </strong>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <!-- Evalua a : <span> <button class="btn btn-primary">Escoger</button>  </span> -->
+                    <label for="">Evaluar a </label>
+                        <select class="form-select" formControlName="usuario_evaluado_id">
+                            <option value="" selected>Selecciona a cgpower</option>
+                            <option *ngFor="let empleado of this.misEmpleados"  [value]="empleado.usuario_id">
+                                {{ empleado.nombre_empleado }}
+                            </option>
+                        </select>
+                </div>
+                <div *ngIf="this.usuarioAEvaluar && this.formEvaluacion.get('usuario_evaluado_id')?.valid" class="col-md-6">
+                      <a [href]="archivoDescargaUrl" target="_blank" rel="noopener noreferrer">Descargar Evaluación Excel</a>
+
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="card">
+
+    <div class="card-body">
+        <div class="row">
+
+        <div class="col-md-4">
+
+        <h5 class="card-title">Subir archivo de Excel</h5>
+        <p class="card-text"> Subir solo 1 Archivo de excel   </p>
+        <p-toast />
+        </div>
+
+        <div class="col-md-4 ">
+            <p-fileupload  #fu mode="basic"
+            (onSelect)="onFileSelect($event)"
+             chooseLabel="Escoger archivo" chooseIcon="pi pi-upload" name="demo[]"  accept=".xlsx, .xls" maxFileSize="1000000"  />
+             <p>{{ fileName || 'Ningún archivo seleccionado' }}</p>
+
+        </div>
+        <div class="col-md-4 ">
+            <p-button class="btn-custom" label="Subir Archivo" 
+             (onClick)="uploadFile(fu)" severity="secondary" />
+        </div>
+
+        </div>
+    </div>
+</div> -->
+
+<div  *ngIf="this.usuarioAEvaluar && this.formEvaluacion.get('usuario_evaluado_id')?.valid" class="card">
+    <div class="card-body">
+        <button type="button" (click)="irEvaluar()" class="btn btn-primary">Ir a evaluar</button>
+    </div>
+</div>
+</div>
+</form>
+
+<div *ngIf="esLider=='Empleado'"  class="alert alert-danger">
+    No puedes hacer evaluacion a cgpower ya que no eres jefe de algun departamento
+</div>
+
+
+
+<!-- {{this.formEvaluacion.get('usuario_evaluado_id')?.value}} -->
+
+
+<!-- para cuando ya tenga evaluado a una persona -->
+<div *ngIf="todasPendientes" class="alert alert-danger" >
+    ya has Evaluado a todos tus empleados en el mes de <strong> {{this.mes}} </strong>
+        <ul class="list-group">
+            <li *ngFor="let usuario of evaluacionesPendientes; let i = index"  class="list-group-item ">
+
+                <div class="row w-100">
+                    <div class="col-md-4"> <span class="me-3"><strong>{{ i + 1 }}.</strong></span>
+                        <strong>Nombre:</strong> {{ usuario.nombre_usuario }}</div>
+                    <div class="col-md-4"><strong>Puesto:</strong> puesto</div>
+                </div>
+
+            </li>
+        </ul>
+</div>
+
+<!-- simulacion de carga de archivo -->
+<div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Subiendo archivo, por favor espera...</p>
+  </div>
+
+  
+  

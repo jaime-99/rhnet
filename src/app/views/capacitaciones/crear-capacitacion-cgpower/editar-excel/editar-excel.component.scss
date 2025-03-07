@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top; /* Para que los textos se alineen arriba */
+    white-space: normal; /* Permitir saltos de línea */
+    word-wrap: break-word; /* Cortar palabras largas */
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .metric-row {
+    background-color: black;
+    color: white;
+  }
+  

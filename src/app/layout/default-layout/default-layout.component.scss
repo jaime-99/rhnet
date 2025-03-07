@@ -1,0 +1,69 @@
+:host {
+  .ng-scrollbar {
+    --scrollbar-padding: 1px;
+    --scrollbar-size: 5px;
+    --scrollbar-thumb-color: var(--cui-gray-500, #999);
+    --scrollbar-thumb-hover-color: var(--cui-gray-400, #999);
+    --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
+  }
+}
+
+/* Cambiar el color del sidebar */
+// ::ng-deep #sidebar1 {
+//   background-color: #003366; /* Cambiar el color de fondo */
+//   color: #ffffff; /* Cambiar el color del texto */
+// }
+
+// /* Cambiar el color de los items del menú en el sidebar */
+// ::ng-deep #sidebar1 .sidebar-nav {
+//   background-color: #004d80;
+// }
+
+
+
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item {
+//   transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+// }
+
+// /* Estilo para el enlace dentro de la nav-item */
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item a:hover {
+//   background-color: #005b99 !important;  /* Fondo al pasar el cursor */
+// }
+
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item .nav-dropdown > a:hover,
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item .nav-dropdown .nav-dropdown-item:hover {
+//   background-color: #005b99 !important;  /* Fondo al pasar el cursor */
+//   color: #ffffff !important;  /* Color de texto */
+// }
+
+/* Sobrescribir variables CSS para cambiar colores en el sidebar */
+.sidebar-dark {
+  --cui-body-color: #ffffff;  /* Color del texto en el sidebar */
+  --cui-body-bg: #005b99;     /* Color de fondo del sidebar */
+  --cui-emphasis-color: #ffffff; /* Color de énfasis (para items activos, etc.) */
+  --cui-secondary-color: rgba(255, 255, 255, 0.8);  /* Color de los iconos y texto secundario */
+  --cui-secondary-bg: #003f73; /* Fondo para los elementos secundarios (como submenús) */
+  --cui-tertiary-color: rgba(255, 255, 255, 0.6);  /* Color para elementos terciarios */
+  --cui-tertiary-bg: #002a54;  /* Fondo para elementos terciarios */
+  --cui-border-color: #004b8c;  /* Color de los bordes */
+}
+
+.sidebar-header{
+  background-color: white;
+}
+
+
+// ng-scrollbar css variables
+// .cui-scrollbar {
+//  --scrollbar-border-radius: 7px;
+//  --scrollbar-padding: 1px;
+//  --scrollbar-viewport-margin: 0;
+//  --scrollbar-track-color: transparent;
+//  --scrollbar-wrapper-color: transparent;
+//  --scrollbar-thumb-color: rgba(42, 6, 126, 0.2);
+//  --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color);
+//  --scrollbar-size: 5px;
+//  --scrollbar-hover-size: var(--scrollbar-size);
+//  --scrollbar-thumb-transition: height ease-out 150ms, width ease-out 150ms;
+//  --scrollbar-track-transition: height ease-out 150ms, width ease-out 150ms;
+// }

@@ -1,0 +1,223 @@
+<!-- <p>editar-excel works!</p>
+<div *ngIf="excelData.length > 0">
+    <table>
+      <tr *ngFor="let row of excelData">
+        <td *ngFor="let cell of row">{{ cell }}</td>
+      </tr>
+    </table>
+  </div>
+-->
+  <div *ngIf="excelData.length === 0">
+    <p>Cargando datos...</p>
+  </div>
+  
+
+   <div class="card m-1">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col">
+                        <h5>Evaluacion del mes de <p class="text-info"> {{this.mes}} </p> </h5>
+                        <p>Fecha Actual : 19/02/2025</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <h5>Nombre del Evaluador: {{this.usuario.nombre}} {{this.usuario.apellido_paterno}} {{this.usuario.apellido_materno}} </h5>
+                <div class="row ">
+                    <div class="col-md-6">
+                        <p>area: {{this.datosEvaluacion?.datosUsuarioActual?.departamento}} </p>
+                    </div>
+                    <div class="col">
+                        <p>puesto: {{this.datosEvaluacion?.datosUsuarioActual?.puesto}} </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5>Evalua a : {{this.datosEvaluacion?.usuarioAEvaluar?.nombre_usuario}}   </h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        area: {{this.datosEvaluacion?.usuarioAEvaluar?.departamento}}
+                    </div>
+                    <div class="col-md-6">
+                        puesto: {{this.datosEvaluacion?.usuarioAEvaluar?.puesto}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+
+   <table *ngIf="excelData.length > 0" border="1">
+    <thead>
+      <tr>
+        <th *ngFor="let header of headers">{{ header }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of excelData; let i = index">
+        <td *ngFor="let cell of row; let j = index">
+  
+          <!-- Si es la fila de "Promedio", en la tercera columna se coloca el cálculo -->
+          <ng-container *ngIf="row[1] === 'Promedio'">
+            <!-- Segunda columna: No mostrar botones -->
+            <ng-container *ngIf="j === 1">
+              {{ cell }}
+            </ng-container>
+  
+            <!-- Tercera columna: Mostrar el promedio calculado -->
+            <ng-container *ngIf="j === 2">
+              {{ calculateAverage() * 100 | number: '1.0-2' }}%
+            </ng-container>
+  
+            <!-- Otras columnas normales -->
+            <ng-container *ngIf="j !== 1 && j !== 2">
+              {{ cell }}
+            </ng-container>
+          </ng-container>
+  
+          <!-- Si NO es la fila de "Promedio" -->
+          <ng-container *ngIf="row[1] !== 'Promedio'">
+            <!-- Evaluación ✔️ ❌ solo en la columna correcta -->
+           
+            <ng-container *ngIf="headers[j] === 'EVALÚE A BASE DE %' && (cell === 0 || cell === 1)">
+              <button (click)="toggleEvaluation(i, j)">
+                {{ excelData[i][j] === 1 ? '✔️' : '❌' }}
+              </button>
+            </ng-container>
+            
+          
+            <!-- Celda normal (sin mostrar 'ninguno' en la columna de comentarios) -->
+            <ng-container *ngIf="headers[j] !== 'EVALÚE A BASE DE %'">
+              <!-- Si es la columna de comentarios, no mostrar 'ninguno' -->
+              <ng-container *ngIf="headers[j] === 'COMENTARIOS'">
+                <button type="button" (click)="openCommentModal(i, j)" class="btn btn-primary">
+                  Comentar
+                </button>
+                <span *ngIf="excelData[i][j] !== 'ninguno'">
+                  {{ excelData[i][j] }}
+                </span>
+              </ng-container>
+          
+              <!-- Mostrar otras celdas normalmente (excepto la columna de comentarios) -->
+              <ng-container *ngIf="headers[j] !== 'COMENTARIOS'">
+                {{ cell }}
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Modal de Bootstrap -->
+  <div class="modal" tabindex="-1" id="commentModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Comentario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <textarea [(ngModel)]="currentComment" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button (click)="saveComment()" type="button" class="btn btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" id="commentModalKpi">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Comentario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <textarea [(ngModel)]="currentComment" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button (click)="saveCommentKpi()" type="button" class="btn btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<hr>
+
+<h3>Evaluación KPI's</h3>
+<table *ngIf="kpiData.length > 0" border="1">
+  <thead>
+    <tr>
+      <th *ngFor="let header2 of headers2">{{ header2 }}</th> <!-- Encabezado para KPIs -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of kpiData; let i = index" [ngClass]="{'metric-row': isMetricRow(row)}">
+      <td *ngFor="let cell of row; let j = index">
+        <ng-container *ngIf="row[1] === 'Resultado'">
+          <!-- Tercera columna: Mostrar el promedio calculado -->
+          <ng-container *ngIf="j === 2">
+            {{ calculateCombinedAverage() | percent }}
+          </ng-container>
+         
+
+        </ng-container>
+        <!-- Si la columna no es 'EVALÚE A BASE DE %', solo mostramos el valor -->
+        <ng-container *ngIf="headers2[j] !== 'EVALÚE A BASE DE %'">
+          <ng-container *ngIf="headers2[j] === 'COMENTARIOS'">
+            <button type="button" (click)="openCommentModalKpi(i, j)" class="btn btn-primary">
+              Comentar
+            </button>
+            <span *ngIf="kpiData[i][j] !== 'ninguno'">
+              {{ kpiData[i][j] }}
+            </span>
+          </ng-container> 
+          <ng-container *ngIf="headers[j] !== 'COMENTARIOS'">
+            {{ cell }}
+          </ng-container>
+        </ng-container>
+
+        
+        <!-- Si la columna es 'EVALÚE A BASE DE %', mostramos el botón para cambiar entre ✔️ y ❌ -->
+        
+        <ng-container *ngIf="headers2[j] === 'EVALÚE A BASE DE %' && row[1] !== 'Resultado' && !isMetricRow(row) && (row[j] === 0 || row[j] === 1)">
+          <button (click)="toggleKpiEvaluation(i, j)">
+            {{ row[j] === 1 ? '✔️' : '❌' }}
+          </button>
+        </ng-container>
+        
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- <h4>Promedio de Evaluación: {{ calculateKpiAverage() | percent:'1.0-2' }}</h4> -->
+<h2>Promedio Final: {{ calculateCombinedAverage() | percent }}</h2>
+
+
+
+<!-- finalizar y despues guardar el promedio -->
+  <!-- <button (click)="guardarPromedio(true)" class="btn btn-primary">Finalizar</button> -->
+<!-- este es otro componente -->
+
+<app-envio-evaluacion  *ngIf="datosEvaluacion && kpiData?.length && excelData?.length"
+  [datosEvaluaciones]="datosEvaluacion"
+  [datosKpi]="kpiData"
+  [datosExcel]="excelData"
+  [promedio]="this.calculateCombinedAverage()"
+  >
+</app-envio-evaluacion>
+
+
+
+
+
+  

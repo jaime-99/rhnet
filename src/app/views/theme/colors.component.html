@@ -1,0 +1,55 @@
+
+<div class="container-fluid">
+
+
+  <div class="card mb-2 " >
+    <img src="" class="card-image-top" alt="">
+    <div class="card-body">
+      <h5 class="card-title">Ejemplo</h5>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+    <h5 class="card-title">Perfil</h5>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label for="">Nombre Completo</label>
+        <input type="text"  class="form-control" [value]="usuario.nombre + ' ' + usuario.apellido_paterno + ' ' + usuario.apellido_materno" disabled>
+      </div>
+      
+      <div class="col-md-6">
+        <label for="">Correo</label>
+        <input class="form-control" [formControl]="this.correo" [value]="usuario.correo" >
+      </div>
+      <div class="col-md-6">
+        <label for="">Area</label>
+        <input class="form-control" [value]="usuario.area" disabled >
+      </div>
+      <div class="col-md-6">
+        <label for="">Ciudad</label>
+        <input class="form-control"[value]="usuario.ciudad" disabled >
+      </div>
+      <div class="col-md-6">
+        <label for="">Empresa</label>
+        <input class="form-control" [value]="usuario.empresa" disabled >
+      </div>
+      <div class="col-md-6 mt-2">
+        <button class="btn btn-primary" type="button"
+         (click)="actualizarDatos($event)"
+         style="background-color: #0ab4df; border-color: #0ab4df;"
+
+          >Actualizar Datos</button>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+</div>
+
+</div>
+<p-confirmdialog />
+<p-toast />
