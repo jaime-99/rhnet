@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
+import { DefaultLayoutComponent2 } from './admin/layout';
 
 export const routes: Routes = [
   {
@@ -29,7 +30,7 @@ export const routes: Routes = [
       {
         path: 'vacaciones',
         loadChildren: () => import('./views/vacaciones/routes').then((m)=>m.routes)
-      }
+      },
       // {
       //   path: 'base',
       //   loadChildren: () => import('./views/base/routes').then((m) => m.routes)
@@ -62,6 +63,15 @@ export const routes: Routes = [
       //   path: 'pages',
       //   loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
       // }
+    ]
+  },
+  //!es el admin layout 
+  {
+    path: 'admin',
+    component: DefaultLayoutComponent2,
+    children: [
+      // { path: 'dashboard-admin', loadChildren: () => import('').then(m => m.routes) },
+      // { path: 'usuarios', loadChildren: () => import('./views/admin/usuarios/routes').then(m => m.routes) }
     ]
   },
   {

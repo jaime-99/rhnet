@@ -1,0 +1,70 @@
+:host {
+  .ng-scrollbar {
+    --scrollbar-padding: 1px;
+    --scrollbar-size: 5px;
+    --scrollbar-thumb-color: var(--cui-gray-500, #999);
+    --scrollbar-thumb-hover-color: var(--cui-gray-400, #999);
+    --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
+  }
+}
+
+/* Cambiar el color del sidebar */
+// ::ng-deep #sidebar1 {
+//   background-color: #003366; /* Cambiar el color de fondo */
+//   color: #ffffff; /* Cambiar el color del texto */
+// }
+
+// /* Cambiar el color de los items del menú en el sidebar */
+// ::ng-deep #sidebar1 .sidebar-nav {
+//   background-color: #004d80;
+// }
+
+
+
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item {
+//   transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+// }
+
+// /* Estilo para el enlace dentro de la nav-item */
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item a:hover {
+//   background-color: #005b99 !important;  /* Fondo al pasar el cursor */
+// }
+
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item .nav-dropdown > a:hover,
+// ::ng-deep #sidebar1 .sidebar-nav .nav-item .nav-dropdown .nav-dropdown-item:hover {
+//   background-color: #005b99 !important;  /* Fondo al pasar el cursor */
+//   color: #ffffff !important;  /* Color de texto */
+// }
+
+/* Sobrescribir variables CSS para cambiar colores en el sidebar */
+.sidebar-dark {
+  --cui-body-color: #f4f4f4;  /* Color de texto más suave y accesible */
+  --cui-body-bg: #343a40;     /* Color de fondo del sidebar con tono oscuro y sobrio */
+  --cui-emphasis-color: #00aaff; /* Color de énfasis con un azul brillante para destacar los items activos */
+  --cui-secondary-color: rgba(255, 255, 255, 0.7);  /* Color de los iconos y texto secundario, más suave */
+  --cui-secondary-bg: #495057; /* Fondo para elementos secundarios (más oscuro que el fondo principal) */
+  --cui-tertiary-color: rgba(255, 255, 255, 0.5);  /* Color para elementos terciarios (más tenue) */
+  --cui-tertiary-bg: #6c757d;  /* Fondo para elementos terciarios, tono gris neutro */
+  --cui-border-color: #ced4da;  /* Color de los bordes, gris claro para suavizar el contraste */
+}
+
+
+.sidebar-header{
+  background-color: white;
+}
+
+
+// ng-scrollbar css variables
+// .cui-scrollbar {
+//  --scrollbar-border-radius: 7px;
+//  --scrollbar-padding: 1px;
+//  --scrollbar-viewport-margin: 0;
+//  --scrollbar-track-color: transparent;
+//  --scrollbar-wrapper-color: transparent;
+//  --scrollbar-thumb-color: rgba(42, 6, 126, 0.2);
+//  --scrollbar-thumb-hover-color: var(--scrollbar-thumb-color);
+//  --scrollbar-size: 5px;
+//  --scrollbar-hover-size: var(--scrollbar-size);
+//  --scrollbar-thumb-transition: height ease-out 150ms, width ease-out 150ms;
+//  --scrollbar-track-transition: height ease-out 150ms, width ease-out 150ms;
+// }

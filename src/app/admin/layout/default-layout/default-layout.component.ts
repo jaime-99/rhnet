@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 
@@ -47,23 +47,12 @@ function isOverflown(element: HTMLElement) {
         DefaultFooterComponent
     ]
 })
-export class DefaultLayoutComponent implements OnInit {
-  ngOnInit(): void {
-    this.updateSidebarColors();
-
-  }
+export class DefaultLayoutComponent2 {
   public navItems = navItems;
 
   onScrollbarUpdate($event: any) {
     // if ($event.verticalUsed) {
     // console.log('verticalUsed', $event.verticalUsed);
     // }
-  }
-
-  updateSidebarColors() {
-    // Actualiza las variables CSS aquí, como ejemplo:
-    // document.documentElement.style.setProperty('--cui-body-bg', '#003366'); // Cambiar el color de fondo
-    // document.documentElement.style.setProperty('--cui-body-color', '#ffffff'); // Cambiar el color del texto
-    // Puedes agregar más cambios a las variables CSS según sea necesario
   }
 }
