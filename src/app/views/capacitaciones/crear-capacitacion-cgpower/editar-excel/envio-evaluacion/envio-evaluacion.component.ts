@@ -106,7 +106,7 @@ export class EnvioEvaluacionComponent implements OnInit {
     const dataBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
 
     // Convertir el Blob en un archivo válido
-    const nombreArchivo = `Evaluacionn-${this.datosEvaluaciones.data.mes_evaluacion}-${this.datosEvaluaciones.usuarioAEvaluar.nombre_usuario}.xlsx`;  // Puedes personalizar el nombre
+    const nombreArchivo = `Evaluacion-${this.datosEvaluaciones.data.mes_evaluacion}-${this.datosEvaluaciones.usuarioAEvaluar.nombre_usuario}.xlsx`;  // Puedes personalizar el nombre
     
     const file = new File([dataBlob], nombreArchivo, { type: dataBlob.type });
     // Crear un FormData y adjuntar el archivo
