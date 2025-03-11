@@ -43,6 +43,7 @@
     "jspdf": "^3.0.0",
     "jspdf-autotable": "^5.0.2",
     "lodash-es": "^4.17.21",
+    "ngx-infinite-scroll": "^19.0.0",
     "ngx-scrollbar": "^13.0.3",
     "pdfmake": "^0.2.18",
     "primeicons": "^7.0.0",

@@ -12,18 +12,25 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Perfil'
+    name: 'Administracion'
   },
   {
-    name: 'Perfil',
-    url: '/perfil/perfil',
-    iconComponent: { name: 'cli-pencil' }
-  },
-  {
-    name:'Evaluacion',
-    url: '/evaluaciones',
-    iconComponent: {name: 'cli-pencil'}
-  }
+      name: 'Usuarios',
+      url: '/usuarios',
+      iconComponent: { name: 'cil-cursor' },
+      children: [
+        {
+          name: 'Todos',
+          url: '/admin/usuarios',
+          icon: ''
+        },
+        {
+          name: 'Crear',
+          url: '/admin/usuarios/crear',
+          icon: ''
+        },
+      ]
+    },
   // {
   //   name: 'Typography',
   //   url: '/theme/typography',
