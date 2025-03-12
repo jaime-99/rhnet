@@ -93,7 +93,6 @@ export class CrearComponent implements OnInit {
       puesto_id: parseInt( this.createUserForm.get('puesto_id')?.value, 10) || null,
       empresa: parseInt( this.createUserForm.get('empresa')?.value, 10 ),
       jefe_id: parseInt(this.createUserForm.get('jefe_id')?.value, 10) || null
-
     }
 
     console.log(data)

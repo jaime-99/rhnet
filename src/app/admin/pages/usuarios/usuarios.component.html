@@ -7,9 +7,12 @@
             <i class="bi bi-person-fill icono-usuario"></i>
             <h5 class="card-title"> {{usuario?.nombre}} </h5>
             <p class="card-text text-muted"> {{usuario?.correo}} </p>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary me-2" type="button" (click)="openEditModal(usuario)">
                 <i class="bi bi-pencil-square"></i>
                 Editar</button>
+            <button class="btn btn-secondary" type="button" (click)="openEditModal2(usuario)">
+                <i class="bi bi-pencil-square"></i>
+                Cambiar Contraseña</button>
           </div>
         </div>
       </div>
@@ -26,3 +29,36 @@
      [infiniteScrollThrottle]="10"
      (scrolled)="getAllUsers()">
     </div>
+
+  <!-- Modal primero -->
+  <ng-container *ngIf="isModalOpen">
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Editar Usuario</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            <app-editar [usuario]="selectedUser" (close)="closeModal()"></app-editar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <!-- Modal segundo de contrasenia  -->
+  <ng-container *ngIf="isModalOpen1">
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Cambiar Contraseña</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="closeModal2()"></button>
+          </div>
+          <div class="modal-body">
+            <app-cambiar-password [usuario]="selectedUser" (close1)="closeModal2()"></app-cambiar-password>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>

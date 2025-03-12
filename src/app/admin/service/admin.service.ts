@@ -40,9 +40,14 @@ export class AdminService implements OnInit{
     return this.http.get(url)
   }
 
+  // es para agregar un usuario completo (falta agregar permisos)
   addUsuarioCompleto(data:any):Observable<any>{
     let url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/addUsuario.php`
     return this.http.post(url,data)
   }
-
+  // es para obtener todos los datos del usuario ya correctamente 
+  obtenerUsuariosCompleto(usuario_id:any):Observable<any>{
+    let url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/obtenerDatosDeUsuario.php?usuario_id=${usuario_id}`
+    return this.http.get(url,usuario_id)
+  }
 }

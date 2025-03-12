@@ -3,10 +3,11 @@ import { AdminService } from '../../service/admin.service';
 import { CommonModule } from '@angular/common';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll'
 import { FormsModule } from '@angular/forms';
-
+import { EditarComponent } from './editar/editar.component';
+import {CambiarPasswordComponent} from '../usuarios/editar/cambiar-password/cambiar-password.component'
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, InfiniteScrollModule, FormsModule ],
+  imports: [CommonModule, InfiniteScrollModule, FormsModule, EditarComponent , CambiarPasswordComponent],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })
@@ -16,13 +17,14 @@ export class UsuariosComponent implements OnInit {
   isLoading: boolean = false; // Estado de carga
   searchText: string = ''; // Variable para el texto de búsqueda
   filteredUsuarios: any = []; // Usuarios filtrados por búsqueda
+  isModalOpen: boolean = false;
+  selectedUser: any;
+  isModalOpen1: boolean = false;
 
-  constructor (private adminService:AdminService) {}
+  constructor (private adminService:AdminService, ) {}
   ngOnInit(): void {
     this.getAllUsers()
   }
-
-
   getAllUsers() {
     if (this.isLoading) return;
 
@@ -53,5 +55,22 @@ export class UsuariosComponent implements OnInit {
     );
   }
 
+  // primer boton de editar
+  openEditModal(usuario: any) {
+    this.selectedUser = usuario;
+    this.isModalOpen = true; // Abrir el modal
+  }
+  closeModal() {
+    this.isModalOpen = false; // Cerrar el modal
+  }
+
+  //segundo boton para cambiar contrasenia
+  openEditModal2(usuario: any) {
+    this.selectedUser = usuario;
+    this.isModalOpen1 = true; // Abrir el modal
+  }
+  closeModal2() {
+    this.isModalOpen1 = false; // Cerrar el modal
+  }
 
 }
