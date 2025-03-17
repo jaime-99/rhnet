@@ -3,10 +3,13 @@ import { AdminService } from '../../../service/admin.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-editar',
-  imports: [ReactiveFormsModule, CommonModule ],
+  imports: [ReactiveFormsModule, CommonModule, ToastModule ],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.scss'
 })
@@ -21,7 +24,8 @@ export class EditarComponent implements OnInit {
   puestos: any = [];
   ciudades: any = [];
   empresas: any;
-  constructor (private adminService:AdminService, private fb:FormBuilder) {
+  usuarios: any;
+  constructor (private adminService:AdminService, private fb:FormBuilder, private messageService: MessageService) {
 
     this.formUsuario = this.fb.group({
       nombre: ['', Validators.required],
@@ -62,15 +66,17 @@ export class EditarComponent implements OnInit {
           nombre_materno: this.datosUsuario?.usuario_apellido_materno,
           usuario: this.datosUsuario?.usuario_usuario,
           correo: this.datosUsuario?.usuario_correo,
-          departamento: this.datosUsuario?.departamento_id,
-          puesto: this.datosUsuario?.puesto_id,
-          ciudad: this.datosUsuario?.ciudad_id,
-          jefe: this.datosUsuario?.jefe_nombre,
+          departamento: Number( this.datosUsuario?.departamento_id),
+          puesto:Number( this.datosUsuario?.puesto_id),
+          ciudad: Number(this.datosUsuario?.ciudad_id),
+          empresa: Number(this.datosUsuario?.empresa_id),
+          jefe: Number( this.datosUsuario?.jefe_id),
         });
         this.getDepartamentos();
+        this.ObtenerUsuarios();
+
       }
     })
-
   }
   getDepartamentos(){
     this.adminService.getAllDepartments().subscribe((res)=>{
@@ -78,45 +84,80 @@ export class EditarComponent implements OnInit {
       this.getPuestos()
     })
   }
-  getPuestos(){
-    this.adminService.getAllPuestos(this.datosUsuario?.departamento_id).subscribe((res)=>{
+  getPuestos(departamento_id?:any){
+    this.adminService.getAllPuestos(departamento_id || this.datosUsuario?.departamento_id).subscribe((res)=>{
       this.puestos = res
       this.getCiudades();
+
+      const jefeActual = this.formUsuario.value.jefe; // Guarda el jefe actual
+      this.formUsuario.patchValue({ jefe: jefeActual });
+
+      
     })
   }
   getCiudades(){
     this.adminService.getAllCiudades().subscribe((res)=>{
       this.ciudades = res
-      this.loading = true
+      this.getEmpresas()
     })
   }
   getEmpresas(){
     this.adminService.getAllEmpresas().subscribe((res)=>{
       this.empresas = res
+      // this.ObtenerUsuarios()
+
+    })
+  }
+  // es para obtener Usuarios todos
+  ObtenerUsuarios(){
+    this.adminService.getAllUsers().pipe(
+      delay(1500),
+    ).subscribe((res)=>{
+      this.usuarios = res
+
+      this.formUsuario.patchValue({
+        jefe: this.datosUsuario?.jefe_id || ''
+      });
+      this.loading = true
     })
   }
   ngSubmit(){
+    const usuarioData = {
+      id: this.datosUsuario.usuario_id,
+      nombre: this.formUsuario.value.nombre,
+      apellido_paterno: this.formUsuario.value.nombre_paterno,  // Corrección aquí
+      apellido_materno: this.formUsuario.value.nombre_materno,  // Corrección aquí
+      correo: this.formUsuario.value.correo,
+      usuario: this.formUsuario.value.usuario,
+      departamento_id: Number(this.formUsuario.value.departamento),
+      puesto_id: Number(this.formUsuario.value.puesto),
+      ciudad: Number(this.formUsuario.value.ciudad),  
+      jefe_id: Number(this.formUsuario.value.jefe),
+      empresa: Number(this.formUsuario.value.empresa)  
+    };
 
-      const usuarioData = {
-        id: this.datosUsuario.id,  // ID del usuario a actualizar
-        nombre: this.formUsuario.value.nombre,
-        apellido_paterno: this.formUsuario.value.nombre_paterno,
-        apellido_materno: this.formUsuario.value.nombre_materno,
-        correo: this.formUsuario.value.correo,
-        usuario: this.formUsuario.value.usuario,
-        password: this.formUsuario.value.password,  // Si es necesario, puedes enviar la contraseña nueva
-        departamento_id: this.formUsuario.value.departamento,
-        puesto_id: this.formUsuario.value.puesto,
-        ciudad: this.formUsuario.value.ciudad,
-        jefe_id: this.formUsuario.value.jefe,
-        empresa: this.formUsuario.value.empresa  // Si también se desea actualizar la empresa
-      };
+    // console.log(usuarioData);
+    
+    this.messageService.add({ severity: 'success', summary: 'Mensaje', detail: 'Se actualizo el usuario correctamente', life: 3000 });
+    this.adminService.editarUsuarioCompleto(usuarioData).subscribe((res)=>{
+      // console.log(res)
+      //mandar aviso de que se actualizo el usuario
+      // location.reload()
+      this.datosUsuario = { ...this.datosUsuario, ...usuarioData };
+    })
 
-      console.log(this.formUsuario.value)
+}
+onDepartamentoChange(event:any){
+  // this.ObtenerUsuarios()
+  const departamentoId = event.target.value;  // Obtenemos el id del departamento seleccionado
+  this.formUsuario.patchValue({ puesto: '' }); // Reseteamos el campo puesto
+  this.formUsuario.get('puesto')?.reset();
+  this.formUsuario.get('puesto')?.markAsTouched();
+  this.formUsuario.get('puesto')?.markAsDirty();
 
 
-  
-  
 
+  // this.formUsuario.get('puesto')?.markAsUntouched();
+  this.getPuestos(departamentoId)
 }
 }

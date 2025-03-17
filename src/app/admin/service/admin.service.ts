@@ -46,8 +46,22 @@ export class AdminService implements OnInit{
     return this.http.post(url,data)
   }
   // es para obtener todos los datos del usuario ya correctamente 
-  obtenerUsuariosCompleto(usuario_id:any):Observable<any>{
-    let url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/obtenerDatosDeUsuario.php?usuario_id=${usuario_id}`
-    return this.http.get(url,usuario_id)
+  obtenerUsuariosCompleto(usuario_id: any): Observable<any> {
+    const timestamp = new Date().getTime(); // Genera un parámetro único
+    const url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/obtenerDatosDeUsuario.php?usuario_id=${usuario_id}&_t=${timestamp}`;
+    return this.http.get(url);
   }
+  // editar un usuario
+  editarUsuarioCompleto(data:any):Observable<any>{
+    let url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/editarUsuario.php`
+    return this.http.post(url,data)
+  }
+
+  //funcion para cambiar la contrasenia de un usuario
+  cambiarContrasenia(usuario_id:number,password:string):Observable<any>{
+    const url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/cambiarContrasenia.php`;
+    const body = {usuario_id,password}
+    return this.http.post(url,body)
+  }
+
 }

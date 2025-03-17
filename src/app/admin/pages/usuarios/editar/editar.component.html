@@ -24,22 +24,31 @@
                 </div>
                 <div class="col-md-6 mb-1">
                     <label for="nombre">Jefe Directo</label>
-                    <input formControlName="jefe"  class="form-label" type="text"  class="form-control" id="nombre" >
+                    <select formControlName="jefe" class="form-select">
+                        <option value="">Selecciona jefe</option>
+                    <option *ngFor="let usuario of usuarios" [value]="usuario.id"> {{usuario.nombre + ' '+ usuario.apellido_paterno}} </option>
+                    </select>
+
                     <label for="nombre">Departamento</label>
-                    <select formControlName="departamento" class="form-select" aria-label="Default select example">
+                    <select (change)="onDepartamentoChange($event)" formControlName="departamento" class="form-select" aria-label="Default select example">
                         <option *ngFor="let departamento of departamentos" [value]="departamento.id"> {{departamento.nombre}} </option>
                     </select>
                     <label for="nombre">Puesto</label>
-                    <select formControlName="puesto" class="form-select" aria-label="Default select example">
+                    <select formControlName="puesto" class="form-select" >
+                        <option value="">Selecciona un Puesto</option>
                         <option *ngFor="let puesto of puestos" [value]="puesto.id"> {{puesto.nombre}} </option>
                     </select>
+                    <div *ngIf="formUsuario.get('puesto')?.invalid && formUsuario.get('puesto')?.touched" class="text-danger">
+                        Debes escoger un puesto.
+                      </div>
+                      
                     <label for="nombre">Ciudad</label>
-                    <select formControlName="ciudad" class="form-select" aria-label="Default select example">
+                    <select formControlName="ciudad" class="form-select" >
                         <option *ngFor="let ciudad of ciudades" [value]="ciudad.id"> {{ciudad.nombre}} </option>
                     </select>
                     <label for="nombre">Empresa</label>
-                    <select formControlName="empresa" class="form-select" aria-label="Default select example">
-                        <!-- <option *ngFor="let ciudad of ciudades" [value]="ciudad.id"> {{ciudad.nombre}} </option> -->
+                    <select formControlName="empresa" class="form-select">
+                        <option *ngFor="let empresa of empresas" [value]="empresa.id"> {{empresa.nombre}} </option>
                     </select>
                     <!-- <label for="password">Contraseña</label>
                     <input formControlName="password" class="form-label" type="password"  class="form-control" id="password">
@@ -54,6 +63,17 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary">Actualizar Datos</button>
+                <p-toast />
               </div>
             </form>
 </div>
+
+
+<!-- Alerta de éxito -->
+<!-- <div id="successAlert" class="alert alert-success alert-dismissible fade" role="alert" style="display:none;">
+    <strong>¡Éxito!</strong> El usuario se ha actualizado correctamente.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> -->
+  
