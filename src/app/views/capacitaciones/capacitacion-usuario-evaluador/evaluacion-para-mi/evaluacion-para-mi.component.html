@@ -1,0 +1,75 @@
+
+<h5>Evaluacion del mes de  {{this.mes}} </h5>
+
+ <div *ngIf=" loading && this.evaluaciones.length>0" class="card">
+    <div class="card-body">
+        <h5 class="card-title text-center"> Evaluaciones del mes de <strong> {{this.mes}} </strong></h5>
+        <p-table
+        [value]="evaluaciones"
+        showGridlines
+        [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombre Evaluador</th>
+                    <th>Tipo de Evaluacion</th>
+                    <th>Estatus</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-evaluacion>
+                <tr>
+                    <td>{{ evaluacion?.fecha_creacion }}</td>
+                    <td>{{ evaluacion?.evaluador_nombre }}</td>
+                    <td>{{ evaluacion?.tipo_evaluacion }}</td>
+                    <td>
+                        <span class="badge text-bg-primary"> {{evaluacion?.estatus}} </span>
+                    </td>
+                    <td>
+                        <button 
+                    class="btn btn-primary"  (click)="abrirModal(evaluacion)"data-bs-toggle="modal" data-bs-target="#evaluacionModal">
+                    Ver Detalles
+                    </button>
+
+                    </td>
+                </tr>
+            </ng-template>
+    </p-table>
+    </div>
+</div> 
+
+<!-- Modal -->
+<div class="modal fade " id="evaluacionModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Detalles de Evaluación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" *ngIf="evaluacionSeleccionada">
+
+                <div class="row">
+                    <div class="col">
+                        <p><strong>Fecha en la que se evaluo:</strong> {{ evaluacionSeleccionada.fecha_creacion }}</p>
+                        <p><strong>Mes de la Evaluacion:</strong> {{ evaluacionSeleccionada.mes_evaluacion }}</p>
+                        <p><strong>Evaluador:</strong> {{ evaluacionSeleccionada.evaluador_nombre + " " + evaluacionSeleccionada.evaluador_apellido_paterno + " " + evaluacionSeleccionada.evaluador_apellido_materno  }}</p>
+                        <p><strong>Tipo Evaluacion:</strong> {{ evaluacionSeleccionada.tipo_evaluacion }}</p>
+                        <p><strong>Estatus:</strong><span class="badge text-bg-primary"> {{evaluacionSeleccionada?.estatus}} </span> </p>
+                        <p><strong>Descripción:</strong> {{ evaluacionSeleccionada.descripcion }}</p>
+                    </div>
+                    <div class="col">
+                        <p><strong>Ver Evaluacion:</strong>  <button type="button" (click)="verEvaluacionPDF()" class="btn btn-primary">Ver PDF</button>  </p>
+
+                        <label for="">Escribir comentarios(opcional)</label>
+                        <textarea [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+                        <button type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -50,6 +50,13 @@ export const routes: Routes = [
                 },
             },
             {
+                path: 'evaluar-lider',
+                loadComponent: () => import('./crear-capacitacion/crear-capacitacion-lider/crear-capacitacion-lider.component').then(m => m.CrearCapacitacionLiderComponent),
+                data: {
+                  title: 'evaluar lider'
+                },
+            },
+            {
                 path: 'mensaje-exitoso',
                 loadComponent: () => import('./crear-capacitacion-cgpower/mensaje-exitoso/mensaje-exitoso.component').then(m => m.MensajeExitosoComponent),
                 data: {

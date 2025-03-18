@@ -1,0 +1,59 @@
+
+<div class="card m-2">
+    <div class="card-body">
+        <h4 class="card-title text-center">Evaluacion a lider del mes de {{this.datosEvaluacion?.data.mes_evaluacion}} </h4>
+        <p>lider Evaluado: <strong>{{this.datosEvaluacion?.evalua_a}} </strong> </p>
+        <p>Evaluador: <strong>EJEMPLO   </strong> </p>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Áreas de Evaluación</th>
+        <th style="max-width: 200px; overflow: hidden; word-wrap: break-word; white-space: normal;">Pregunta</th>
+        <th>Puntuación</th>
+        <th>Comentarios</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let ev of evaluaciones; let i = index">
+        <!-- Agregar encabezado cuando cambia el área -->
+        <tr *ngIf="i === 0 || ev.__EMPTY !== evaluaciones[i - 1].__EMPTY" class="area-header">
+          <td colspan="5" class="fw-bold border-top border-dark">{{ ev.__EMPTY }}</td>
+        </tr>
+        <!-- Fila de pregunta -->
+        <tr *ngIf="ev.__EMPTY_1 !== 'Evaluacion'">
+          <td>{{ i + 1 }}</td>
+          <td></td> <!-- Celda vacía porque el área ya se muestra arriba -->
+          <td style="max-width: 200px; overflow: hidden; word-wrap: break-word; white-space: normal;">
+            {{ ev.__EMPTY_1 }}
+          </td>
+          <td>
+            <div class="d-flex gap-2">
+              <button (click)="ev.puntuacion = '✔️'" class="btn btn-success">✔️</button>
+              <button (click)="ev.puntuacion = '❌'" class="btn btn-danger">❌</button>
+              <span>{{ ev.puntuacion }}</span>
+            </div>
+          </td>
+          <td>
+            <input [(ngModel)]="ev.comentario" type="text" class="form-control" />
+          </td>
+        </tr>
+        
+        <!-- Fila de evaluación al final -->
+        <tr *ngIf="ev.__EMPTY_1 === 'Evaluación General'">
+          <td colspan="5" class="fw-bold">
+            <div>
+              Evaluación Final:
+              <span>{{ getEvaluation() }}</span>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <button (click)="exportToExcel()" class="btn btn-primary">Subir Evaluacion </button>
+  

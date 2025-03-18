@@ -1,56 +1,79 @@
-<div class="container text-center">
-
-<div *ngIf="this.loading" class="row align-items-center">
-<div class="col ">
-    <p-progress-spinner ariaLabel="Cargando.." />
-    <p class="mt-2">Cargando Informacion..  del mes de <strong>{{this.mes}}</strong>   </p>
-</div>
-</div>
-</div>
 
 
-
-<div *ngIf=" !loading && this.capacitaciones.length>0" class="card">
-    <div class="card-body">
-        <h5 class="card-title text-center"> Capacitaciones del mes de <strong> {{this.mes}} </strong></h5>
-        <p-table
-        [value]="capacitaciones"
-        showGridlines
-        [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template #header>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Nombre Evaluador</th>
-                    <th>Nombre del Evaluado</th>
-                    <th>Tipo de Evaluacion</th>
-                    <th>Acciones</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-capacitacion>
-                <tr>
-                    <td>{{ capacitacion.fecha_creacion }}</td>
-                    <td>{{ capacitacion.nombre_evaluador }}</td>
-                    <td>{{ capacitacion.nombre_evaluado }}</td>
-                    <td>{{ capacitacion.tipo_evaluacion }}</td>
-                    <td>
-                        <button (click)="irDetalles(capacitacion?.id)" class="btn btn-primary">Ver</button>
-                    </td>
-                </tr>
-            </ng-template>
-    </p-table>
+<!-- crar tab  -->
 
 
-    </div>
+<p-tabs value="0">
+    <p-tablist class="mi-tabview">
+        <p-tab value="0">Evaluaciones Realizadas por mí</p-tab>
+        <p-tab value="1">Evaluaciones Dirigidas a mí</p-tab>
+        
+    </p-tablist>
+    <p-tabpanels>
+        <!-- primer tab -->
+        <p-tabpanel value="0">
 
-</div>
+            <div class="container text-center">
+                <div *ngIf="this.loading" class="row align-items-center">
+                <div class="col ">
+                    <p-progress-spinner ariaLabel="Cargando.." />
+                    <p class="mt-2">Cargando Informacion..  del mes de <strong>{{this.mes}}</strong>   </p>
+                </div>
+                </div>
+                </div>
+                
+                
+                
+                
+                
+                <div *ngIf=" !loading && this.capacitaciones.length>0" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"> Capacitaciones del mes de <strong> {{this.mes}} </strong></h5>
+                        <p-table
+                        [value]="capacitaciones"
+                        showGridlines
+                        [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre Evaluador</th>
+                                    <th>Nombre del Evaluado</th>
+                                    <th>Tipo de Evaluacion</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-capacitacion>
+                                <tr>
+                                    <td>{{ capacitacion.fecha_creacion }}</td>
+                                    <td>{{ capacitacion.nombre_evaluador }}</td>
+                                    <td>{{ capacitacion.nombre_evaluado }}</td>
+                                    <td>{{ capacitacion.tipo_evaluacion }}</td>
+                                    <td>
+                                        <button (click)="irDetalles(capacitacion?.id)" class="btn btn-primary">Ver</button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                    </p-table>
+                    </div>
+                </div>
+                
+                <div *ngIf=" !loading && this.capacitaciones.length===0" class="card">
+                    <div class="alert alert-danger">
+                        Aun no has conluido con la evaluacion del mes de <strong> {{this.mes}} </strong>
+                
+                        <p class="text-center">Ir a la evaluacion </p>
+                    </div>
+                </div>
+            
+        </p-tabpanel>
+        <!-- Segundo Tab -->
+        <p-tabpanel value="1">
+           <app-evaluacion-para-mi></app-evaluacion-para-mi>
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>
 
-<div *ngIf=" !loading && this.capacitaciones.length===0" class="card">
-    <div class="alert alert-danger">
-        Aun no has conluido con la evaluacion del mes de <strong> {{this.mes}} </strong>
 
-        <p class="text-center">Ir a la evaluacion </p>
-    </div>
-</div>
 
 
 <!-- <router-outlet></router-outlet> -->

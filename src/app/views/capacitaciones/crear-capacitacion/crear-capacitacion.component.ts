@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FileUpload, UploadEvent } from 'primeng/fileupload';
 
 import { ButtonModule } from 'primeng/button';
@@ -13,10 +13,11 @@ import { MessageService } from 'primeng/api';
 import { TabsModule } from 'primeng/tabs';
 import { TabViewModule } from 'primeng/tabview'; // Asegúrate de importar este módulo
 import { CrearCapacitacionCgpowerComponent } from '../crear-capacitacion-cgpower/crear-capacitacion-cgpower.component';
-
+import {CrearCapacitacionLiderComponent} from '../crear-capacitacion/crear-capacitacion-lider/crear-capacitacion-lider.component'
+import { CompartirDatosService } from '../crear-capacitacion-cgpower/compartir-datos.service';
 @Component({
   selector: 'app-crear-capacitacion',
-  imports: [ButtonModule, FileUpload, CommonModule, ToastModule,TabsModule, CrearCapacitacionCgpowerComponent ],
+  imports: [ButtonModule, FileUpload, CommonModule, ToastModule,TabsModule, CrearCapacitacionCgpowerComponent, CrearCapacitacionLiderComponent ],
   providers: [MessageService],
   templateUrl: './crear-capacitacion.component.html',
   styleUrl: './crear-capacitacion.component.scss'
@@ -36,7 +37,8 @@ export class CrearCapacitacionComponent implements OnInit {
   datosUsuario: any;
   
   constructor (private routerActivated:ActivatedRoute, private fb:FormBuilder,
-    private capacitacionesService:CapacitacionesService, private messageService:MessageService
+    private capacitacionesService:CapacitacionesService, private messageService:MessageService,
+    private router:Router, private compartirDatosService:CompartirDatosService
   ) {
 
     this.formEvaluacion = this.fb.group({
@@ -167,8 +169,8 @@ export class CrearCapacitacionComponent implements OnInit {
 
   get data() {
     return {
-        mes_evaluacion: 'enero',
-        archivo: this.urlArchivo,
+        mes_evaluacion: this.mes,
+        archivo: '',
         descripcion: `evaluacion del mes de ${this.mes}`,
         estatus: 'pendiente',
         usuario_id:this.usuario?.id,
@@ -180,7 +182,20 @@ export class CrearCapacitacionComponent implements OnInit {
   //subir los datos a la tabla rh_evaluaciones
   postCapacitacion(){
     this.capacitacionesService.postCapacitacion(this.data).subscribe((res)=>{
-
     })
+  }
+
+  // lleva directo a la pagina para evaluar a lider
+  IrAEvaluarLider(){
+    this.router.navigate(['/evaluaciones/evaluar-lider'], {queryParams:{mes:this.mes}})
+
+    //mandar los datos por servcio 
+    this.compartirDatosService.setDatosPrivados(
+      {
+        data:this.data,
+        evalua_a:this.jefeDirecto.jefe_nombre_completo,
+        // datosUsuarioActual:this.departamentoUsuario
+      }
+    );
   }
 }

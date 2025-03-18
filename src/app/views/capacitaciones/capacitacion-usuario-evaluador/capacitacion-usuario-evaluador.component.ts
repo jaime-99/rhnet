@@ -6,10 +6,11 @@ import { TableModule } from 'primeng/table';
 import { RouterModule } from '@angular/router';  // Importa RouterModule
 import { delay, filter, map } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { TabsModule } from 'primeng/tabs';
+import { EvaluacionParaMiComponent} from '../capacitacion-usuario-evaluador/evaluacion-para-mi/evaluacion-para-mi.component'
 @Component({
   selector: 'app-capacitacion-usuario-evaluador',
-  imports: [CommonModule, TableModule, RouterModule, ProgressSpinnerModule],
+  imports: [CommonModule, TableModule, RouterModule, ProgressSpinnerModule, TabsModule, EvaluacionParaMiComponent],
   templateUrl: './capacitacion-usuario-evaluador.component.html',
   styleUrl: './capacitacion-usuario-evaluador.component.scss'
 })

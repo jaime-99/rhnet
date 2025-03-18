@@ -82,7 +82,8 @@ export class EditarExcelComponent implements OnInit {
   downloadExcel() {
     const tipoEvaluacion = this.datosEvaluacion.usuarioAEvaluar.puesto;
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
-    const url = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}`;
+    const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
+    const url = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}&timestamp=${timestamp}`;
 
     this.http.get(url, { responseType: 'arraybuffer' })
       .subscribe((data: ArrayBuffer) => {
@@ -95,7 +96,7 @@ export class EditarExcelComponent implements OnInit {
   
         if (jsonData.length > 0) {
           // Buscar la fila donde están los encabezados correctos
-          // console.log('excel,',jsonData)
+          console.log('excel,',jsonData)
           const startIndex = jsonData.findIndex(row => 
             row.includes("FACTOR") && row.includes("ÁREA DE DESEMPEÑO") && row.includes("EVALÚE A BASE DE %") && row.includes('COMENTARIOS')
           );
