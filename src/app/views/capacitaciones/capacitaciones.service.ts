@@ -89,7 +89,7 @@ export class CapacitacionesService {
   }
 
   verComentariosPorEvaluacionId(evaluacion_id:any):Observable<any>{
-    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/verComentariosPorEvaluacionId.php?evaluacion_id=${evaluacion_id}`
+    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/verComentariosPorEvaluacionId.php?evaluacion_id=${evaluacion_id}&timestamp=${new Date().getTime()}`
     return this.http.get(url)
   }
 }

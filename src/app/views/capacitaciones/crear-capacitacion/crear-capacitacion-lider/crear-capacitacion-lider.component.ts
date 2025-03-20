@@ -18,6 +18,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   datosEvaluacion:any = []
 
   public urlArchivo = `https://rhnet.cgpgroup.mx/archivos/capacitaciones2025/`
+  mostrarMensaje: boolean = false;
 
   constructor (private compatirDatos:CompartirDatosService, private capacitacionesService:CapacitacionesService,
     private http:HttpClient ) {}
@@ -123,9 +124,9 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     this.capacitacionesService.postCapacitacion(this.data).subscribe({
       next:(res)=>{
         //llevar a un mensaje de exito
-        
       }
     })
     
+    this.mostrarMensaje = true
   }
 }

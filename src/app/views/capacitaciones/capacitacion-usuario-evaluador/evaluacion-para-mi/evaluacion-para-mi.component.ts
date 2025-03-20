@@ -4,15 +4,20 @@ import { CapacitacionesService } from '../../capacitaciones.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms'; 
+import { ToastModule } from 'primeng/toast';
+declare var bootstrap: any;
 
 import * as XLSX from 'xlsx'; // Librería para leer Excel
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { HttpClient } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import {ComentariosComponent} from '../evaluacion-para-mi/comentarios/comentarios.component'
+
 @Component({
   selector: 'app-evaluacion-para-mi',
-  imports: [TableModule, CommonModule, ReactiveFormsModule],
+  imports: [TableModule, CommonModule, ReactiveFormsModule, ToastModule, ComentariosComponent],
   templateUrl: './evaluacion-para-mi.component.html',
   styleUrl: './evaluacion-para-mi.component.scss'
 })
@@ -27,7 +32,9 @@ export class EvaluacionParaMiComponent implements OnInit {
   evaluacionSeleccionada: any;
   comentario = new FormControl(''); // Inicializado con un valor vacío
 
-  constructor (private activatedRouter:ActivatedRoute, private capacitacionesService:CapacitacionesService, private http:HttpClient) {}
+  constructor (private activatedRouter:ActivatedRoute, private capacitacionesService:CapacitacionesService, private http:HttpClient,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {
 
     const usuarioData:any = localStorage.getItem('usuario');
@@ -84,7 +91,6 @@ export class EvaluacionParaMiComponent implements OnInit {
           }
         );
   }
-
   // para dar un update a la evaluacion de la tabla rh_evaluaciones en la columna estatus a completado
   marcarPorVistoEvaluacion(){
     let datos = {
@@ -92,11 +98,25 @@ export class EvaluacionParaMiComponent implements OnInit {
       usuario_id: this.usuario.id,
       comentario: this.comentario.value
     }
-
     this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
+        this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha enviado el comentario', life: 3000 });
       }
     })
+  }
+
+  // es para abrir el modal de solo los comentarios
+  abrirModalComentarios() {
+    const modalElement = document.getElementById('comentariosModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+  
+  // para cerrar el modal de los comentarios 
+  cerrarModal() {
+    this.evaluacionSeleccionada = null;
   }
 }

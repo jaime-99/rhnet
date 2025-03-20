@@ -1,13 +1,13 @@
 
-<div class="card m-2">
+<div class="card m-2" *ngIf="!mostrarMensaje">
     <div class="card-body">
         <h4 class="card-title text-center">Evaluacion a lider del mes de {{this.datosEvaluacion?.data.mes_evaluacion}} </h4>
         <p>lider Evaluado: <strong>{{this.datosEvaluacion?.evalua_a}} </strong> </p>
-        <p>Evaluador: <strong>EJEMPLO   </strong> </p>
+        <p>Evaluador: <strong>EJEMPL   </strong> </p>
     </div>
 </div>
 
-<table class="table">
+<table *ngIf="!mostrarMensaje" class="table">
     <thead>
       <tr>
         <th>No.</th>
@@ -55,5 +55,12 @@
     </tbody>
   </table>
 
-  <button (click)="exportToExcel()" class="btn btn-primary">Subir Evaluacion </button>
+  <button *ngIf="!mostrarMensaje"  (click)="exportToExcel()" class="btn btn-primary">Subir Evaluacion </button>
   
+
+  <div *ngIf="mostrarMensaje" class="alert alert-danger" role="alert">
+    Has enviado la evaluacion con exito!
+    
+    <a href="./evaluaciones/" class="btn btn-success">Ir a Inicio</a>
+
+  </div>

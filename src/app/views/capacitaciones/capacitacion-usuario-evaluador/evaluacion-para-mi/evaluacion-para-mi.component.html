@@ -39,6 +39,8 @@
 </div> 
 
 <!-- Modal -->
+<p-toast />
+
 <div class="modal fade " id="evaluacionModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -56,6 +58,7 @@
                         <p><strong>Tipo Evaluacion:</strong> {{ evaluacionSeleccionada.tipo_evaluacion }}</p>
                         <p><strong>Estatus:</strong><span class="badge text-bg-primary"> {{evaluacionSeleccionada?.estatus}} </span> </p>
                         <p><strong>Descripción:</strong> {{ evaluacionSeleccionada.descripcion }}</p>
+
                     </div>
                     <div class="col">
                         <p><strong>Ver Evaluacion:</strong>  <button type="button" (click)="verEvaluacionPDF()" class="btn btn-primary">Ver PDF</button>  </p>
@@ -64,8 +67,33 @@
                         <textarea [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
 
                         <button type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
+                        <div class="alert alert-success" role="success">
+                           Ya  Has Marcado por visto la Evaluacion!
+                           <button class="btn btn-primary btn-sm ms-3">
+                            <i class="bi bi-chat-dots"></i> Ver comentarios
+                          </button>
+                          </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal de Comentarios -->
+<div class="modal fade" id="comentariosModal" tabindex="-1" aria-labelledby="comentariosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="comentariosModalLabel">Comentariosss</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <app-comentarios [evaluacion]="evaluacionSeleccionada"></app-comentarios>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
