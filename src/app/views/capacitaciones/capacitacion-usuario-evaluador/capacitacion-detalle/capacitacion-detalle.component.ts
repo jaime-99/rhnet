@@ -200,7 +200,14 @@ export class CapacitacionDetalleComponent implements OnInit {
       
     ).subscribe((res)=>{
       this.comentarios = res.data
-      console.log('comentarios',this.comentarios)
+      // console.log('comentarios',this.comentarios)
+      const ultimoComentario = [...this.comentarios].sort((a, b) => b.id - a.id)[0];
+      // console.log('ultimo comentario',ultimoComentario.usuario_id)
+
+        
+      // if(
+        
+      // )
     })
   }
  
@@ -214,11 +221,17 @@ export class CapacitacionDetalleComponent implements OnInit {
     }
 
     const nuevaRespuesta = {
-      idComentarioPadre: comentarioId,
-      usuario: 'Usuario Actual', // Reemplaza con el usuario autenticado
+      evaluacion_id: this.evaluacion.id,
+      usuario_id: this.usuario.id, // Reemplaza con el usuario autenticado
       comentario: this.respuestaTexto,
-      fecha: new Date().toISOString(),
+      respondio_id:comentarioId
     };
+
+    this.capacitacionoService.agregarComentarioAEvaluacion(nuevaRespuesta).subscribe({
+      next:(res)=>{
+
+      }
+    })
 
     this.comentarios.push(nuevaRespuesta); // Simulación de respuesta en la lista
     this.respuestaTexto = '';

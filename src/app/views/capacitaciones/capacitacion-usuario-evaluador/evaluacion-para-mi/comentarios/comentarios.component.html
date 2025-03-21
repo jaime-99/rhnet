@@ -1,1 +1,28 @@
-<p>comentarios works!</p>
+
+<div *ngIf="comentarios.length > 0; else noComentarios">
+    <ul class="list-group">
+        <li class="list-group-item" *ngFor="let comentario of comentarios">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>{{ comentario.usuario }}</strong>  
+                <span class="text-muted">{{ comentario?.fecha_creacion | date:'short' }}</span>
+            </div>
+            <p class="mb-2">{{ comentario?.comentario }}</p>
+            
+            <!-- Responder comentario -->
+            <button *ngIf="comentario.usuario_id !== this.usuario.id" 
+            class="btn btn-sm btn-outline-primary" 
+            (click)="toggleResponder(comentario.id)">
+                    Responderrr
+                </button>
+
+            <!-- Área de respuesta -->
+            <div *ngIf="comentario.id === comentarioSeleccionado" class="mt-2">
+                <textarea [(ngModel)]="respuestaTexto" class="form-control" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+                <button class="btn btn-success btn-sm mt-2" (click)="responderComentario(comentario.evaluacion_id)">Enviar</button>
+            </div>
+        </li>
+    </ul>
+</div>
+<ng-template #noComentarios>
+    <p class="text-center text-muted">No hay comentarios aún.</p>
+</ng-template>

@@ -73,7 +73,7 @@
                                 <p class="mb-2">{{ comentario?.comentario }}</p>
                                 
                                 <!-- Responder comentario -->
-                                <button class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
+                                <button *ngIf="comentario.usuario_id !== this.usuario.id" class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
                                     Responder
                                 </button>
     

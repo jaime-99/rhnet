@@ -23,11 +23,17 @@
                     <td>{{ evaluacion?.evaluador_nombre }}</td>
                     <td>{{ evaluacion?.tipo_evaluacion }}</td>
                     <td>
-                        <span class="badge text-bg-primary"> {{evaluacion?.estatus}} </span>
+                        <span [ngClass]="{
+                            'badge': true,
+                            'text-bg-danger': evaluacion?.estatus === 'pendiente', 
+                            'text-bg-success': evaluacion?.estatus === 'terminado'
+                        }">
+                        {{ evaluacion?.estatus }}
+                    </span>
                     </td>
                     <td>
                         <button 
-                    class="btn btn-primary"  (click)="abrirModal(evaluacion)"data-bs-toggle="modal" data-bs-target="#evaluacionModal">
+                    class="btn btn-primary" style="background-color: #0ab4df; border-color: #0ab4df;"  (click)="abrirModal(evaluacion)"data-bs-toggle="modal" data-bs-target="#evaluacionModal">
                     Ver Detalles
                     </button>
 
@@ -56,22 +62,31 @@
                         <p><strong>Mes de la Evaluacion:</strong> {{ evaluacionSeleccionada.mes_evaluacion }}</p>
                         <p><strong>Evaluador:</strong> {{ evaluacionSeleccionada.evaluador_nombre + " " + evaluacionSeleccionada.evaluador_apellido_paterno + " " + evaluacionSeleccionada.evaluador_apellido_materno  }}</p>
                         <p><strong>Tipo Evaluacion:</strong> {{ evaluacionSeleccionada.tipo_evaluacion }}</p>
-                        <p><strong>Estatus:</strong><span class="badge text-bg-primary"> {{evaluacionSeleccionada?.estatus}} </span> </p>
+                        <p><strong>Estatus:</strong>
+                            <span [ngClass]="{
+                                'badge': true,
+                                'text-bg-danger': evaluacionSeleccionada?.estatus === 'pendiente', 
+                                'text-bg-success': evaluacionSeleccionada?.estatus === 'terminado'
+                            }">
+                            {{ evaluacionSeleccionada?.estatus }}
+                        </span>
+                         </p>
                         <p><strong>Descripción:</strong> {{ evaluacionSeleccionada.descripcion }}</p>
 
                     </div>
                     <div class="col">
-                        <p><strong>Ver Evaluacion:</strong>  <button type="button" (click)="verEvaluacionPDF()" class="btn btn-primary">Ver PDF</button>  </p>
+                        <p><strong>Ver Evaluacion:</strong>  <button style="background-color: #0ab4df; border-color: #0ab4df;" type="button" (click)="verEvaluacionPDF()" class="btn btn-primary">Ver PDF</button>  </p>
 
-                        <label for="">Escribir comentarios(opcional)</label>
-                        <textarea [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <label *ngIf="!this.mostrarMensaje" for="">Escribir comentarios(opcional)</label>
+                        <textarea *ngIf="!this.mostrarMensaje" [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
 
-                        <button type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
-                        <div class="alert alert-success" role="success">
+                        <button [disabled]="this.mostrarMensaje" type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
+
+                        <div *ngIf="this.mostrarMensaje" class="alert alert-success mt-1" role="success">
                            Ya  Has Marcado por visto la Evaluacion!
-                           <button class="btn btn-primary btn-sm ms-3">
+                           <button style="background-color: #0ab4df; border-color: #0ab4df;"  data-bs-toggle="modal" data-bs-target="#comentariosModal" class="btn btn-primary btn-sm ms-3">
                             <i class="bi bi-chat-dots"></i> Ver comentarios
-                          </button>
+                        </button>
                           </div>
                     </div>
                 </div>
@@ -89,14 +104,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="comentariosModalLabel">Comentariosss</h5>
+                <h5 class="modal-title" id="comentariosModalLabel">Comentarios</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <app-comentarios [evaluacion]="evaluacionSeleccionada"></app-comentarios>
+                <app-comentarios *ngIf="evaluacionSeleccionada" [evaluacion]="evaluacionSeleccionada"></app-comentarios>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#evaluacionModal" >Regresar</button>
             </div>
         </div>
     </div>

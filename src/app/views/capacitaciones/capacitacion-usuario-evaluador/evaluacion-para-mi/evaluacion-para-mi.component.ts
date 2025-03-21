@@ -31,6 +31,8 @@ export class EvaluacionParaMiComponent implements OnInit {
   loading: boolean = false;
   evaluacionSeleccionada: any;
   comentario = new FormControl(''); // Inicializado con un valor vacío
+  comentarios: any;
+  mostrarMensaje: boolean = false;
 
   constructor (private activatedRouter:ActivatedRoute, private capacitacionesService:CapacitacionesService, private http:HttpClient,
     private messageService: MessageService
@@ -62,6 +64,7 @@ export class EvaluacionParaMiComponent implements OnInit {
 
   abrirModal(evaluacion:any){
     this.evaluacionSeleccionada = evaluacion;
+    this.obtenerComentarios(evaluacion)
   }
 
   verEvaluacionPDF(){
@@ -96,12 +99,14 @@ export class EvaluacionParaMiComponent implements OnInit {
     let datos = {
       evaluacion_id:  this.evaluacionSeleccionada?.id,
       usuario_id: this.usuario.id,
-      comentario: this.comentario.value
+      comentario: this.comentario.value,
+      respondio_id : null
     }
     this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
       next:(res)=>{
         // console.log(res)
         this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha enviado el comentario', life: 3000 });
+        location.reload();
       }
     })
   }
@@ -118,5 +123,19 @@ export class EvaluacionParaMiComponent implements OnInit {
   // para cerrar el modal de los comentarios 
   cerrarModal() {
     this.evaluacionSeleccionada = null;
+  }
+
+  obtenerComentarios(evaluacionSeleccionada:any){
+    
+    this.capacitacionesService.verComentariosPorEvaluacionId(evaluacionSeleccionada.id).subscribe({
+      next:(res)=>{
+        this.comentarios = res.data
+        const ultimoComentario = [...this.comentarios].sort((a, b) => b.id - a.id)[0];
+
+        if(ultimoComentario.usuario_id == this.usuario.id){
+          this.mostrarMensaje = true
+        }
+      }
+    })
   }
 }
