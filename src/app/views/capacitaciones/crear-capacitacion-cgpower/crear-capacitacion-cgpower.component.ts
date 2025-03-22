@@ -96,7 +96,7 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
   getMisEmpleados(){
     this.capacitacionesService.getMisEmpleados(this.usuario.id).subscribe({
       next:(res)=>{
-        // console.log('primer empleados',res)
+        console.log('primer empleados',res)
         this.misEmpleados = res.data || []
       }
     })
@@ -121,13 +121,13 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
     this.formEvaluacion.get('usuario_evaluado_id')?.valueChanges.subscribe((idUsuario) => {
       if (idUsuario) {
         this.capacitacionesService.getinfoPuestoYDepartamentoPorId(idUsuario).subscribe((res) => {
-          console.log('Datos del usuario seleccionado:', res);
+          // console.log('Datos del usuario seleccionado:', res);
           // Aquí puedes asignar los datos a variables del componente si necesitas mostrarlos en la vista
           // this.usuarioSeleccionado = res;
           this.usuarioAEvaluar = res
           //todo  hacer un switch
-          console.log('usuario a evaluar', res)
-          console.log(res.puesto)
+          // console.log('usuario a evaluar', res)
+          // console.log(res.puesto)
           switch (res.puesto) {
             case 'Auxiliar de Recursos Humanos':
                 let nombreArchivo1 = "Evaluación Desempeño Auxiliar de Recursos Humanos Actualizada feb25.xlsx";
@@ -293,7 +293,7 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
   getEvaluacionesDeMisEmpleados(){
     this.capacitacionesService.getEvaluacionesMisEmpelados(this.usuario.id,this.mes).pipe().subscribe({
       next:(res)=>{
-        console.log('evaluaciones',res)
+        // console.log('evaluaciones',res)
 
         // mes actual 
           const mesActualNumero = new Date().getMonth();

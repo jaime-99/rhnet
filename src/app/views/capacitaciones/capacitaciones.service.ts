@@ -51,7 +51,6 @@ export class CapacitacionesService {
     let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/getEvaluacionForId.php?id=${id}`
     return this.http.get<any[]>(url)
   }
-
   // es para obtener el puesto y el departamento de un usuario
   getinfoPuestoYDepartamentoPorId(id:number):Observable<any>{
     let url = `https://rhnet.cgpgroup.mx/endpoints/usuarios/getInfoUsuarioComplete.php?id=${id}&timestamp=${new Date().getTime()}`
@@ -87,9 +86,15 @@ export class CapacitacionesService {
     // let data = {}
     return this.http.post(url,data)
   }
-
+  // es para ver todos los comentarios por el id de la evaluacion
   verComentariosPorEvaluacionId(evaluacion_id:any):Observable<any>{
     let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/verComentariosPorEvaluacionId.php?evaluacion_id=${evaluacion_id}&timestamp=${new Date().getTime()}`
     return this.http.get(url)
+  }
+
+  // para actualizar el estatus de pendiente a completado en una evaluacion 
+  cambiarEstatus(evaluacion_id:number):Observable<any>{
+    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/cambiarEstatusEvaluacion.php`
+    return this.http.post(url, {evaluacion_id})
   }
 }

@@ -15,9 +15,17 @@ import { TabViewModule } from 'primeng/tabview'; // Asegúrate de importar este 
 import { CrearCapacitacionCgpowerComponent } from '../crear-capacitacion-cgpower/crear-capacitacion-cgpower.component';
 import {CrearCapacitacionLiderComponent} from '../crear-capacitacion/crear-capacitacion-lider/crear-capacitacion-lider.component'
 import { CompartirDatosService } from '../crear-capacitacion-cgpower/compartir-datos.service';
+import {NumeroVecesLiderEvaluadoComponent} from '../crear-capacitacion/numero-veces-lider-evaluado/numero-veces-lider-evaluado.component'
 @Component({
   selector: 'app-crear-capacitacion',
-  imports: [ButtonModule, FileUpload, CommonModule, ToastModule,TabsModule, CrearCapacitacionCgpowerComponent, CrearCapacitacionLiderComponent ],
+  imports: [ButtonModule,
+     CommonModule,
+     ToastModule,
+     TabsModule,
+      CrearCapacitacionCgpowerComponent,
+      //  CrearCapacitacionLiderComponent,
+      NumeroVecesLiderEvaluadoComponent
+       ],
   providers: [MessageService],
   templateUrl: './crear-capacitacion.component.html',
   styleUrl: './crear-capacitacion.component.scss'
@@ -35,6 +43,7 @@ export class CrearCapacitacionComponent implements OnInit {
   urlArchivo: string = '';
   fileName:string = ''
   datosUsuario: any;
+  mensajesNoPuedesEvaluarLider: boolean = false;
   
   constructor (private routerActivated:ActivatedRoute, private fb:FormBuilder,
     private capacitacionesService:CapacitacionesService, private messageService:MessageService,
@@ -76,13 +85,15 @@ export class CrearCapacitacionComponent implements OnInit {
   getJefeDirecto(){
     this.capacitacionesService.getJefeDirecto(this.usuario.id).subscribe({
       next:(res)=>{
-
+        // console.log(res)
         if(res.message){
           this.jefeDirecto = ''
-
+          // console.log('no tiene jefe directo')
         }else{
           this.jefeDirecto = res
-
+        }
+        if(res.jefe_id == null){
+          this.mensajesNoPuedesEvaluarLider = true
         }
         // console.log(this.jefeDirecto)
       }

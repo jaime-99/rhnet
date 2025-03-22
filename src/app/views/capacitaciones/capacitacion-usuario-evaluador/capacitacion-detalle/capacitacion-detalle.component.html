@@ -57,42 +57,51 @@
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (shown.bs.modal)="verComentarios()">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Comentarios ({{ comentarios.length }})</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div *ngIf="comentarios.length > 0; else noComentarios">
-                        <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let comentario of comentarios">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <strong>{{ comentario.usuario }}</strong>  
-                                    <span class="text-muted">{{ comentario?.fecha_creacion | date:'short' }}</span>
-                                </div>
-                                <p class="mb-2">{{ comentario?.comentario }}</p>
-                                
-                                <!-- Responder comentario -->
-                                <button *ngIf="comentario.usuario_id !== this.usuario.id" class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
-                                    Responder
-                                </button>
-    
-                                <!-- Área de respuesta -->
-                                <div *ngIf="comentario.id === comentarioSeleccionado" class="mt-2">
-                                    <textarea [(ngModel)]="respuestaTexto" class="form-control" rows="2" placeholder="Escribe tu respuesta..."></textarea>
-                                    <button class="btn btn-success btn-sm mt-2" (click)="responderComentario(comentario.id)">Enviar</button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <ng-template #noComentarios>
-                        <p class="text-center text-muted">No hay comentarios aún.</p>
-                    </ng-template>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Comentarios ({{ comentarios.length }})</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+              <div *ngIf="comentarios.length > 0; else noComentarios">
+                <ul class="list-group">
+                  <li class="list-group-item" *ngFor="let comentario of comentarios">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <strong>{{ comentario.usuario }}</strong>  
+                      <span class="text-muted">{{ comentario?.fecha_creacion | date:'short' }}</span>
+                    </div>
+                    <p class="mb-2">{{ comentario?.comentario }}</p>
+      
+                    <!-- Mostrar "Respondido" si este comentario fue respondido por otro comentario -->
+                    <div *ngIf="comentario.respondido" class="text-muted">
+                      <span>Respondido</span>
+                    </div>
+      
+                    <!-- Mostrar el botón "Responder" solo si el comentario no ha sido respondido -->
+                    <div *ngIf="!comentario.respondido">
+                      <button *ngIf="comentario.usuario_id !== this.usuario.id" class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
+                        Responder
+                      </button>
+                    </div>
+      
+                    <!-- Área de respuesta -->
+                    <div *ngIf="comentario.id === comentarioSeleccionado" class="mt-2">
+                      <textarea [(ngModel)]="respuestaTexto" class="form-control" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+                      <button class="btn btn-success btn-sm mt-2" (click)="responderComentario(comentario.id)">Enviar</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <ng-template #noComentarios>
+                <p class="text-center text-muted">No hay comentarios aún.</p>
+              </ng-template>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+      
+      
     

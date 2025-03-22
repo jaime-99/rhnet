@@ -92,7 +92,7 @@
             <ng-container *ngIf="headers[j] !== 'EVALÚE A BASE DE %'">
               <!-- Si es la columna de comentarios, no mostrar 'ninguno' -->
               <ng-container *ngIf="headers[j] === 'COMENTARIOS'">
-                <button type="button" (click)="openCommentModal(i, j)" class="btn btn-primary">
+                <button  type="button" (click)="openCommentModal(i, j)" class="btn btn-info">
                   Comentar
                 </button>
                 <span *ngIf="excelData[i][j] !== 'ninguno'">
@@ -126,7 +126,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button (click)="saveComment()" type="button" class="btn btn-primary">Guardar</button>
+          <button (click)="saveComment()" type="button" class="btn btn-success">Guardar</button>
         </div>
       </div>
     </div>
@@ -144,7 +144,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button (click)="saveCommentKpi()" type="button" class="btn btn-primary">Guardar</button>
+          <button (click)="saveCommentKpi()" type="button" class="btn btn-success">Guardar</button>
         </div>
       </div>
     </div>
@@ -174,7 +174,7 @@
         <!-- Si la columna no es 'EVALÚE A BASE DE %', solo mostramos el valor -->
         <ng-container *ngIf="headers2[j] !== 'EVALÚE A BASE DE %'">
           <ng-container *ngIf="headers2[j] === 'COMENTARIOS'">
-            <button type="button" (click)="openCommentModalKpi(i, j)" class="btn btn-primary">
+            <button type="button" (click)="openCommentModalKpi(i, j)" class="btn btn-info">
               Comentar
             </button>
             <span *ngIf="kpiData[i][j] !== 'ninguno'">

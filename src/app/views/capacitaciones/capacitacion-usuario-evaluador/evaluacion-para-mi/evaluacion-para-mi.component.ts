@@ -64,7 +64,7 @@ export class EvaluacionParaMiComponent implements OnInit {
 
   abrirModal(evaluacion:any){
     this.evaluacionSeleccionada = evaluacion;
-    this.obtenerComentarios(evaluacion)
+    this.obtenerComentarios(evaluacion) //checar 
   }
 
   verEvaluacionPDF(){
@@ -96,18 +96,26 @@ export class EvaluacionParaMiComponent implements OnInit {
   }
   // para dar un update a la evaluacion de la tabla rh_evaluaciones en la columna estatus a completado
   marcarPorVistoEvaluacion(){
-    let datos = {
-      evaluacion_id:  this.evaluacionSeleccionada?.id,
-      usuario_id: this.usuario.id,
-      comentario: this.comentario.value,
-      respondio_id : null
-    }
-    this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
-      next:(res)=>{
-        // console.log(res)
-        this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha enviado el comentario', life: 3000 });
-        location.reload();
+    if(this.comentario.valid){
+
+      let datos = {
+        evaluacion_id:  this.evaluacionSeleccionada?.id,
+        usuario_id: this.usuario.id,
+        comentario: this.comentario.value,
+        respondio_id : null
       }
+      this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
+        next:(res)=>{
+          // console.log(res)
+          location.reload();
+        }
+      })
+    }
+    //*marcar por visto la evaluacion
+    // console.log(this.evaluacionSeleccionada)
+    this.capacitacionesService.cambiarEstatus(this.evaluacionSeleccionada?.id).subscribe((res)=>{
+      this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha enviado el comentario', life: 3000 });
+      // console.log('update',res)
     })
   }
 
@@ -132,9 +140,9 @@ export class EvaluacionParaMiComponent implements OnInit {
         this.comentarios = res.data
         const ultimoComentario = [...this.comentarios].sort((a, b) => b.id - a.id)[0];
 
-        if(ultimoComentario.usuario_id == this.usuario.id){
-          this.mostrarMensaje = true
-        }
+        // if(ultimoComentario.usuario_id == this.usuario.id){
+        //   this.mostrarMensaje = true
+        // }
       }
     })
   }

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';  // 👈 Importar FormsModule
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -19,10 +20,15 @@ export class CrearCapacitacionLiderComponent implements OnInit {
 
   public urlArchivo = `https://rhnet.cgpgroup.mx/archivos/capacitaciones2025/`
   mostrarMensaje: boolean = false;
+  usuario: any = '';
+  startIndex: number = 0;
 
   constructor (private compatirDatos:CompartirDatosService, private capacitacionesService:CapacitacionesService,
-    private http:HttpClient ) {}
+    private http:HttpClient, private router:Router ) {}
   ngOnInit(): void {
+
+    const usuarioData:any = localStorage.getItem('usuario');
+    this.usuario = JSON.parse(usuarioData);
     
     this.datosEvaluacion = this.compatirDatos.getDatosPrivados()
 
@@ -34,13 +40,24 @@ export class CrearCapacitacionLiderComponent implements OnInit {
         puntuacion: null,  // Inicialmente vacío
         comentario: ''     // Inicialmente vacío
       }));
+      this.startIndex = this.evaluaciones.findIndex(ev => ev.__EMPTY === 'Comunicación');
+
+      // const evaluacionFinal = this.getEvaluation();
+      // const evaluacionGeneralIndex = this.evaluaciones.findIndex(ev => ev.__EMPTY_1  === 'Evaluación General');
+  
+      // if (evaluacionGeneralIndex !== -1) {
+      //   this.evaluaciones[evaluacionGeneralIndex].puntuacion = evaluacionFinal;  // Asignamos la evaluación calculada
+      // }
     });
   }
 
   getEvaluation(): string {
-    const total = this.evaluaciones.filter(ev => ev.puntuacion !== '').length; // Total de respuestas
-    const correctas = this.evaluaciones.filter(ev => ev.puntuacion === '✔️').length; // Total de correctas
-    const incorrectas = this.evaluaciones.filter(ev => ev.puntuacion === '❌').length; // Total de incorrectas
+    if (!this.evaluaciones || this.startIndex === -1) return "Sin evaluación";
+
+    const evaluacionesFiltradas = this.evaluaciones.slice(this.startIndex);
+
+    const total = evaluacionesFiltradas.filter(ev => ev.puntuacion !== '').length; 
+    const correctas = evaluacionesFiltradas.filter(ev => ev.puntuacion === '✔️').length;
 
     const porcentaje = (correctas / total) * 100; // Calcula el porcentaje de respuestas correctas
 
@@ -61,9 +78,18 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     const data = evaluacionesConEvaluacionFinal.map(ev => ({
       'Área de Evaluación': ev.__EMPTY,
       'Pregunta': ev.__EMPTY_1,
-      'Puntuación': ev.puntuacion,
+      'Puntuación': ev.puntuacion === '✔️' ? 'Aprobado' : ev.puntuacion === '❌' ? 'Reprobado' : ev.puntuacion,
       'Comentarios': ev.comentario,
     }));
+
+     // Agregamos la fila de evaluación final
+  const evaluacionFinal = this.getEvaluation();  // Calcula la evaluación final
+  data.push({
+    'Área de Evaluación': 'Evaluación Final',
+    'Pregunta': '',
+    'Puntuación': evaluacionFinal,
+    'Comentarios': ''
+  });
 
     // Crear un libro de trabajo de Excel
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
@@ -91,15 +117,15 @@ export class CrearCapacitacionLiderComponent implements OnInit {
 
   // es para enviar los datos de excel a el servidor
   enviarDatosExcel(formData:FormData){
-    console.log(formData)
+    // console.log(formData)
     this.http.post("https://rhnet.cgpgroup.mx/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
       (response) => {
-          console.log("Archivo enviado con éxito", response);
+          // console.log("Archivo enviado con éxito", response);
           this.subirEvaluacionBD()
           alert("Archivo enviado correctamente");
       },  
       (error) => {
-          console.error("Error al enviar el archivo", error);
+          // console.error("Error al enviar el archivo", error);
       }
   );
 
@@ -128,5 +154,10 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     })
     
     this.mostrarMensaje = true
+  }
+
+  irAEvaluacion(){
+    // redigiremos a la evaluacion de ese mes 
+    this.router.navigate(['./evaluaciones/capacitacion-evaluador'], {queryParams:{mes:this.data.mes_evaluacion}} )
   }
 }

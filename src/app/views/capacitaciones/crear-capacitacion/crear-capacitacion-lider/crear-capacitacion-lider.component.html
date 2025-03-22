@@ -3,7 +3,7 @@
     <div class="card-body">
         <h4 class="card-title text-center">Evaluacion a lider del mes de {{this.datosEvaluacion?.data.mes_evaluacion}} </h4>
         <p>lider Evaluado: <strong>{{this.datosEvaluacion?.evalua_a}} </strong> </p>
-        <p>Evaluador: <strong>EJEMPL   </strong> </p>
+        <p>Evaluador: <strong> {{this.usuario.nombre + " " + this.usuario.apellido_paterno + " " + this.usuario.apellido_materno}}    </strong> </p>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let ev of evaluaciones; let i = index">
+      <ng-container *ngFor="let ev of evaluaciones.slice(startIndex); let i = index">
         <!-- Agregar encabezado cuando cambia el área -->
         <tr *ngIf="i === 0 || ev.__EMPTY !== evaluaciones[i - 1].__EMPTY" class="area-header">
           <td colspan="5" class="fw-bold border-top border-dark">{{ ev.__EMPTY }}</td>
@@ -55,12 +55,14 @@
     </tbody>
   </table>
 
-  <button *ngIf="!mostrarMensaje"  (click)="exportToExcel()" class="btn btn-primary">Subir Evaluacion </button>
+  <!-- <button *ngIf="!mostrarMensaje"  (click)="exportToExcel()" class="btn btn-outline-info">Subir Evaluacion </button> -->
   
+  <div *ngIf="!mostrarMensaje"  (click)="exportToExcel()"  class="d-grid gap-2 m-2">
+    <button class="btn btn-outline-info" type="button">Subir Evaluacion</button>
+  </div>
 
-  <div *ngIf="mostrarMensaje" class="alert alert-danger" role="alert">
-    Has enviado la evaluacion con exito!
-    
-    <a href="./evaluaciones/" class="btn btn-success">Ir a Inicio</a>
-
+  <div *ngIf="mostrarMensaje" class="alert alert-success fade show text-center" role="alert">
+    <h4 class="alert-heading">¡Evaluación enviada con éxito!</h4>
+    <hr>
+    <button (click)="irAEvaluacion()" class="btn btn-success ">Ir a la Evaluacion</button>
   </div>

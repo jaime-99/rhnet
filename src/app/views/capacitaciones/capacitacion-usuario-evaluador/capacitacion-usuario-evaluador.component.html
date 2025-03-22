@@ -39,17 +39,20 @@
                                     <th>Nombre Evaluador</th>
                                     <th>Nombre del Evaluado</th>
                                     <th>Tipo de Evaluacion</th>
+                                    <th>Estatus</th>
                                     <th>Acciones</th>
                                 </tr>
                             </ng-template>
                             <ng-template #body let-capacitacion>
                                 <tr>
-                                    <td>{{ capacitacion.fecha_creacion }}</td>
+                                    <td>{{ capacitacion.fecha_creacion |date:'dd/MM/yyyy' }}</td>
                                     <td>{{ capacitacion.nombre_evaluador }}</td>
                                     <td>{{ capacitacion.nombre_evaluado }}</td>
                                     <td>{{ capacitacion.tipo_evaluacion }}</td>
+                                    <td> <span class="badge text-bg-primary" > {{capacitacion.estatus}} </span>
+                                    </td>
                                     <td>
-                                        <button (click)="irDetalles(capacitacion?.id)" class="btn btn-primary">Ver</button>
+                                        <button  (click)="irDetalles(capacitacion?.id)" class="btn btn-info">Ver</button>
                                     </td>
                                 </tr>
                             </ng-template>

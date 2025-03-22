@@ -200,7 +200,7 @@ export class CapacitacionDetalleComponent implements OnInit {
       
     ).subscribe((res)=>{
       this.comentarios = res.data
-      // console.log('comentarios',this.comentarios)
+      console.log('comentarios',this.comentarios)
       const ultimoComentario = [...this.comentarios].sort((a, b) => b.id - a.id)[0];
       // console.log('ultimo comentario',ultimoComentario.usuario_id)
 
@@ -208,6 +208,16 @@ export class CapacitacionDetalleComponent implements OnInit {
       // if(
         
       // )
+      this.comentarios.forEach((comentario: any) => {
+        if (comentario.respondio_id) {
+          // Encuentra el comentario al que responde este comentario (el que tiene el `id` igual a `respondio_id`)
+          const comentarioRespondido = this.comentarios.find((c) => c.id === comentario.respondio_id);
+          if (comentarioRespondido) {
+            // Asignamos al comentario original el texto "Respondido"
+            comentarioRespondido.respondido = true;
+          }
+        }
+      });
     })
   }
  

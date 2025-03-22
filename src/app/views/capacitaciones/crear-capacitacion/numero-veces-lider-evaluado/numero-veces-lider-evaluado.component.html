@@ -1,0 +1,8 @@
+
+<div *ngIf="mostrarAlert" class="alert alert-danger">
+    {{this.mensaje}}
+</div>
+
+<div *ngIf="!mostrarAlert" class="alert alert-success">
+    numero de veces Evaluado en este mes: {{evaluacionesDeEsteMes.length}}
+</div>
