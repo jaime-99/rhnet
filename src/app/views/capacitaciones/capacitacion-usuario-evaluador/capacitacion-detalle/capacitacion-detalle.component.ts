@@ -200,10 +200,10 @@ export class CapacitacionDetalleComponent implements OnInit {
       
     ).subscribe((res)=>{
       this.comentarios = res.data
-      console.log('comentarios',this.comentarios)
+      // console.log('comentarios',this.comentarios)
       const ultimoComentario = [...this.comentarios].sort((a, b) => b.id - a.id)[0];
       // console.log('ultimo comentario',ultimoComentario.usuario_id)
-
+        
         
       // if(
         

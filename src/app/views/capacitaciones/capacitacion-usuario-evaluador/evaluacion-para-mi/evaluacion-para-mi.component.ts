@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CapacitacionesService } from '../../capacitaciones.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule, Validators } from '@angular/forms'; 
 import { ToastModule } from 'primeng/toast';
 declare var bootstrap: any;
 
@@ -23,6 +23,7 @@ import {ComentariosComponent} from '../evaluacion-para-mi/comentarios/comentario
 })
 // componete para ver la evaluaciones que te hicieron a ti 
 export class EvaluacionParaMiComponent implements OnInit {
+  @ViewChild(ComentariosComponent) comentariosHijo!: ComentariosComponent;  // Referencia al componente hijo
 
   // @Input() Usuario:any
   mes: any;
@@ -30,7 +31,11 @@ export class EvaluacionParaMiComponent implements OnInit {
   evaluaciones:any[] = []
   loading: boolean = false;
   evaluacionSeleccionada: any;
-  comentario = new FormControl(''); // Inicializado con un valor vacío
+  comentario = new FormControl('', [
+    Validators.required,      // El comentario es obligatorio
+    Validators.pattern(/^(?!\s*$).+/)        // No permite solo espacios en blanco
+
+  ]); // Inicializado con un valor vacío
   comentarios: any;
   mostrarMensaje: boolean = false;
 
@@ -57,6 +62,8 @@ export class EvaluacionParaMiComponent implements OnInit {
 
       next:(res)=>{
         this.evaluaciones = res.filter((e:any) => e.mes_evaluacion == this.mes)
+
+
         this.loading = true;
       }
     })
@@ -64,6 +71,10 @@ export class EvaluacionParaMiComponent implements OnInit {
 
   abrirModal(evaluacion:any){
     this.evaluacionSeleccionada = evaluacion;
+
+    if(this.evaluacionSeleccionada.estatus === 'completada') {
+      this.mostrarMensaje = true;
+    }
     this.obtenerComentarios(evaluacion) //checar 
   }
 
@@ -106,16 +117,32 @@ export class EvaluacionParaMiComponent implements OnInit {
       }
       this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
         next:(res)=>{
-          // console.log(res)
-          location.reload();
+           // Agregar el nuevo comentario a la lista de comentarios local
+        const nuevoComentario = {
+          id: res.data?.id || Math.random(), // Si no devuelve ID, usa uno temporal
+          evaluacion_id: this.evaluacionSeleccionada?.id,
+          usuario_id: this.usuario.id,
+          usuario: this.usuario.nombre, // Muestra el nombre del usuario
+          comentario: this.comentario.value?.trim(),
+          fecha_creacion: new Date(), // Fecha actual para mostrarlo de inmediato
+          respondido: false
+        };
+        this.comentarios.push(nuevoComentario); // Agregarlo a la lista de comentarios
+        this.comentario.reset(); // Limpiar el textarea
+        this.mostrarMensaje = true; // Mostrar el mensaje de "Ya has marcado por visto"
+
+        // obtiene los comentarios desde el hijo 
+          this.comentariosHijo.obtenerComentarios();
+
         }
       })
     }
     //*marcar por visto la evaluacion
-    // console.log(this.evaluacionSeleccionada)
     this.capacitacionesService.cambiarEstatus(this.evaluacionSeleccionada?.id).subscribe((res)=>{
-      this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha enviado el comentario', life: 3000 });
+      this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha cambiado el estatus a COMPLETADA', life: 3000 });
       // console.log('update',res)
+      this.evaluacionSeleccionada.estatus = 'completada'; // Actualizar localmente el estatus
+
     })
   }
 

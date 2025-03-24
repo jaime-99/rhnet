@@ -77,12 +77,13 @@
                     <div class="col">
                         <p><strong>Ver Evaluacion:</strong>  <button style="background-color: #0ab4df; border-color: #0ab4df;" type="button" (click)="verEvaluacionPDF()" class="btn btn-primary">Ver PDF</button>  </p>
 
-                        <label *ngIf="!this.mostrarMensaje" for="">Escribir comentarios(opcional)</label>
-                        <textarea *ngIf="!this.mostrarMensaje" [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <div *ngIf="!mostrarMensaje" class="div">
+                            <label  for="">Escribir comentarios(opcional)</label>
+                            <textarea [formControl]="comentario" class="form-control m-1" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <button  type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
+                        </div>
 
-                        <button [disabled]="this.mostrarMensaje" type="button" (click)="marcarPorVistoEvaluacion()" class="btn btn-danger">marcar por visto la Evaluacion</button>
-
-                        <div  class="alert alert-success mt-1" role="success">
+                        <div *ngIf="mostrarMensaje"  class="alert alert-success mt-1" role="success">
                            Ya  Has Marcado por visto la Evaluacion!
                            <button style="background-color: #0ab4df; border-color: #0ab4df;"  data-bs-toggle="modal" data-bs-target="#comentariosModal" class="btn btn-primary btn-sm ms-3">
                             <i class="bi bi-chat-dots"></i> Ver comentarios
@@ -108,7 +109,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <app-comentarios *ngIf="evaluacionSeleccionada" [evaluacion]="evaluacionSeleccionada"></app-comentarios>
+                <app-comentarios *ngIf="evaluacionSeleccionada" [evaluacion]="evaluacionSeleccionada"
+                
+                ></app-comentarios>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#evaluacionModal" >Regresar</button>
