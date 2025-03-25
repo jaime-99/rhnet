@@ -88,7 +88,7 @@ export class CapacitacionesService {
   }
   // es para ver todos los comentarios por el id de la evaluacion
   verComentariosPorEvaluacionId(evaluacion_id:any):Observable<any>{
-    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/verComentariosPorEvaluacionId.php?evaluacion_id=${evaluacion_id}&timestamp=${new Date().getTime()}`
+    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/verComentariosPorEvaluacionId.php?evaluacion_id=${evaluacion_id}}`
     return this.http.get(url)
   }
 
@@ -96,5 +96,18 @@ export class CapacitacionesService {
   cambiarEstatus(evaluacion_id:number):Observable<any>{
     let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/cambiarEstatusEvaluacion.php`
     return this.http.post(url, {evaluacion_id})
+  }
+
+  //cambiar area de oportunidad 
+
+  guardarAreaOportunidad(evaluacion_id: number, usuario_id: number, notas: string): Observable<any> {
+    let url = 'https://rhnet.cgpgroup.mx/endpoints/capacitaciones/guardar_AreaOportunidad.php'
+    const body = { evaluacion_id, usuario_id, notas };
+    return this.http.post<any>(url, body);
+  }
+
+  obtenerAreaDeOportunidad(evaluacion_id:number):Observable<any>{
+    let url = `https://rhnet.cgpgroup.mx/endpoints/capacitaciones/obtenerAreaDeEvaluacion.php?evaluacion_id=${evaluacion_id}&timestamp=${new Date().getTime()}`;
+    return this.http.get<any>(url)
   }
 }

@@ -57,6 +57,21 @@ export const routes: Routes = [
                 },
             },
             {
+                path: 'area-oportunidad',
+                loadComponent: () => import('./area-de-oportunidad/area-de-oportunidad.component').then(m => m.AreaDeOportunidadComponent),
+                data: {
+                  title: 'crear area de oportunidad'
+                },
+            },
+            {
+                path: 'ver-area-oportunidad-evaluado',
+                loadComponent: () => import('./capacitacion-usuario-evaluador/evaluacion-para-mi/ver-area-oportunidad-evaluado/ver-area-oportunidad-evaluado.component').then(m => m.VerAreaOportunidadEvaluadoComponent),
+                data: {
+                  title: 'ver area de oportunidad'
+                },
+            },
+            
+            {
                 path: 'mensaje-exitoso',
                 loadComponent: () => import('./crear-capacitacion-cgpower/mensaje-exitoso/mensaje-exitoso.component').then(m => m.MensajeExitosoComponent),
                 data: {

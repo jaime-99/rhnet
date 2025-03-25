@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CapacitacionesService } from '../../capacitaciones.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import * as XLSX from 'xlsx'; // Librería para leer Excel
@@ -27,7 +27,7 @@ export class CapacitacionDetalleComponent implements OnInit {
   respuestaTexto: string = '';
 
   constructor(private capacitacionoService:CapacitacionesService,
-    private activatedRouter:ActivatedRoute,
+    private activatedRouter:ActivatedRoute, private router:Router,
     private http: HttpClient
 
   ) {}
@@ -242,13 +242,17 @@ export class CapacitacionDetalleComponent implements OnInit {
 
       }
     })
-
     this.comentarios.push(nuevaRespuesta); // Simulación de respuesta en la lista
     this.respuestaTexto = '';
     this.comentarioSeleccionado = null;
   }
 
 
+  // es para ir al template de crear el area de oportunidad 
+
+  crearArea(id?:any){
+    this.router.navigate(['evaluaciones/area-oportunidad'], {queryParams:{id_evaluacion:id}})
+  }
   
 
 

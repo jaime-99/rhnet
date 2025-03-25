@@ -293,7 +293,6 @@ export class EditarExcelComponent implements OnInit {
         },
     });
 }
-
 confirm2(event: Event) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,

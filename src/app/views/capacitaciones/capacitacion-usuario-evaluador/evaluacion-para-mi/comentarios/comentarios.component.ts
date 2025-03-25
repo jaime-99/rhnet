@@ -36,6 +36,8 @@ export class ComentariosComponent implements OnInit {
 
   
   obtenerComentarios(){
+    
+    // this.actualizarComentarios.emit()
     if (!this.evaluacion || !this.evaluacion.id) {
       console.error('Error: No se ha recibido la evaluación correctamente');
       return;
@@ -43,6 +45,7 @@ export class ComentariosComponent implements OnInit {
     this.capacitacionesService.verComentariosPorEvaluacionId(this.evaluacion.id).subscribe({
       next:(res)=>{
         this.comentarios = res.data
+        console.log('comentarios',this.comentarios)
 
         this.comentarios.forEach((comentario: any) => {
           if (comentario.respondio_id) {
@@ -81,7 +84,7 @@ export class ComentariosComponent implements OnInit {
     // console.log(nuevaRespuesta);
     this.capacitacionesService.agregarComentarioAEvaluacion(nuevaRespuesta).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
         // location.reload();
       }
     })
@@ -141,10 +144,10 @@ export class ComentariosComponent implements OnInit {
       comentario: this.nuevoComentario.value.trim(),
       respondio_id: id
     };
-  
+
     this.capacitacionesService.agregarComentarioAEvaluacion(primerComentario).subscribe({
       next: (res) => {
-        console.log(res);
+        // console.log(res);
         this.messageService.add({ severity: 'success', summary: 'COMPLETADO', detail: 'Comentario agregado', life: 3000 });
   
         // Si la API devuelve un ID, lo agregamos a la lista local para que se refleje en la vista

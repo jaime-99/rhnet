@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CapacitacionesService } from '../../capacitaciones.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -40,7 +40,7 @@ export class EvaluacionParaMiComponent implements OnInit {
   mostrarMensaje: boolean = false;
 
   constructor (private activatedRouter:ActivatedRoute, private capacitacionesService:CapacitacionesService, private http:HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService, private router:Router
   ) {}
   ngOnInit(): void {
 
@@ -72,40 +72,112 @@ export class EvaluacionParaMiComponent implements OnInit {
   abrirModal(evaluacion:any){
     this.evaluacionSeleccionada = evaluacion;
 
+    // console.log(this.evaluacionSeleccionada)
+
     if(this.evaluacionSeleccionada.estatus === 'completada') {
       this.mostrarMensaje = true;
     }
     this.obtenerComentarios(evaluacion) //checar 
   }
 
-  verEvaluacionPDF(){
-
-    this.http.get(this.evaluacionSeleccionada?.archivo, { responseType: 'arraybuffer' }).subscribe(
-          (data) => {
-            const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      
-            // Convertir a PDF
-            const doc = new jsPDF();
-            autoTable(doc, {
-              head: [jsonData[0] as any[]], // Forzar tipo de encabezado
-              body: jsonData.slice(1) as any[][] // Forzar tipo del cuerpo
-            });
-      
-            // Generar Blob del PDF
-            const pdfBlob = doc.output('blob');
-      
-            // Crear una URL para el Blob y abrir en nueva pestaña
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            window.open(pdfUrl, '_blank');
-          },
-          (error) => {
-            console.error('Error al descargar el archivo:', error);
-          }
-        );
+  convertImageToBase64(logoUrl: string): Promise<string> {
+    return fetch(logoUrl)
+      .then(response => response.blob())
+      .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }));
   }
+  
+  // verEvaluacionPDF(){
+
+
+  //   //colocar logo
+  //   const logoUrl = '../../assets/Logo2.png';
+
+  //   this.http.get(this.evaluacionSeleccionada?.archivo, { responseType: 'arraybuffer' }).subscribe(
+  //         (data) => {
+  //           const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+  //           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  //           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+  //           // Convertir a PDF
+  //           const doc = new jsPDF();
+  //           autoTable(doc, {
+  //             head: [jsonData[0] as any[]], // Forzar tipo de encabezado
+  //             body: jsonData.slice(1) as any[][] // Forzar tipo del cuerpo
+  //           });
+      
+  //           // Generar Blob del PDF
+  //           const pdfBlob = doc.output('blob');
+      
+  //           // Crear una URL para el Blob y abrir en nueva pestaña
+  //           const pdfUrl = URL.createObjectURL(pdfBlob);
+  //           window.open(pdfUrl, '_blank');
+  //         },
+  //         (error) => {
+  //           console.error('Error al descargar el archivo:', error);
+  //         }
+  //       );
+  // }
   // para dar un update a la evaluacion de la tabla rh_evaluaciones en la columna estatus a completado
+
+  verEvaluacionPDF() {
+    const logoUrl = '../../assets/Logo2.png';
+    const nombreEvaluador = `${this.evaluacionSeleccionada.evaluador_nombre} ${this.evaluacionSeleccionada.evaluador_apellido_paterno}`;
+    const fecha = this.evaluacionSeleccionada.fecha_creacion;
+    const estatus = this.evaluacionSeleccionada.estatus;
+    const mes = this.evaluacionSeleccionada.mes_evaluacion;
+    
+    this.convertImageToBase64(logoUrl).then((logoBase64) => {
+      this.http.get(this.evaluacionSeleccionada?.archivo, { responseType: 'arraybuffer' }).subscribe(
+        (data) => {
+          const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+  
+          const doc = new jsPDF();
+  
+          // **Agregar el logo**
+          doc.addImage(logoBase64, 'PNG', 10, 10, 40, 20); // X, Y, Width, Height
+  
+          // **Agregar los textos**
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(12);
+          doc.text('Evaluador:', 10, 35);
+          doc.text('Fecha:', 10, 42);
+          doc.text('Estatus:', 100, 35);
+          doc.text('Mes:', 100, 42);
+  
+          // **Agregar los valores dinámicos**
+          doc.setFont('helvetica', 'normal');
+          doc.text(nombreEvaluador, 40, 35);
+          doc.text(fecha, 40, 42);
+          doc.text(estatus, 130, 35);
+          doc.text(mes, 130, 42);
+  
+          // **Ajustar la tabla para que inicie después de los textos**
+          autoTable(doc, {
+            startY: 50, // 📌 Se ajusta la posición de la tabla después de los textos
+            head: [jsonData[0] as any[]],
+            body: jsonData.slice(1) as any[][]
+          });
+  
+          // **Generar y abrir el PDF**
+          const pdfBlob = doc.output('blob');
+          const pdfUrl = URL.createObjectURL(pdfBlob);
+          window.open(pdfUrl, '_blank');
+        },
+        (error) => {
+          console.error('Error al descargar el archivo:', error);
+        }
+      );
+    }).catch(error => console.error("Error cargando la imagen:", error));
+  }
+  
+  
   marcarPorVistoEvaluacion(){
     if(this.comentario.valid){
 
@@ -172,5 +244,17 @@ export class EvaluacionParaMiComponent implements OnInit {
         // }
       }
     })
+  }
+
+  verAreaDeOportunidad(){
+    console.log(this.evaluacionSeleccionada)
+    let modal = document.getElementById('evaluacionModal');
+    if (modal) {
+        let modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+    this.router.navigate(['/evaluaciones/ver-area-oportunidad-evaluado'], {queryParams:{id_evaluacion:this.evaluacionSeleccionada?.id}})
   }
 }

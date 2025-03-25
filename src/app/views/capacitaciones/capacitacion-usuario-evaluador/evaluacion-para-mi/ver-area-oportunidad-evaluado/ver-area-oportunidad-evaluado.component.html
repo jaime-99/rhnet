@@ -1,0 +1,18 @@
+
+<div *ngIf="notas.length>=1"  class="div">
+
+<div class="card m-1">
+    <div class="card-body">
+        <p class="cart-title">Area de Oportunidad</p>
+    </div>
+</div>
+
+<div class="card">
+    <p-editor [(ngModel)]="notas" [readonly]="true" [style]="{ height: '320px' }" />
+</div>
+
+</div>
+
+<div *ngIf="notas?.length<1" class="alert alert-danger">
+    No hay aun un area de oportunidad para ti
+</div>
