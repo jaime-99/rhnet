@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ThisReceiver } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,10 +12,7 @@ export class LoginService {
 
 
   validacionIniciarSesion(usuario:string,contrasenia:string):Observable<any>{
-    let url = `https://itickets.cgpgroup.mx/apis/usuario/getUserForUser.php?usuario=${usuario}&contrasenia=${contrasenia}`
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-    return this.http.get<any>(url, {headers});
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/iniciar_sesion.php?usuario=${usuario}&contrasenia=${contrasenia}`
+    return this.http.get<any>(url);
   }
 }
