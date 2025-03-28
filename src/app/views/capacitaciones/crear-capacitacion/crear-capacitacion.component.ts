@@ -15,7 +15,7 @@ import { TabViewModule } from 'primeng/tabview'; // Asegúrate de importar este 
 import { CrearCapacitacionCgpowerComponent } from '../crear-capacitacion-cgpower/crear-capacitacion-cgpower.component';
 import {CrearCapacitacionLiderComponent} from '../crear-capacitacion/crear-capacitacion-lider/crear-capacitacion-lider.component'
 import { CompartirDatosService } from '../crear-capacitacion-cgpower/compartir-datos.service';
-import {NumeroVecesLiderEvaluadoComponent} from '../crear-capacitacion/numero-veces-lider-evaluado/numero-veces-lider-evaluado.component'
+import {NumeroVecesLiderEvaluadoComponent} from '../crear-capacitacion/numero-veces-lider-evaluado/numero-veces-lider-evaluado.component';
 @Component({
   selector: 'app-crear-capacitacion',
   imports: [ButtonModule,
@@ -139,7 +139,7 @@ export class CrearCapacitacionComponent implements OnInit {
   onUpload(event:any){
     const file = event;
     this.fileName = file
-    const urlArchivo = `https://rhnet.cgpgroup.mx/archivos/capacitaciones2025/${file.name}`
+    const urlArchivo = `https://magna.cgpgroup.mx/rhnet/archivos/capacitaciones2025/${file.name}`
     this.urlArchivo = urlArchivo
     // console.log('URL del archivo:', urlArchivo);
 

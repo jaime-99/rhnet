@@ -16,7 +16,7 @@ import { CapacitacionesService } from '../../../capacitaciones.service';
 })
 export class EnvioEvaluacionComponent implements OnInit {
 
-  public urlArchivo = `https://rhnet.cgpgroup.mx/archivos/capacitaciones2025/`
+  public urlArchivo = `https://magna.cgpgroup.mx/rhnet/archivos/capacitaciones2025/`
 
   constructor (private http:HttpClient, private confirmationService: ConfirmationService,  private messageService: MessageService,
     private router:Router, private capacitacionesService:CapacitacionesService
@@ -66,7 +66,7 @@ export class EnvioEvaluacionComponent implements OnInit {
   //   console.log(formData.get("file")); // Verifica si el archivo se está agregando correctamente
   
   //   // Enviar al backend
-  //   this.http.post("https://rhnet.cgpgroup.mx/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
+  //   this.http.post("https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
   //     (response) => {
   //       console.log("Archivo enviado con éxito", response);
   //       alert("Archivo enviado correctamente");
@@ -116,7 +116,7 @@ export class EnvioEvaluacionComponent implements OnInit {
     // console.log(formData.get("file")); // Verifica si el archivo se está agregando correctamente
     this.urlArchivo = this.urlArchivo +  nombreArchivo
     // Enviar al backend
-    this.http.post("https://rhnet.cgpgroup.mx/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
+    this.http.post("https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
         (response) => {
             console.log("Archivo enviado con éxito", response);
             alert("Archivo enviado correctamente");

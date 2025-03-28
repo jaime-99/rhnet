@@ -18,7 +18,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   evaluaciones: any[] = [];
   datosEvaluacion:any = []
 
-  public urlArchivo = `https://rhnet.cgpgroup.mx/archivos/capacitaciones2025/`
+  public urlArchivo = `https://magna.cgpgroup.mx/rhnet/archivos/capacitaciones2025/`
   mostrarMensaje: boolean = false;
   usuario: any = '';
   startIndex: number = 0;
@@ -118,7 +118,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   // es para enviar los datos de excel a el servidor
   enviarDatosExcel(formData:FormData){
     // console.log(formData)
-    this.http.post("https://rhnet.cgpgroup.mx/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
+    this.http.post("https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
       (response) => {
           // console.log("Archivo enviado con éxito", response);
           this.subirEvaluacionBD()

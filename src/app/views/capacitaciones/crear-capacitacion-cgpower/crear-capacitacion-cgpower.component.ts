@@ -128,80 +128,80 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
           //todo  hacer un switch
           // console.log('usuario a evaluar', res)
           // console.log(res.puesto)
-          switch (res.puesto) {
-            case 'Auxiliar de Recursos Humanos':
-                let nombreArchivo1 = "Evaluación Desempeño Auxiliar de Recursos Humanos Actualizada feb25.xlsx";
-                this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo1)}`;
-              break;
+          // switch (res.puesto) {
+          //   case 'Auxiliar de Recursos Humanos':
+          //       let nombreArchivo1 = "Evaluación Desempeño Auxiliar de Recursos Humanos Actualizada feb25.xlsx";
+          //       this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo1)}`;
+          //     break;
 
-                case 'soporte tecnico' :
-                  let nombreArchivo2 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo2)}`;
-              break;
+          //       case 'soporte tecnico' :
+          //         let nombreArchivo2 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo2)}`;
+          //     break;
 
-                case 'Analista Financiero' :
-                  let nombreArchivo3 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo3)}`;
-              break;
+          //       case 'Analista Financiero' :
+          //         let nombreArchivo3 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo3)}`;
+          //     break;
 
-                case 'Auxiliar Administrativo' :
-                  let nombreArchivo4 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo4)}`;
-              break;
+          //       case 'Auxiliar Administrativo' :
+          //         let nombreArchivo4 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo4)}`;
+          //     break;
 
-                case 'Gerente Nacional Administrativa' :
-                  let nombreArchivo5 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo5)}`;
-              break;
+          //       case 'Gerente Nacional Administrativa' :
+          //         let nombreArchivo5 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo5)}`;
+          //     break;
 
-                case 'Gerente Comercial' :
-                  let nombreArchivo6 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo6)}`;
-              break;
+          //       case 'Gerente Comercial' :
+          //         let nombreArchivo6 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo6)}`;
+          //     break;
 
-                case 'Gerente Comercial Sr' :
-                  let nombreArchivo7 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo7)}`;
-              break;
+          //       case 'Gerente Comercial Sr' :
+          //         let nombreArchivo7 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo7)}`;
+          //     break;
 
-                case 'Gerente Comercial Jr' :
-                  let nombreArchivo8 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo8)}`;
-              break;
+          //       case 'Gerente Comercial Jr' :
+          //         let nombreArchivo8 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo8)}`;
+          //     break;
 
-                case 'Auxiliar Comercial' :
-                  let nombreArchivo9 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo9)}`;
+          //       case 'Auxiliar Comercial' :
+          //         let nombreArchivo9 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo9)}`;
 
-              break;
+          //     break;
 
-                case 'Auxiliar de materiales' :
-                  let nombreArchivo10 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo10)}`;
-              break;
+          //       case 'Auxiliar de materiales' :
+          //         let nombreArchivo10 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo10)}`;
+          //     break;
 
-                case 'Ingeniero de Materiales' :
-                  let nombreArchivo11 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo11)}`;
-              break;
+          //       case 'Ingeniero de Materiales' :
+          //         let nombreArchivo11 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo11)}`;
+          //     break;
 
-                case 'Generalista de Recursos Humanos' :
-                  let nombreArchivo12 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo12)}`;
-              break;
+          //       case 'Generalista de Recursos Humanos' :
+          //         let nombreArchivo12 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo12)}`;
+          //     break;
 
-                case 'Diseñadora' :
-                  let nombreArchivo14 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo14)}`;
-              break;
+          //       case 'Diseñadora' :
+          //         let nombreArchivo14 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo14)}`;
+          //     break;
 
-                case 'Coordinadora de Digital Media' :
-                  let nombreArchivo15 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
-                  this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo15)}`;
-              break;
-            default:
-              break;
-          }
+          //       case 'Coordinadora de Digital Media' :
+          //         let nombreArchivo15 = "Evaluación Desempeño Auxiliar Administrativa-Operaciones-Comercial.xlsx";
+          //         this.archivoDescargaUrl = `https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/${encodeURIComponent(nombreArchivo15)}`;
+          //     break;
+          //   default:
+          //     break;
+          // }
         });
       }
     });
