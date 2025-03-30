@@ -84,7 +84,7 @@ export class EditarExcelComponent implements OnInit {
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
     const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
     const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}&timestamp=${timestamp}`;
-
+    
     this.http.get(url, { responseType: 'arraybuffer' })
       .subscribe((data: ArrayBuffer) => {
         const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });

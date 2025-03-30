@@ -52,13 +52,15 @@ export class EditarComponent implements OnInit {
     return password === password1 ? null : { passwordMismatch: true };
   };
   ngOnInit(): void {
-    this.ObtenerDatos();
+    console.log(this.usuario.id)
+    this.ObtenerDatos();  
   }
   // es para obtener todos los datos del usuario ordenadamente
   ObtenerDatos(){
-
+    
     this.adminService.obtenerUsuariosCompleto(this.usuario.id).subscribe({
       next:(res)=>{
+        console.log(res)
         this.datosUsuario = res.data
         this.formUsuario.patchValue({
           nombre: this.datosUsuario?.usuario_nombre,

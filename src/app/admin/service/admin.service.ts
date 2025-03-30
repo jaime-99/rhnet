@@ -48,7 +48,7 @@ export class AdminService implements OnInit{
   // es para obtener todos los datos del usuario ya correctamente 
   obtenerUsuariosCompleto(usuario_id: any): Observable<any> {
     const timestamp = new Date().getTime(); // Genera un parámetro único
-    const url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/obtenerDatosDeUsuario.php?usuario_id=${usuario_id}&_t=${timestamp}`;
+    const url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/obtenerDatosDeUsuario.php?usuario_id=${usuario_id}`;
     return this.http.get(url);
   }
   // editar un usuario

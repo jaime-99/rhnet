@@ -12,7 +12,7 @@ export class LoginService {
 
 
   validacionIniciarSesion(usuario:string,contrasenia:string):Observable<any>{
-    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/endpoints/usuarios/iniciar_sesion.php?usuario=${usuario}&contrasenia=${contrasenia}`
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/iniciar_sesion.php?usuario=${usuario}&contrasenia=${contrasenia}`
     return this.http.get<any>(url);
   }
 }
