@@ -31,6 +31,7 @@ export class EvaluacionParaMiComponent implements OnInit {
   evaluaciones:any[] = []
   loading: boolean = false;
   evaluacionSeleccionada: any;
+  mostrarMensajeNoHayEvaluaciones:boolean = false;
   comentario = new FormControl('', [
     Validators.required,      // El comentario es obligatorio
     Validators.pattern(/^(?!\s*$).+/)        // No permite solo espacios en blanco
@@ -62,8 +63,6 @@ export class EvaluacionParaMiComponent implements OnInit {
 
       next:(res)=>{
         this.evaluaciones = res.filter((e:any) => e.mes_evaluacion == this.mes)
-
-
         this.loading = true;
       }
     })

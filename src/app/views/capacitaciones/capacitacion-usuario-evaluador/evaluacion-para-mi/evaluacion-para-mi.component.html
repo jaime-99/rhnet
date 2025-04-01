@@ -1,5 +1,11 @@
 
-<h5>Evaluacion del mes de  {{this.mes}} </h5>
+<h5  class="text-center">Evaluacion del mes de  {{this.mes}} </h5>
+
+
+    <div *ngIf="this.evaluaciones.length==0" class="alert alert-danger">
+        No hay Evaluaciones del mes de {{this.mes}} aun.
+    </div>
+
 
  <div *ngIf=" loading && this.evaluaciones.length>0" class="card">
     <div class="card-body">

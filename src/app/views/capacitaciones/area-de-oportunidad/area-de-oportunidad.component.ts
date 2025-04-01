@@ -3,10 +3,12 @@ import { EditorModule } from 'primeng/editor';
 import { FormsModule } from '@angular/forms';
 import { CapacitacionesService } from '../capacitaciones.service';
 import { ActivatedRoute } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-area-de-oportunidad',
-  imports: [EditorModule,FormsModule],
+  imports: [EditorModule,FormsModule, ToastModule],
   templateUrl: './area-de-oportunidad.component.html',
   styleUrl: './area-de-oportunidad.component.scss'
 })
@@ -15,7 +17,7 @@ export class AreaDeOportunidadComponent implements OnInit {
   evaluacion:any = [];
   usuario: any;
 
-  constructor (private capacitacionService:CapacitacionesService, private activatedRouter:ActivatedRoute){
+  constructor (private capacitacionService:CapacitacionesService, private activatedRouter:ActivatedRoute,private messageService: MessageService ){
 
   }
   ngOnInit(): void {
@@ -41,25 +43,33 @@ export class AreaDeOportunidadComponent implements OnInit {
 
   guardarAreaDeOportunidad() {
     if (!this.text?.trim()) {
-      alert('El comentario no puede estar vacío.');
+      this.messageService.add({ severity: 'danger', summary: 'Error', detail: 'No puede estar vacio ', life: 3000 });
+
       return;
     }
 
-    this.capacitacionService.guardarAreaOportunidad(Number(this.evaluacion_id), this.usuario.id, this.text)
-      .subscribe(response => {
-        alert('Comentario guardado correctamente');
-        this.text = ''; // Limpiar el editor
-      }, error => {
-        alert('Error al guardar el comentario');
-        console.error(error);
-      });
+    this.capacitacionService.guardarAreaOportunidad(Number(this.evaluacion_id), this.usuario.id, this.text).subscribe({
+      next:(res)=>{
+        this.messageService.add({ severity: 'success', summary: 'Exito', detail: 'Has guardado el comentario', life: 3000 });
+        
+      },
+      error:(err)=>{
+
+      }
+    })
+      //   alert('Comentario guardado correctamente');
+      //   // this.text = ''; // Limpiar el editor
+      // }, error => {
+      //   alert('Error al guardar el comentario');
+      //   console.error(error);
+      // });
   }
 
   obtenerAreaDeOportunidad(){
 
     this.capacitacionService.obtenerAreaDeOportunidad(Number(this.evaluacion_id)).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
         this.text = res.nota['notas']
         // console.log(this.text)
 

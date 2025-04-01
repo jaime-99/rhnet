@@ -51,7 +51,7 @@ export class CapacitacionDetalleComponent implements OnInit {
     this.capacitacionoService.getEvaluacionForId1(Number(this.id)).subscribe({
       next:(res)=>{
         this.evaluacion = res
-        console.warn(res)
+        // console.warn('la evaluacion es ',res)
       }
     })
   }

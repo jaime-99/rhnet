@@ -23,8 +23,9 @@ export class EnvioEvaluacionComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     // console.log('desde envio de evaluacion',this.datosEvaluaciones)
-    // console.log('desde envio de evaluacion kpi',this.datosKpi)
-    console.warn('primedio envio de evaluacion excel',this.datosEvaluaciones)
+    console.log('desde envio de evaluacion kpi',this.datosKpi)
+    // console.warn('promedio envio de evaluacion excel',this.datosEvaluaciones)
+    // console.warn(this.datosKpi)
   }
 
   @Input() datosEvaluaciones:any
@@ -83,7 +84,7 @@ export class EnvioEvaluacionComponent implements OnInit {
     // Agregar una fila vacía para separación
     datosCombinados.push([]);
     // Agregar la fila que indica la segunda evaluación
-    datosCombinados.push(['Segunda Evaluación']);
+    datosCombinados.push(['Segunda Evaluación (KPIS)']);
     // Agregar datos de KPI después de la separación
     datosCombinados = datosCombinados.concat(this.datosKpi);
     // Obtener el promedio calculado con la función existente
@@ -91,14 +92,14 @@ export class EnvioEvaluacionComponent implements OnInit {
     const percentage = (average * 100).toFixed(2) + '%'; // Redondear a dos decimales
     // Agregar el promedio al final de todo
     datosCombinados.push([]);
-    datosCombinados.push(['Promedio Final', percentage]);
+    datosCombinados.push(['Desempeño General', average]);
     // Crear un nuevo workbook
     const newWorkbook = XLSX.utils.book_new();
 
     // Convertir datos combinados en una sola hoja de Excel
     const excelSheet = XLSX.utils.aoa_to_sheet(datosCombinados);
     XLSX.utils.book_append_sheet(newWorkbook, excelSheet, "Evaluación");
-
+    
     // Generar un archivo en formato XLSX
     const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
 
@@ -141,7 +142,7 @@ confirm1(event: Event) {
           outlined: true,
       },
       acceptButtonProps: {
-          label: 'Save',
+          label: 'Guardar',
       },
       accept: () => {
           // this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });

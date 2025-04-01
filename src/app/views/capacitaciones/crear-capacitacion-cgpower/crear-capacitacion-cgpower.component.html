@@ -1,4 +1,9 @@
 
+
+
+<!-- colocar spinner -->
+
+
 <form [formGroup]="this.formEvaluacion" >
 <div *ngIf="(esLider=='Jefe' || esLider== 'Empleado y Jefe') && !todasPendientes" class="div">
 
@@ -10,9 +15,8 @@
         <p class="card-text"> Hola ! <strong> {{this.usuario.usuario}} </strong>   Bienvenido a la evaluacion del mes <strong> {{this.mes}} </strong>    Porfavor lee las instrucciones antes de seguir:  </p>
         <ul class="card-list">
             
-            <li class="card-list-item">1.Descarga el archivo de evaluacion</li>
-            <li class="card-list-item">2. completa el archivo de excel</li>
-            <li class="card-list-item">3. Sube el archivo de Excel completo</li>
+            <li class="card-list-item">1. completa el archivo de excel</li>
+            <li class="card-list-item">2. Sube el archivo de Excel completo</li>
 
         </ul>
         </div>
@@ -37,7 +41,8 @@
                         <select class="form-select" formControlName="usuario_evaluado_id">
                             <option value="" selected>Selecciona a cgpower</option>
                             <option *ngFor="let empleado of this.misEmpleados"  [value]="empleado.usuario_id">
-                                {{ empleado.nombre_empleado }}
+                                {{ empleado.nombre_empleado }} - {{ empleado.departamento }}
+
                             </option>
                         </select>
                 </div>

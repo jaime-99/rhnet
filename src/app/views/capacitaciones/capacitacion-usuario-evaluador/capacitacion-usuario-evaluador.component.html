@@ -49,7 +49,15 @@
                                     <td>{{ capacitacion.nombre_evaluador }}</td>
                                     <td>{{ capacitacion.nombre_evaluado }}</td>
                                     <td>{{ capacitacion.tipo_evaluacion }}</td>
-                                    <td> <span class="badge text-bg-primary" > {{capacitacion.estatus}} </span>
+                                    <td> 
+                                        <span 
+                                    class="badge" 
+                                    [ngClass]="{
+                                    'text-bg-danger': capacitacion.estatus === 'pendiente',
+                                    'text-bg-success': capacitacion.estatus === 'completada'
+                                    }">
+                                    {{ capacitacion.estatus }}
+                                    </span>
                                     </td>
                                     <td>
                                         <button  (click)="irDetalles(capacitacion?.id)" class="btn btn-info">Ver</button>

@@ -14,7 +14,7 @@
             </div>
             <div class="col-md-6">
                 <label for="">Fecha Evaluacion</label>
-                <input type="text" [value]="this.evaluacion?.fecha_creacion" disabled readonly class="form-control">
+                <input type="text" [value]="this.evaluacion?.fecha_creacion | date:'dd/MM/yyyy'" disabled readonly class="form-control">
             </div>
             <div class="col-md-6">
                 <label for="">Descripcion</label>

@@ -39,12 +39,13 @@ export class ComentariosComponent implements OnInit {
     
     // this.actualizarComentarios.emit()
     if (!this.evaluacion || !this.evaluacion.id) {
-      console.error('Error: No se ha recibido la evaluación correctamente');
+      console.error('Error: No se ha recibido la evaluación correctamentes');
       return;
     }
     this.capacitacionesService.verComentariosPorEvaluacionId(this.evaluacion.id).subscribe({
       next:(res)=>{
         this.comentarios = res.data
+        console.log(this.usuario.id)
         console.log('comentarios',this.comentarios)
 
         this.comentarios.forEach((comentario: any) => {

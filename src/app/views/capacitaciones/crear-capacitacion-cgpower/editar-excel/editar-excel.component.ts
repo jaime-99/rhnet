@@ -31,14 +31,19 @@ export class EditarExcelComponent implements OnInit {
   kpiAverage: number = 0;
   promedioFinal: number= 0;
   // es para mostrar el boton 
-  mostrarBoton: boolean = false;
+  mostrarBoton: boolean = false; // no se usa 
   comentariosIndex: number = 0;
 
+  mostrarEnvioEvaluacion:boolean = false; // Activa el componente hijo
 
+  mostrarAlertaNoTieneKpis:boolean = false;
+  loading:boolean = false
   //para abrir modal de bootsrap 
   currentRowIndex: number | null = null;
   currentColIndex: number | null = null;
   currentComment: string = '';
+
+  promedioGeneralMetricos: number = 0;
   constructor (private http: HttpClient, private activatedRouter:ActivatedRoute, 
     private compartirDatosService: CompartirDatosService, private router:Router,
     private confirmationService: ConfirmationService,  private messageService: MessageService
@@ -57,9 +62,10 @@ export class EditarExcelComponent implements OnInit {
     })
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
     this.downloadExcel()
-    // console.log( 'datos desde editar excel', this.datosEvaluacion)
+    console.log( 'datos desde editar excel', this.datosEvaluacion)
     this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
     // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
+    // console.log(this.datosEvaluacion)
     }
 
  //todo correcto no borrar
@@ -81,60 +87,66 @@ export class EditarExcelComponent implements OnInit {
   // }
   downloadExcel() {
     const tipoEvaluacion = this.datosEvaluacion.usuarioAEvaluar.puesto;
+    //todo que tambien sea por la ciudad y si tiene nombre por el nombre tambien
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
     const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
     const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}&timestamp=${timestamp}`;
     
-    this.http.get(url, { responseType: 'arraybuffer' })
-      .subscribe((data: ArrayBuffer) => {
-        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
+    setTimeout(() => {
+      
+      this.http.get(url, { responseType: 'arraybuffer' })
+        .subscribe((data: ArrayBuffer) => {
+          const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+    
+          // Convertir el contenido a formato JSON
+          const jsonData: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    
+          if (jsonData.length > 0) {
+            // Buscar la fila donde están los encabezados correctos
+            // console.log('excel,',jsonData)
+            const startIndex = jsonData.findIndex(row => 
+              row.includes("FACTOR") && row.includes("ÁREA DE DESEMPEÑO") && row.includes("EVALÚE A BASE DE %") && row.includes('COMENTARIOS')
+            );
+    
+            if (startIndex !== -1) {
+              this.headers = jsonData[startIndex] as string[]; // Usar esta fila como encabezados
+              this.excelData = jsonData.slice(startIndex + 1); // Tomar solo los datos desde ahí
+              // Buscar la fila donde está "KPI'S"
   
-        // Convertir el contenido a formato JSON
-        const jsonData: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+              const kpiIndex = jsonData.findIndex(row => row.includes("KPI´S"));
+              const comentariosIndex = jsonData.findIndex(row => row.includes("COMENTARIOS ADICIONALES:"));
   
-        if (jsonData.length > 0) {
-          // Buscar la fila donde están los encabezados correctos
-          console.log('excel,',jsonData)
-          const startIndex = jsonData.findIndex(row => 
-            row.includes("FACTOR") && row.includes("ÁREA DE DESEMPEÑO") && row.includes("EVALÚE A BASE DE %") && row.includes('COMENTARIOS')
-          );
+              // console.log(this.excelData)
   
-          if (startIndex !== -1) {
-            this.headers = jsonData[startIndex] as string[]; // Usar esta fila como encabezados
-            this.excelData = jsonData.slice(startIndex + 1); // Tomar solo los datos desde ahí
-            // Buscar la fila donde está "KPI'S"
-
-            const kpiIndex = jsonData.findIndex(row => row.includes("KPI´S"));
-            const comentariosIndex = jsonData.findIndex(row => row.includes("COMENTARIOS ADICIONALES:"));
-
-            // console.log(this.excelData)
-
-            if (kpiIndex !== -1) {
-              this.excelData = jsonData.slice(startIndex + 1, kpiIndex); // Tomar solo hasta antes de KPI´S
-              
-              this.kpiData = jsonData.slice(kpiIndex + 2, comentariosIndex); // Saltar la fila de headers
-
-              this.headers2 = jsonData[kpiIndex + 1] as string[]; // El siguiente conjunto de headers después de KPI´S
-
-              const evalColumnIndex = this.headers2.indexOf("EVALÚE A BASE DE %");
-                if (evalColumnIndex !== -1) {
-                  this.kpiData.forEach(row => {
-                    if (row[evalColumnIndex] === undefined) {
-                      row[evalColumnIndex] = false;
-                    }
-                  });
-                }
+              if (kpiIndex !== -1) {
+                this.excelData = jsonData.slice(startIndex + 1, kpiIndex); // Tomar solo hasta antes de KPI´S
                 
-            } else {
-              this.excelData = jsonData.slice(startIndex + 1); // Si no hay KPI´S, tomar todo después de los headers
-              this.kpiData = [];
+                this.kpiData = jsonData.slice(kpiIndex + 2, comentariosIndex); // Saltar la fila de headers
+  
+                this.headers2 = jsonData[kpiIndex + 1] as string[]; // El siguiente conjunto de headers después de KPI´S
+  
+                const evalColumnIndex = this.headers2.indexOf("EVALÚE A BASE DE %");
+                  if (evalColumnIndex !== -1) {
+                    this.kpiData.forEach(row => {
+                      if (row[evalColumnIndex] === undefined) {
+                        row[evalColumnIndex] = false;
+                      }
+                    });
+                  }
+                  
+              } else {
+                this.excelData = jsonData.slice(startIndex + 1); // Si no hay KPI´S, tomar todo después de los headers
+                this.kpiData = [];
+              }
+  
             }
-
           }
-        }
-      });
+          this.loading = true
+        });
+        this.loading = true
+    }, 2000);
   }
 
   isMetricRow(row: any[]): boolean {
@@ -318,6 +330,107 @@ confirm2(event: Event) {
         },
     });
 }
+
+
+//! lo nuevo 
+
+// Asumiendo que ya tienes una función `isMetricRow` que valida si es una fila de métrica
+
+
+
+calculateMetricAverage(index: number): number {
+  let successCount = 0;
+  let totalCount = 0;
+  let foundMetric = false; // Para saber si encontramos una fila métrica
+
+  // Iteramos sobre las filas previas a la fila actual (hasta la fila anterior a la actual)
+  for (let i = index - 1; i >= 0; i--) {
+    const row = this.kpiData[i];
+
+    // Si encontramos una fila métrica, detenemos el cálculo para este grupo
+    if (this.isMetricRow(row)) {
+      break; // Detenemos el ciclo en el primer encuentro con una fila métrica
+    }
+
+    // Si no encontramos una fila métrica, procesamos las tachas/ángulos
+    for (let j = 0; j < row.length; j++) {
+      const evaluationValue = row[j];
+
+      // Solo contamos las celdas que tienen valor 1 (✔️) o 0 (❌)
+      if (evaluationValue === 1 || evaluationValue === 0) {
+        totalCount++; // Contamos tachas/ángulos
+        if (evaluationValue === 1) {
+          successCount++; // Contamos los éxitos (✔️)
+        }
+      }
+    }
+  }
+  // Calculamos el promedio de éxito solo para el bloque de tachas/ángulos
+  return totalCount > 0 ? (successCount / totalCount) * 100 : 0;
+}
+
+updateKpiData(): void {
+  let updatedKpiData = [...this.kpiData]; // Crear una copia para no modificar el original directamente
+
+  for (let i = 0; i < updatedKpiData.length; i++) {
+    if (this.isMetricRow(updatedKpiData[i])) {
+      // Calcular el promedio para la fila métrica actual
+      let metricAverage = this.calculateMetricAverage(i);
+      // Buscar la columna correcta ('EVALÚE A BASE DE %') donde debe insertarse el valor
+      let columnIndex = this.headers2.findIndex(header => header === 'EVALÚE A BASE DE %');
+      
+      if (columnIndex !== -1) {
+        updatedKpiData[i][columnIndex] = metricAverage.toFixed(2) + '%'; // Agregar porcentaje con 2 decimales
+      }
+    }
+  }
+  // Asignar el kpiData actualizado antes de enviarlo al componente hijo
+  this.kpiData = updatedKpiData;
+  this.promedioGeneralMetricos = this.calculateTotalMetricAverage();
+  
+  // console.log(this.promedioGeneralMetricos)
+  // console.log('nuevo metrico', updatedKpiData)
+}
+
+actualizarDatos(){
+  this.updateKpiData();
+  this.mostrarEnvioEvaluacion=true;
+  
+}
+//calcular el promedio de todos los metricos
+calculateTotalMetricAverage(): number {
+  let totalSum = 0;
+  let metricCount = 0;
+
+  for (let i = 0; i < this.kpiData.length; i++) {
+    if (this.isMetricRow(this.kpiData[i])) {
+      let columnIndex = this.headers2.findIndex(header => header === 'EVALÚE A BASE DE %');
+
+      if (columnIndex !== -1) {
+        let metricValue = parseFloat(this.kpiData[i][columnIndex]); // Remover '%' y convertir a número
+
+        if (!isNaN(metricValue)) { // Asegurar que es un número válido
+          totalSum += metricValue;
+          metricCount++;
+        }
+      }
+    }
+  }
+
+  // Retorna el promedio con 2 decimales
+  return metricCount > 0 ? parseFloat((totalSum / metricCount).toFixed(2)) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
   }
 
 

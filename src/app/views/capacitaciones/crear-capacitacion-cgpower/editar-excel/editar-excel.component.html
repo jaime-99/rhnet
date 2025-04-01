@@ -7,12 +7,23 @@
     </table>
   </div>
 -->
-  <div *ngIf="excelData.length === 0">
+  <div class="text-center " *ngIf="!loading">
     <p>Cargando datos...</p>
+    <div class="spinner-border">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+
+  </div>
+
+  <div class="div" *ngIf="loading">
+    <div *ngIf="this.excelData?.length===0" class="alert alert-danger">
+      El usuario {{this.datosEvaluacion.usuarioAEvaluar.nombre_usuario}} no tiene kpi'ss actualizados por el momento. Favor de ir al departamento de RH 
+    </div>
   </div>
   
 
-   <div class="card m-1">
+  <div class="cargando" *ngIf="loading">
+   <div *ngIf="this.excelData?.length>0" class="card m-1">
     <div class="card-body">
         <div class="row">
             <div class="col-md-3">
@@ -48,7 +59,9 @@
         </div>
     </div>
    </div>
+   </div>
 
+   <div class="cargando" *ngIf="loading" >
    <table *ngIf="excelData.length > 0" border="1">
     <thead>
       <tr>
@@ -112,6 +125,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
   
   <!-- Modal de Bootstrap -->
   <div class="modal" tabindex="-1" id="commentModal">
@@ -153,7 +167,10 @@
 
 <hr>
 
-<h3>Evaluación KPI's</h3>
+<div class="cargando" *ngIf="loading">
+  <h3 *ngIf="this.excelData?.length>0">Evaluación KPI's</h3>
+</div>
+
 <table *ngIf="kpiData.length > 0" border="1">
   <thead>
     <tr>
@@ -163,10 +180,14 @@
   <tbody>
     <tr *ngFor="let row of kpiData; let i = index" [ngClass]="{'metric-row': isMetricRow(row)}">
       <td *ngFor="let cell of row; let j = index">
-        <ng-container *ngIf="row[1] === 'Resultado'">
+        <ng-container *ngIf="row[1] === 'Desempeño General'">
           <!-- Tercera columna: Mostrar el promedio calculado -->
           <ng-container *ngIf="j === 2">
-            {{ calculateCombinedAverage() | percent }}
+            <!-- {{ calculateCombinedAverage() | percent }} -->
+            <span style="color: red;">
+              {{ promedioGeneralMetricos === 0 ? 'sin calcular aún' : promedioGeneralMetricos }}
+            </span>
+            
           </ng-container>
          
 
@@ -194,13 +215,23 @@
             {{ row[j] === 1 ? '✔️' : '❌' }}
           </button>
         </ng-container>
+
+        <ng-container *ngIf="headers2[j] === 'EVALÚE A BASE DE %' && isMetricRow(row)" >
+          {{ calculateMetricAverage(i) | number: '1.2-2' }}%
+        </ng-container>
+
+        <!-- <ng-container *ngIf="row[1] === 'Desempeño General'">
+          <ng-container *ngIf="j === 1">
+            {{ promedioGeneralMetricos === 0 ? 'sin calcular aún' : promedioGeneralMetricos }}
+          </ng-container>
+          </ng-container> -->
+          
         
       </td>
     </tr>
   </tbody>
 </table>
-<!-- <h4>Promedio de Evaluación: {{ calculateKpiAverage() | percent:'1.0-2' }}</h4> -->
-<h2>Promedio Final: {{ calculateCombinedAverage() | percent }}</h2>
+<!-- <h2>Promedio Final: {{ calculateCombinedAverage() | percent }}</h2> -->
 
 
 
@@ -208,13 +239,20 @@
   <!-- <button (click)="guardarPromedio(true)" class="btn btn-primary">Finalizar</button> -->
 <!-- este es otro componente -->
 
-<app-envio-evaluacion  *ngIf="datosEvaluacion && kpiData?.length && excelData?.length"
+
+<div *ngIf="this.excelData?.length>0" class="d-grid gap-2">
+  <button class="btn btn-success" type="button" (click)="actualizarDatos()"> calcular el Desempeño General</button>
+</div>
+
+<app-envio-evaluacion  *ngIf="datosEvaluacion && kpiData?.length && excelData?.length && mostrarEnvioEvaluacion"
   [datosEvaluaciones]="datosEvaluacion"
   [datosKpi]="kpiData"
   [datosExcel]="excelData"
-  [promedio]="this.calculateCombinedAverage()"
+  [promedio]="this.promedioGeneralMetricos"
   >
 </app-envio-evaluacion>
+
+
 
 
 
