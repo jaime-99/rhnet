@@ -1,15 +1,22 @@
 
 <h3 class="text-center">Evaluaciones 2025</h3>
 
-<div class="row">
+
+<div *ngIf="!loading" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+<div *ngIf="loading" class="row">
 
     <div class="col-md-4 mt-1" *ngFor="let mes of meses">
 
-        <div class="card">
+        <div class="card" [ngClass]="{'bg-success text-white': capacitaciones.includes(mes)}" >
             <div class="card-body">
                 <h5 class="card-title">Evaluacion {{mes}} </h5>
                 <p class="card-text">Evaluacion para el mes de {{mes}} </p>
-
+                
                 <div class="row">
                     <div class="col-md-6">
                         <button type="button"  (click)="irAEvaluar(mes)"
@@ -32,3 +39,29 @@
         </div>
     </div>
 </div>
+
+<!-- <div class="col-md-4 mt-1" *ngFor="let mes of meses">
+    <div class="card" [ngClass]="{'bg-success text-white': capacitaciones.includes(mes)}">
+        <div class="card-body">
+            <h5 class="card-title">Evaluación {{ mes }} </h5>
+            <p class="card-text">Evaluación para el mes de {{ mes }} </p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" (click)="irAEvaluar(mes)"
+                        style="background-color: #0ab4df; border-color: #0ab4df;"
+                        class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Evaluar
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary"
+                        style="background-color: #0ab4df; border-color: #0ab4df;"
+                        (click)="irEvaluacionForId(mes)">
+                        <i class="bi bi-eye"></i> Ver 
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

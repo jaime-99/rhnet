@@ -195,7 +195,7 @@
         <!-- Si la columna no es 'EVALÚE A BASE DE %', solo mostramos el valor -->
         <ng-container *ngIf="headers2[j] !== 'EVALÚE A BASE DE %'">
           <ng-container *ngIf="headers2[j] === 'COMENTARIOS'">
-            <button type="button" (click)="openCommentModalKpi(i, j)" class="btn btn-info">
+            <button  type="button" (click)="openCommentModalKpi(i, j)" class="btn btn-info">
               Comentar
             </button>
             <span *ngIf="kpiData[i][j] !== 'ninguno'">

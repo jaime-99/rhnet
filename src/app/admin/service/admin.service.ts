@@ -16,7 +16,7 @@ export class AdminService implements OnInit{
 
   //Obtener todos los usuarios totales
   getAllUsers():Observable<any>{
-    let url = `https://itickets.cgpgroup.mx/apis/usuario/getUser.php`
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/obtenerTodosLosUsuarios.php`
     return this.http.get(url)
   }
   //obtener todos los departamentos

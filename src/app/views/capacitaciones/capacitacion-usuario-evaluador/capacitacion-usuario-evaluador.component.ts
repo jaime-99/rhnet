@@ -32,7 +32,6 @@ export class CapacitacionUsuarioEvaluadorComponent implements OnInit {
         this.mes = paramas['mes'].toLowerCase();
       }
     )
-
     this.getCapacitacionForId()
   }
 

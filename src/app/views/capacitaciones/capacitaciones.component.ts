@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CapacitacionesService } from './capacitaciones.service';
+import { delay, map } from 'rxjs';
 
 @Component({
   selector: 'app-capacitaciones',
@@ -11,13 +13,20 @@ import { FileUploadModule } from 'primeng/fileupload';
   templateUrl: './capacitaciones.component.html',
   styleUrl: './capacitaciones.component.scss'
 })
-
 // componente de capacitaciones 
 export class CapacitacionesComponent implements OnInit {
+  usuario: any;
+  capacitaciones: string[] = [];  // Inicializamos como un array vacío
 
-  constructor (private router:Router) {}
+  loading: boolean = false;
+
+  constructor (private router:Router, private capacitacionesService:CapacitacionesService) {}
   ngOnInit(): void {
+
+    const usuarioData:any = localStorage.getItem('usuario');
+    this.usuario = JSON.parse(usuarioData);
     this.obtenerMes()
+    this.obtenerEvaluacionesPorUsuario();
   }
 
   meses: string[] = [
@@ -44,4 +53,21 @@ export class CapacitacionesComponent implements OnInit {
     const mes = fecha.toLocaleDateString('es-ES', opciones); // 'es-ES' para español
     return mes
   }
-}
+
+  // para cambiar el color del mes que esta evaluado por al menos una persona
+  obtenerEvaluacionesPorUsuario() {
+    this.capacitacionesService.getEvaluacionForId(this.usuario.id).pipe(
+      map((res: any) => res.map((item: any) => item.mes_evaluacion)), // Extraemos solo los meses evaluados
+      delay(1000),
+    ).subscribe({
+      next: (capacitaciones) => {
+        this.capacitaciones = capacitaciones; // Guardamos los meses evaluados
+      },
+      complete: () => {
+        this.loading = true;
+      }
+    });
+  }
+  
+  }
+

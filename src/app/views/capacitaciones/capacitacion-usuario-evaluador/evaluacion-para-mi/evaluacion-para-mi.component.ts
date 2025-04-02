@@ -123,58 +123,170 @@ export class EvaluacionParaMiComponent implements OnInit {
   // }
   // para dar un update a la evaluacion de la tabla rh_evaluaciones en la columna estatus a completado
 
-  verEvaluacionPDF() {
-    const logoUrl = '../../assets/Logo2.png';
-    const nombreEvaluador = `${this.evaluacionSeleccionada.evaluador_nombre} ${this.evaluacionSeleccionada.evaluador_apellido_paterno}`;
-    const fecha = this.evaluacionSeleccionada.fecha_creacion;
-    const estatus = this.evaluacionSeleccionada.estatus;
-    const mes = this.evaluacionSeleccionada.mes_evaluacion;
+  // verEvaluacionPDF() {
+  //   const logoUrl = '../../assets/Logo2.png';
+  //   const nombreEvaluador = `${this.evaluacionSeleccionada.evaluador_nombre} ${this.evaluacionSeleccionada.evaluador_apellido_paterno}`;
+  //   const fecha = this.evaluacionSeleccionada.fecha_creacion;
+  //   const estatus = this.evaluacionSeleccionada.estatus;
+  //   const mes = this.evaluacionSeleccionada.mes_evaluacion;
     
-    this.convertImageToBase64(logoUrl).then((logoBase64) => {
-      this.http.get(this.evaluacionSeleccionada?.archivo, { responseType: 'arraybuffer' }).subscribe(
+  //   this.convertImageToBase64(logoUrl).then((logoBase64) => {
+  //     this.http.get(this.evaluacionSeleccionada?.archivo, { responseType: 'arraybuffer' }).subscribe(
+  //       (data) => {
+  //         const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+  //         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  //         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+  
+  //         const doc = new jsPDF();
+  
+  //         // **Agregar el logo**
+  //         doc.addImage(logoBase64, 'PNG', 10, 10, 40, 20); // X, Y, Width, Height
+  
+  //         // **Agregar los textos**
+  //         doc.setFont('helvetica', 'bold');
+  //         doc.setFontSize(12);
+  //         doc.text('Evaluador:', 10, 35);
+  //         doc.text('Fecha:', 10, 42);
+  //         doc.text('Estatus:', 100, 35);
+  //         doc.text('Mes:', 100, 42);
+  
+  //         // **Agregar los valores dinámicos**
+  //         doc.setFont('helvetica', 'normal');
+  //         doc.text(nombreEvaluador, 40, 35);
+  //         doc.text(fecha, 40, 42);
+  //         doc.text(estatus, 130, 35);
+  //         doc.text(mes, 130, 42);
+  
+  //         // **Ajustar la tabla para que inicie después de los textos**
+  //         autoTable(doc, {
+  //           startY: 50, // 📌 Se ajusta la posición de la tabla después de los textos
+  //           head: [jsonData[0] as any[]],
+  //           body: jsonData.slice(1) as any[][]
+  //         });
+  
+  //         // **Generar y abrir el PDF**
+  //         const pdfBlob = doc.output('blob');
+  //         const pdfUrl = URL.createObjectURL(pdfBlob);
+  //         window.open(pdfUrl, '_blank');
+  //       },
+  //       (error) => {
+  //         console.error('Error al descargar el archivo:', error);
+  //       }
+  //     );
+  //   }).catch(error => console.error("Error cargando la imagen:", error));
+  // }
+
+  verEvaluacionPDF() {
+      // if (!this.evaluacion || !this.evaluacion.archivo) {
+      //   console.error('No hay URL de evaluación disponible');
+      //   return;
+      // }
+    // console.log(this.evaluacionSeleccionada)
+      // Datos adicionales
+      const nombreEvaluador = this.evaluacionSeleccionada.evaluador_nombre;
+      const fecha = this.evaluacionSeleccionada.fecha_creacion;
+      // const evaluado = this.evaluacion.nombre_evaluado;
+      const logoUrl = '../../assets/Logo2.png';
+      const mes = this.evaluacionSeleccionada.mes_evaluacion;
+    
+      this.http.get(this.evaluacionSeleccionada.archivo, { responseType: 'arraybuffer' }).subscribe(
         (data) => {
           const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  
-          const doc = new jsPDF();
-  
-          // **Agregar el logo**
-          doc.addImage(logoBase64, 'PNG', 10, 10, 40, 20); // X, Y, Width, Height
-  
-          // **Agregar los textos**
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(12);
-          doc.text('Evaluador:', 10, 35);
-          doc.text('Fecha:', 10, 42);
-          doc.text('Estatus:', 100, 35);
-          doc.text('Mes:', 100, 42);
-  
-          // **Agregar los valores dinámicos**
-          doc.setFont('helvetica', 'normal');
-          doc.text(nombreEvaluador, 40, 35);
-          doc.text(fecha, 40, 42);
-          doc.text(estatus, 130, 35);
-          doc.text(mes, 130, 42);
-  
-          // **Ajustar la tabla para que inicie después de los textos**
-          autoTable(doc, {
-            startY: 50, // 📌 Se ajusta la posición de la tabla después de los textos
-            head: [jsonData[0] as any[]],
-            body: jsonData.slice(1) as any[][]
+    
+          jsonData.forEach((row: any, index: number) => {
+            console.log(`Fila ${index}:`, row[2]); // Imprime el contenido de la columna en la consola
           });
+          // Buscar el índice donde aparece "Segunda Evaluación"
+          const segundaEvaluacionIndex = jsonData.findIndex((row: any) => row[0] === 'Segunda Evaluación');
+    
+          // Procesar datos antes de "Segunda Evaluación"
+          const tableDataBefore = jsonData
+          .slice(0, segundaEvaluacionIndex !== -1 ? segundaEvaluacionIndex : jsonData.length)
+          .map((row: any) => [
+            row[0] || '', 
+            row[1] || '', 
+            (row[2] === 1 || row[2] === '1') ? '/' : (row[2] === 0 || row[2] === '0') ? 'x' : (row[2] ? row[2] : ''), 
+            row[3] || ''
+          ]);
+        
+    
+          // Procesar datos después de "Segunda Evaluación"
+          const tableDataAfter = segundaEvaluacionIndex !== -1
+            ? jsonData.slice(segundaEvaluacionIndex).map((row: any) => [
+                row[0] || '',
+                row[1] || '',
+                row[2] === 1 ? '/' : row[2] === 0 ? 'x' : row[2] || '',
+                row[3] || ''
+              ])
+            : [];
+    
+          // Encabezados
+          const headersBefore = [['FACTOR 1', 'ÁREA DE DESEMPEÑO', 'EVALÚE A BASE DE', 'COMENTARIOS']];
+          const headersAfter = [['ACTIVIDAD GENERAL', 'ACTIVIDADES ESPECÍFICAS', 'EVALÚE A BASE DE', 'COMENTARIOS']];
+    
+          const doc = new jsPDF();
+          doc.setFont('Arial Unicode MS');
   
-          // **Generar y abrir el PDF**
-          const pdfBlob = doc.output('blob');
-          const pdfUrl = URL.createObjectURL(pdfBlob);
-          window.open(pdfUrl, '_blank');
+          // Agregar Logo
+          const img = new Image();
+          img.src = logoUrl;
+          img.onload = () => {
+            doc.addImage(img, 'PNG', 10, 10, 30, 30);
+    
+            // Títulos
+            doc.setFontSize(12);
+            doc.text('Evaluación de Desempeño', 80, 20);
+            doc.setFontSize(10);
+            doc.text(`Evaluador: ${nombreEvaluador}`, 10, 40);
+            doc.text(`Fecha: ${fecha}`, 10, 45);
+            // doc.text(`Evaluado: ${evaluado}`, 10, 50);
+            doc.text(`Mes de Evaluación : ${mes}`, 10, 55);
+    
+            // Agregar la primera tabla (antes de "Segunda Evaluación")
+            let finalY = 65;
+            autoTable(doc, {
+              startY: finalY,
+              head: headersBefore,
+              body: tableDataBefore,
+              theme: 'grid',
+              styles: { fontSize: 8 },
+              headStyles: { fillColor: [0, 102, 204] }
+            });
+    
+            // Verificar si hay "Segunda Evaluación"
+            if (segundaEvaluacionIndex !== -1 && tableDataAfter.length > 0) {
+              // Agregar una nueva página antes de la segunda tabla
+              doc.addPage();
+    
+              // Título para la segunda tabla
+              doc.setFontSize(12);
+              doc.text('Segunda Evaluación ', 80, 20);
+    
+              // Agregar la segunda tabla en la nueva página
+              autoTable(doc, {
+                startY: 30,
+                head: headersAfter,
+                body: tableDataAfter,
+                theme: 'grid',
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [255, 69, 0] }
+              });
+            }
+    
+            // Generar y abrir PDF
+            const pdfBlob = doc.output('blob');
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl, '_blank');
+          };
         },
         (error) => {
           console.error('Error al descargar el archivo:', error);
         }
       );
-    }).catch(error => console.error("Error cargando la imagen:", error));
-  }
+    }
+    
   
   
   marcarPorVistoEvaluacion(){

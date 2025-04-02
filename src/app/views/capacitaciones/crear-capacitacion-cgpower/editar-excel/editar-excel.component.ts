@@ -62,7 +62,7 @@ export class EditarExcelComponent implements OnInit {
     })
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
     this.downloadExcel()
-    console.log( 'datos desde editar excel', this.datosEvaluacion)
+    // console.log( 'datos desde editar excel', this.datosEvaluacion)
     this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
     // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
     // console.log(this.datosEvaluacion)
@@ -87,7 +87,7 @@ export class EditarExcelComponent implements OnInit {
   // }
   downloadExcel() {
     const tipoEvaluacion = this.datosEvaluacion.usuarioAEvaluar.puesto;
-    //todo que tambien sea por la ciudad y si tiene nombre por el nombre tambien
+    //todo que tambien sea por la ciudad y si tiene nombre por el nombre tambien 
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
     const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
     const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}&timestamp=${timestamp}`;
@@ -144,6 +144,7 @@ export class EditarExcelComponent implements OnInit {
             }
           }
           this.loading = true
+          this.actualizarDatos()
         });
         this.loading = true
     }, 2000);
@@ -162,6 +163,8 @@ export class EditarExcelComponent implements OnInit {
     // Cambiar el valor solo en la columna correspondiente a 'EVALÚE A BASE DE %'
     if (this.headers2[j] === 'EVALÚE A BASE DE %') {
       this.kpiData[i][j] = this.kpiData[i][j] === 1 ? 0 : 1; // Alternar entre ✔️ y ❌
+      // this.updateKpiData()
+      this.actualizarDatos()
     }
   }
   calculateAverage(): number {
@@ -368,7 +371,6 @@ calculateMetricAverage(index: number): number {
   // Calculamos el promedio de éxito solo para el bloque de tachas/ángulos
   return totalCount > 0 ? (successCount / totalCount) * 100 : 0;
 }
-
 updateKpiData(): void {
   let updatedKpiData = [...this.kpiData]; // Crear una copia para no modificar el original directamente
 
@@ -395,7 +397,6 @@ updateKpiData(): void {
 actualizarDatos(){
   this.updateKpiData();
   this.mostrarEnvioEvaluacion=true;
-  
 }
 //calcular el promedio de todos los metricos
 calculateTotalMetricAverage(): number {
