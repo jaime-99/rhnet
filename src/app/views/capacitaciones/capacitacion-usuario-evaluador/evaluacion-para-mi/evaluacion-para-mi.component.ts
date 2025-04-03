@@ -189,102 +189,117 @@ export class EvaluacionParaMiComponent implements OnInit {
       const logoUrl = '../../assets/Logo2.png';
       const mes = this.evaluacionSeleccionada.mes_evaluacion;
     
-      this.http.get(this.evaluacionSeleccionada.archivo, { responseType: 'arraybuffer' }).subscribe(
-        (data) => {
-          const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    
-          jsonData.forEach((row: any, index: number) => {
-            console.log(`Fila ${index}:`, row[2]); // Imprime el contenido de la columna en la consola
-          });
-          // Buscar el índice donde aparece "Segunda Evaluación"
-          const segundaEvaluacionIndex = jsonData.findIndex((row: any) => row[0] === 'Segunda Evaluación');
-    
-          // Procesar datos antes de "Segunda Evaluación"
-          const tableDataBefore = jsonData
-          .slice(0, segundaEvaluacionIndex !== -1 ? segundaEvaluacionIndex : jsonData.length)
-          .map((row: any) => [
-            row[0] || '', 
-            row[1] || '', 
-            (row[2] === 1 || row[2] === '1') ? '/' : (row[2] === 0 || row[2] === '0') ? 'x' : (row[2] ? row[2] : ''), 
-            row[3] || ''
-          ]);
-        
-    
-          // Procesar datos después de "Segunda Evaluación"
-          const tableDataAfter = segundaEvaluacionIndex !== -1
-            ? jsonData.slice(segundaEvaluacionIndex).map((row: any) => [
-                row[0] || '',
-                row[1] || '',
-                row[2] === 1 ? '/' : row[2] === 0 ? 'x' : row[2] || '',
-                row[3] || ''
-              ])
-            : [];
-    
-          // Encabezados
-          const headersBefore = [['FACTOR 1', 'ÁREA DE DESEMPEÑO', 'EVALÚE A BASE DE', 'COMENTARIOS']];
-          const headersAfter = [['ACTIVIDAD GENERAL', 'ACTIVIDADES ESPECÍFICAS', 'EVALÚE A BASE DE', 'COMENTARIOS']];
-    
-          const doc = new jsPDF();
-          doc.setFont('Arial Unicode MS');
-  
-          // Agregar Logo
-          const img = new Image();
-          img.src = logoUrl;
-          img.onload = () => {
-            doc.addImage(img, 'PNG', 10, 10, 30, 30);
-    
-            // Títulos
-            doc.setFontSize(12);
-            doc.text('Evaluación de Desempeño', 80, 20);
-            doc.setFontSize(10);
-            doc.text(`Evaluador: ${nombreEvaluador}`, 10, 40);
-            doc.text(`Fecha: ${fecha}`, 10, 45);
-            // doc.text(`Evaluado: ${evaluado}`, 10, 50);
-            doc.text(`Mes de Evaluación : ${mes}`, 10, 55);
-    
-            // Agregar la primera tabla (antes de "Segunda Evaluación")
-            let finalY = 65;
-            autoTable(doc, {
-              startY: finalY,
-              head: headersBefore,
-              body: tableDataBefore,
-              theme: 'grid',
-              styles: { fontSize: 8 },
-              headStyles: { fillColor: [0, 102, 204] }
-            });
-    
-            // Verificar si hay "Segunda Evaluación"
-            if (segundaEvaluacionIndex !== -1 && tableDataAfter.length > 0) {
-              // Agregar una nueva página antes de la segunda tabla
-              doc.addPage();
-    
-              // Título para la segunda tabla
+      //  Precargar la imagen
+        const logoImg = new Image();
+        logoImg.src = logoUrl;
+      
+        //logo verde 
+        const img = new Image();
+        img.src = '../../assets/check-square-fill.png';
+      
+        const imagenRoja = new Image();
+        imagenRoja.src = '../../assets/file-x-fill.png'
+        img.onload = () => {
+          this.http.get(this.evaluacionSeleccionada.archivo, { responseType: 'arraybuffer' }).subscribe(
+            (data) => {
+              const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+              const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+              const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+              const segundaEvaluacionIndex = jsonData.findIndex((row: any) => row[0] === 'Segunda Evaluación');
+      
+              const tableDataBefore = jsonData
+                .slice(0, segundaEvaluacionIndex !== -1 ? segundaEvaluacionIndex : jsonData.length)
+                .map((row: any) => [
+                  row[0] || '',
+                  row[1] || '',
+                  (row[2] === 1 || row[2] === '1') ? '/' : (row[2] === 0 || row[2] === '0') ? 'x' : (row[2] ? row[2] : ''),
+                  row[3] || ''
+                ]);
+      
+              const tableDataAfter = segundaEvaluacionIndex !== -1
+                ? jsonData.slice(segundaEvaluacionIndex).map((row: any) => [
+                    row[0] || '',
+                    row[1] || '',
+                    row[2] === 1 ? '/' : row[2] === 0 ? 'x' : row[2] || '',
+                    row[3] || ''
+                  ])
+                : [];
+      
+              const headersBefore = [['FACTOR 1', 'ÁREA DE DESEMPEÑO', 'EVALÚE A BASE DE', 'COMENTARIOS']];
+              const headersAfter = [['ACTIVIDAD GENERAL', 'ACTIVIDADES ESPECÍFICAS', 'EVALÚE A BASE DE', 'COMENTARIOS']];
+      
+              const doc = new jsPDF();
+              doc.setFont('Arial Unicode MS');
+      
+              // Agregar Logo principal
+              doc.addImage(logoImg, 'PNG', 10, 10, 30, 30);
+      
+              // Títulos
               doc.setFontSize(12);
-              doc.text('Segunda Evaluación ', 80, 20);
-    
-              // Agregar la segunda tabla en la nueva página
+              doc.text('Evaluación de Desempeño', 80, 20);
+              doc.setFontSize(10);
+              doc.text(`Evaluador: ${nombreEvaluador}`, 10, 40);
+              doc.text(`Fecha: ${fecha}`, 10, 45);
+              // doc.text(`Evaluado: ${evaluado}`, 10, 50);
+              doc.text(`Mes de Evaluación: ${mes}`, 10, 55);
+      
+              let finalY = 65;
+      
+              // Agregar la primera tabla
               autoTable(doc, {
-                startY: 30,
-                head: headersAfter,
-                body: tableDataAfter,
+                startY: finalY,
+                head: headersBefore,
+                body: tableDataBefore,
                 theme: 'grid',
                 styles: { fontSize: 8 },
-                headStyles: { fillColor: [255, 69, 0] }
+                headStyles: { fillColor: [0, 102, 204] },
+                didDrawCell: (data) => {
+                  const cellText = data.row.cells[2].text.join('');
+      
+                  // Si el contenido de la celda es '/' colocar la imagen
+                  if (data.column.index === 2 && cellText === '/') {
+                    doc.addImage(img, 'PNG', data.cell.x + 2, data.cell.y + 2, 5, 5);
+                  }
+                  if (data.column.index === 2 && cellText === 'x') {
+                    doc.addImage(imagenRoja, 'PNG', data.cell.x + 2, data.cell.y + 2, 5, 5);
+                  }
+                }
               });
+      
+              // Segunda Evaluación
+              if (segundaEvaluacionIndex !== -1 && tableDataAfter.length > 0) {
+                doc.addPage();
+                doc.setFontSize(12);
+                doc.text('Segunda Evaluación', 80, 20);
+      
+                autoTable(doc, {
+                  startY: 30,
+                  head: headersAfter,
+                  body: tableDataAfter,
+                  theme: 'grid',
+                  styles: { fontSize: 8 },
+                  headStyles: { fillColor: [255, 69, 0] },
+                  didDrawCell: (data) => {
+                    const cellText = data.row.cells[2].text.join('');
+      
+                    if (data.column.index === 2 && cellText === '/') {
+                      doc.addImage(img, 'PNG', data.cell.x + 2, data.cell.y + 2, 10, 10);
+                    }
+                  }
+                });
+              }
+      
+              // Generar y abrir PDF
+              const pdfBlob = doc.output('blob');
+              const pdfUrl = URL.createObjectURL(pdfBlob);
+              window.open(pdfUrl, '_blank');
+            },
+            (error) => {
+              console.error('Error al descargar el archivo:', error);
             }
-    
-            // Generar y abrir PDF
-            const pdfBlob = doc.output('blob');
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            window.open(pdfUrl, '_blank');
-          };
-        },
-        (error) => {
-          console.error('Error al descargar el archivo:', error);
-        }
-      );
+          );
+        };
     }
     
   

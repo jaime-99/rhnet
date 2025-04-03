@@ -17,7 +17,7 @@
 
   <div class="div" *ngIf="loading">
     <div *ngIf="this.excelData?.length===0" class="alert alert-danger">
-      El usuario {{this.datosEvaluacion.usuarioAEvaluar.nombre_usuario}} no tiene kpi'ss actualizados por el momento. Favor de ir al departamento de RH 
+      El usuario {{this.datosEvaluacion.usuarioAEvaluar.nombre_usuario}} no tiene kpi's actualizados por el momento. Favor de ir al departamento de RH 
     </div>
   </div>
   
@@ -240,15 +240,16 @@
 <!-- este es otro componente -->
 
 
-<div *ngIf="this.excelData?.length>0" class="d-grid gap-2">
+<!-- <div *ngIf="this.excelData?.length>0" class="d-grid gap-2">
   <button class="btn btn-success" type="button" (click)="actualizarDatos()"> calcular el Desempeño General</button>
-</div>
+</div> -->
 
 <app-envio-evaluacion  *ngIf="datosEvaluacion && kpiData?.length && excelData?.length && mostrarEnvioEvaluacion"
   [datosEvaluaciones]="datosEvaluacion"
   [datosKpi]="kpiData"
   [datosExcel]="excelData"
   [promedio]="this.promedioGeneralMetricos"
+  [promedio2]="this.calculateAverage()*100"
   >
 </app-envio-evaluacion>
 

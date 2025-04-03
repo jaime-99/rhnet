@@ -55,7 +55,7 @@ export class EditarExcelComponent implements OnInit {
     const usuarioData:any = localStorage.getItem('usuario');
     this.usuario = JSON.parse(usuarioData);
 
-        this.promedioFinal = this.calculateCombinedAverage(); // Llamar la función para calcular el promedio
+        // this.promedioFinal = this.calculateCombinedAverage(); // Llamar la función para calcular el promedio
 
     this.activatedRouter.queryParams.subscribe((res)=>{
       this.mes = res['mes']
@@ -63,7 +63,7 @@ export class EditarExcelComponent implements OnInit {
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
     this.downloadExcel()
     // console.log( 'datos desde editar excel', this.datosEvaluacion)
-    this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
+    // this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
     // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
     // console.log(this.datosEvaluacion)
     }
@@ -163,8 +163,7 @@ export class EditarExcelComponent implements OnInit {
     // Cambiar el valor solo en la columna correspondiente a 'EVALÚE A BASE DE %'
     if (this.headers2[j] === 'EVALÚE A BASE DE %') {
       this.kpiData[i][j] = this.kpiData[i][j] === 1 ? 0 : 1; // Alternar entre ✔️ y ❌
-      // this.updateKpiData()
-      this.actualizarDatos()
+      this.updateKpiData()
     }
   }
   calculateAverage(): number {
@@ -191,41 +190,54 @@ export class EditarExcelComponent implements OnInit {
   
     return count === 0 ? 0 : total / count;
   }
+  //es para actualizar el promedio de la primera tabla
+  actualizarPromedio(): void {
+    const indexPromedio = this.excelData.findIndex((row:any) => row[1] === 'Promedio'); // Buscar la fila de "Promedio"
+    const columnIndex = this.headers.indexOf("ÁREA DE DESEMPEÑO"); // Índice de la columna correcta
   
-
-  calculateKpiAverage(): number {
-    let total = 0;
-    let count = 0;
-    // Obtener el índice de la columna "EVALÚE A BASE DE %"
-    const evalColumnIndex = this.headers2.indexOf("EVALÚE A BASE DE %");
-
-    if (evalColumnIndex === -1) {
-        return 0; // Si la columna no existe, retornar 0
-    }
-    for (let i = 0; i < this.kpiData.length; i++) {
-        const evalValue = this.kpiData[i][evalColumnIndex];
-        // Solo contar valores que sean 0 o 1
-        if (evalValue === 0 || evalValue === 1) {
-            count += 1;
-            total += evalValue; // Sumar solo los valores 1
-        }
+    if (indexPromedio !== -1 && columnIndex !== -1) {
+      this.excelData[indexPromedio][columnIndex] = (this.calculateAverage() * 100).toFixed(2); // Guardar promedio como porcentaje
     }
 
-    return count === 0 ? 0 : total / count;
-}
-
-  calculateCombinedAverage(): number {
-    const average = this.calculateAverage();
-    const kpiAverage = this.calculateKpiAverage();
-  
-    // Asegurarse de que los promedios no sean NaN o indefinidos
-    if (isNaN(average) || isNaN(kpiAverage)) {
-      return 0;  // Si alguno de los promedios es inválido, retornamos 0
-    }
-  
-    // Sumar ambos promedios y dividir entre 2 para obtener el promedio combinado
-    return (average + kpiAverage) / 2;
+    // console.warn(this.excelData)
+    
   }
+  
+  
+
+//   calculateKpiAverage(): number {
+//     let total = 0;
+//     let count = 0;
+//     // Obtener el índice de la columna "EVALÚE A BASE DE %"
+//     const evalColumnIndex = this.headers2.indexOf("EVALÚE A BASE DE %");
+
+//     if (evalColumnIndex === -1) {
+//         return 0; // Si la columna no existe, retornar 0
+//     }
+//     for (let i = 0; i < this.kpiData.length; i++) {
+//         const evalValue = this.kpiData[i][evalColumnIndex];
+//         // Solo contar valores que sean 0 o 1
+//         if (evalValue === 0 || evalValue === 1) {
+//             count += 1;
+//             total += evalValue; // Sumar solo los valores 1
+//         }
+//     }
+
+//     return count === 0 ? 0 : total / count;
+// }
+
+  // calculateCombinedAverage(): number {
+  //   const average = this.calculateAverage();
+  //   const kpiAverage = this.calculateKpiAverage();
+  
+  //   // Asegurarse de que los promedios no sean NaN o indefinidos
+  //   if (isNaN(average) || isNaN(kpiAverage)) {
+  //     return 0;  // Si alguno de los promedios es inválido, retornamos 0
+  //   }
+  
+  //   // Sumar ambos promedios y dividir entre 2 para obtener el promedio combinado
+  //   return (average + kpiAverage) / 2;
+  // }
   clearDefaultComment(i: number, j: number) {
     if (this.excelData[i][j] === 'ninguno') {
       setTimeout(() => { this.excelData[i][j] = ''; }, 0);
@@ -421,15 +433,6 @@ calculateTotalMetricAverage(): number {
   // Retorna el promedio con 2 decimales
   return metricCount > 0 ? parseFloat((totalSum / metricCount).toFixed(2)) : 0;
 }
-
-
-
-
-
-
-
-
-
 
 
   }

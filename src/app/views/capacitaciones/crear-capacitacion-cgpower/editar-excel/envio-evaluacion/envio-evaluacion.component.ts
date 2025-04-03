@@ -32,6 +32,7 @@ export class EnvioEvaluacionComponent implements OnInit {
   @Input() datosExcel:any
   @Input() datosKpi:any
   @Input() promedio: number = 0; // Recibir el promedio del padre
+  @Input() promedio2:number = 0; // es el promedio de la primera tabla
 
   enviarEvaluacion(){
     this.saveAndSendExcel()
@@ -81,10 +82,30 @@ export class EnvioEvaluacionComponent implements OnInit {
   saveAndSendExcel() {
     // Crear una copia de datosExcel para no modificar el original
     let datosCombinados = [...this.datosExcel];
+
+    // Buscar la fila con "Promedio" en la columna "ÁREA DE DESEMPEÑO"
+    const headers = datosCombinados[0]; // La primera fila es la de encabezados
+
+    // Buscar el índice de la columna "ÁREA DE DESEMPEÑO"
+    const areaColumnIndex = headers.indexOf("ÁREA DE DESEMPEÑO");
+
+    // Recorrer las filas para encontrar "Promedio" y poner el valor 10 en la tercera columna
+    for (let i = 0; i < datosCombinados.length; i++) {
+      if (datosCombinados[i][1] && datosCombinados[i][1].toString().toLowerCase() === "promedio") {
+          // Colocar el valor 10 en la tercera columna (índice 2)
+          datosCombinados[i][2] = this.promedio2;
+          break; // Termina el bucle después de modificar la fila "Promedio"
+      }
+  }
+  
+
+    // console.log(datosCombinados)
+    // return;
     // Agregar una fila vacía para separación
     datosCombinados.push([]);
+    // datosCombinados.push(['promedio', this.pro])
     // Agregar la fila que indica la segunda evaluación
-    datosCombinados.push(['Segunda Evaluación (KPIS)']);
+    datosCombinados.push(['Segunda tabla (Kpi)']);
     // Agregar datos de KPI después de la separación
     datosCombinados = datosCombinados.concat(this.datosKpi);
     // Obtener el promedio calculado con la función existente
