@@ -93,7 +93,7 @@ export class EnvioEvaluacionComponent implements OnInit {
     for (let i = 0; i < datosCombinados.length; i++) {
       if (datosCombinados[i][1] && datosCombinados[i][1].toString().toLowerCase() === "promedio") {
           // Colocar el valor 10 en la tercera columna (índice 2)
-          datosCombinados[i][2] = this.promedio2;
+          datosCombinados[i][2] = this.promedio2.toFixed(2);
           break; // Termina el bucle después de modificar la fila "Promedio"
       }
   }

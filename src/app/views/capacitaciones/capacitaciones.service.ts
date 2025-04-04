@@ -110,4 +110,9 @@ export class CapacitacionesService {
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerAreaDeEvaluacion.php?evaluacion_id=${evaluacion_id}&timestamp=${new Date().getTime()}`;
     return this.http.get<any>(url)
   }
+
+  obtenerPeriodosEvaluacion():Observable<any>{
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerPeriodosEvaluacion.php`
+    return this.http.get<any>(url)
+  }
 }

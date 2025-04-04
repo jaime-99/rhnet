@@ -37,7 +37,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
       // Agregamos las columnas editables
       this.evaluaciones = this.evaluaciones.map(ev => ({
         ...ev,
-        puntuacion: null,  // Inicialmente vacío
+        puntuacion: '❌',  // Inicialmente vacío
         comentario: ''     // Inicialmente vacío
       }));
       this.startIndex = this.evaluaciones.findIndex(ev => ev.__EMPTY === 'Comunicación');
@@ -52,9 +52,14 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   }
 
   getEvaluation(): string {
+    // console.log('evaluaciones jefe ',this.evaluaciones)
     if (!this.evaluaciones || this.startIndex === -1) return "Sin evaluación";
 
-    const evaluacionesFiltradas = this.evaluaciones.slice(this.startIndex);
+    const evaluacionesFiltradas = this.evaluaciones
+    .slice(this.startIndex)
+    .filter(ev => ev.__EMPTY_1 !== 'Evaluación General');  // Filtra la fila no deseada
+
+    // const evaluacionesFiltradas = this.evaluaciones.slice(this.startIndex);
 
     const total = evaluacionesFiltradas.filter(ev => ev.puntuacion !== '').length; 
     const correctas = evaluacionesFiltradas.filter(ev => ev.puntuacion === '✔️').length;
@@ -72,13 +77,15 @@ export class CrearCapacitacionLiderComponent implements OnInit {
 
   exportToExcel(): void {
     // Filtramos la evaluación final para incluirla en la hoja
-    const evaluacionesConEvaluacionFinal = [...this.evaluaciones];
+    let evaluacionesConEvaluacionFinal = [...this.evaluaciones];
+
+    evaluacionesConEvaluacionFinal = evaluacionesConEvaluacionFinal.filter(ev => ev.__EMPTY_1 !== 'Evaluación General');
 
     // Preparamos los datos que se exportarán
     const data = evaluacionesConEvaluacionFinal.map(ev => ({
       'Área de Evaluación': ev.__EMPTY,
       'Pregunta': ev.__EMPTY_1,
-      'Puntuación': ev.puntuacion === '✔️' ? 'Aprobado' : ev.puntuacion === '❌' ? 'Reprobado' : ev.puntuacion,
+      'Puntuación': ev.puntuacion === '✔️' ? 1 : ev.puntuacion === '❌' ? 0 : ev.puntuacion,
       'Comentarios': ev.comentario,
     }));
 
@@ -101,10 +108,17 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-    const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion}-${this.datosEvaluacion.evalua_a}.xlsx`;  // Puedes personalizar el nombre
+      const evaluaA = this.datosEvaluacion.evalua_a
+      .normalize('NFD') // Descompone caracteres acentuados en base + tilde
+      .replace(/[\u0300-\u036f]/g, '') // Elimina los diacríticos (acentos)
+      .replace(/\s+/g, '')  // Eliminar espacios
+      .replace(/ñ/g, 'n');  // Reemplazar ñ por n
+
+const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion}-${evaluaA}.xlsx`;
+
     const file = new File([blob], nombreArchivo, { type: blob.type });
 
-    // Crear el FormData y adjuntar el archivo
+      // Crear el FormData y adjuntar el archivo¡
     const formData = new FormData();
     // formData.append('file', blob, 'Evaluacion-Lider.xlsx');
     formData.append("file", file);

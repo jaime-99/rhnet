@@ -31,6 +31,23 @@ export const navItems: INavData[] = [
         },
       ]
     },
+  {
+      name: 'Evaluaciones',
+      url: '/evaluaciones',
+      iconComponent: { name: 'cil-cursor' },
+      children: [
+        {
+          name: 'permisos',
+          url: '/admin/evaluaciones',
+          icon: ''
+        },
+        // {
+        //   name: 'Crear',
+        //   url: '/admin/usuarios/crear',
+        //   icon: ''
+        // },
+      ]
+    },
   // {
   //   name: 'Typography',
   //   url: '/theme/typography',

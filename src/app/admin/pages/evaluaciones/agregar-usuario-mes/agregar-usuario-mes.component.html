@@ -1,0 +1,47 @@
+
+<div class="container">
+    <h2>  Usuario a un Periodo</h2>
+  
+    <label>Usuario:</label>
+    <select class="form-select" [(ngModel)]="usuarioSeleccionado">
+      <option *ngFor="let usuario of usuarios" [value]="usuario?.id">
+        {{ usuario?.nombre }}
+      </option>
+    </select>
+
+  
+     <label>Periodo:</label>
+    <select class="form-select" [(ngModel)]="periodoSeleccionado">
+      <option *ngFor="let periodo of periodos" [value]="periodo?.id">
+        {{ periodo?.mes }} {{ periodo?.anio }}
+      </option>
+    </select>
+  
+    <button class="btn btn-primary m-1" (click)="asignarUsuario()" [disabled]="!usuarioSeleccionado || !periodoSeleccionado">
+      Asignar Usuario
+    </button>
+  
+    <hr />
+
+    <h3>Activar o desactivar Periodo de evaluacion a un usuario especifico</h3>
+    <h5 class="mt-3">Usuarios del mes: {{ nombreMesActual | titlecase }}</h5>
+    <p *ngIf="usuarios && usuarios.length > 0">Total usuarios: {{ usuarios.length }}</p>
+
+    <p-tabs 
+        scrollable
+        [(value)]="selectedMonth"
+        (valueChange)="onTabChange($event)">
+  <p-tablist>
+    <p-tab *ngFor="let mes of meses; let i = index" [value]="i">
+      {{ mes | titlecase }}
+    </p-tab>
+  </p-tablist>
+
+  <p-tabpanels>
+    <p-tabpanel *ngFor="let mes of meses; let i = index">
+      <p *ngIf="selectedMonth === i">Contenido del mes: {{ mes }}</p>
+      {{i}}
+      <!-- Aquí podrías mostrar tu tabla si selectedMonth === i -->
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

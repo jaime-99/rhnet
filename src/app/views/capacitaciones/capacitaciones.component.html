@@ -19,7 +19,9 @@
                 
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button"  (click)="irAEvaluar(mes)"
+                        <button type="button"   [disabled]="!mesesHabilitados.includes(mes.toLowerCase())"
+
+                          (click)="irAEvaluar(mes)"
                             style="background-color: #0ab4df; border-color: #0ab4df;"
                         class="btn btn-primary">
                             <i class="bi bi-check-circle"></i> Evaluar

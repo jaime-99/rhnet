@@ -71,7 +71,8 @@ export const routes: Routes = [
     component: DefaultLayoutComponent2,
     children: [
       // { path: 'dashboard-admin', loadChildren: () => import('').then(m => m.routes) },
-      { path: 'usuarios', loadChildren: () => import('./admin/pages/usuarios/routes').then(m => m.routes) }
+      { path: 'usuarios', loadChildren: () => import('./admin/pages/usuarios/routes').then(m => m.routes) },
+      { path: 'evaluaciones', loadChildren: () => import('./admin/pages/evaluaciones/routes').then(m => m.routes) }
     ]
   },
   {

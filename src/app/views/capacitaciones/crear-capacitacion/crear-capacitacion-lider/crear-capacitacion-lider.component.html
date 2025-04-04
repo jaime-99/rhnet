@@ -24,7 +24,7 @@
           <td colspan="5" class="fw-bold border-top border-dark">{{ ev.__EMPTY }}</td>
         </tr>
         <!-- Fila de pregunta -->
-        <tr *ngIf="ev.__EMPTY_1 !== 'Evaluacion'">
+        <tr *ngIf="ev.__EMPTY_1 !== 'Evaluación General'">
           <td>{{ i + 1 }}</td>
           <td></td> <!-- Celda vacía porque el área ya se muestra arriba -->
           <td style="max-width: 200px; overflow: hidden; word-wrap: break-word; white-space: normal;">
@@ -46,7 +46,7 @@
         <tr *ngIf="ev.__EMPTY_1 === 'Evaluación General'">
           <td colspan="5" class="fw-bold">
             <div>
-              Evaluación Final:
+              Evaluación General:
               <span>{{ getEvaluation() }}</span>
             </div>
           </td>

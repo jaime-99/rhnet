@@ -20,6 +20,9 @@ export class CapacitacionesComponent implements OnInit {
 
   loading: boolean = false;
 
+  periodosValidos: any[] = [];
+  mesesHabilitados: string[] = [];
+
   constructor (private router:Router, private capacitacionesService:CapacitacionesService) {}
   ngOnInit(): void {
 
@@ -27,6 +30,8 @@ export class CapacitacionesComponent implements OnInit {
     this.usuario = JSON.parse(usuarioData);
     this.obtenerMes()
     this.obtenerEvaluacionesPorUsuario();
+    this.obtenerPeriodosValidos();
+
   }
 
   meses: string[] = [
@@ -68,6 +73,27 @@ export class CapacitacionesComponent implements OnInit {
       }
     });
   }
+
+  obtenerPeriodosValidos() {
+    this.capacitacionesService.obtenerPeriodosEvaluacion().subscribe((periodos) => {
+      this.periodosValidos = periodos;
+      const hoy = new Date();
+      // console.log(hoy)
+      // Filtramos los meses que estén dentro del periodo válido
+      this.mesesHabilitados = periodos
+        .filter((p: any) => {
+          const inicio = new Date(p.fecha_inicio);
+          const fin = new Date(p.fecha_fin);
+          
+          // Comprobamos si hoy está dentro del rango de fechas de inicio y fin
+          return hoy >= inicio && hoy <= fin;
+        })
+        .map((p: any) => p.mes.toLowerCase()); // para comparar con tu array `meses`
   
+      console.log(this.mesesHabilitados);  // Verifica los meses habilitados
+    });
   }
+  
+
+}
 

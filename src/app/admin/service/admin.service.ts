@@ -64,4 +64,16 @@ export class AdminService implements OnInit{
     return this.http.post(url,body)
   }
 
+  //obtener periodos de los meses
+  obtenerPeriodosEvaluacion():Observable<any>{
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerTodosLosPeriodosDeEvaluacion.php`
+    return this.http.get<any>(url)
+  }
+  //obtiene los usuarios que tienen periodos pasandole el parametro mes 
+  obtenerUsuariosPeriodos(mes:string):Observable<any>{
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtener-usuarios-periodos.php?mes=${mes}`
+    return this.http.get<any>(url)
+  }
+  
+
 }
