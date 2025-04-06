@@ -80,6 +80,7 @@ export class CapacitacionesComponent implements OnInit {
       const hoy = new Date();
       // console.log(hoy)
       // Filtramos los meses que estén dentro del periodo válido
+      console.log('meses habilitados', this.periodosValidos)
       this.mesesHabilitados = periodos
         .filter((p: any) => {
           const inicio = new Date(p.fecha_inicio);

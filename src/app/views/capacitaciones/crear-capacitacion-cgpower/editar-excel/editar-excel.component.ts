@@ -8,6 +8,7 @@ import { CompartirDatosService } from '../compartir-datos.service';
 import { EnvioEvaluacionComponent } from './envio-evaluacion/envio-evaluacion.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CapacitacionesService } from '../../capacitaciones.service';
 
 declare var bootstrap: any; // Si usas Bootstrap 5
 
@@ -46,7 +47,8 @@ export class EditarExcelComponent implements OnInit {
   promedioGeneralMetricos: number = 0;
   constructor (private http: HttpClient, private activatedRouter:ActivatedRoute, 
     private compartirDatosService: CompartirDatosService, private router:Router,
-    private confirmationService: ConfirmationService,  private messageService: MessageService
+    private confirmationService: ConfirmationService,  private messageService: MessageService,
+    private capacitacionService:CapacitacionesService
    ) {
 
   }
@@ -62,7 +64,7 @@ export class EditarExcelComponent implements OnInit {
     })
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
     this.downloadExcel()
-    // console.log( 'datos desde editar excel', this.datosEvaluacion)
+    console.log( 'datos desde editar excel', this.datosEvaluacion)
     // this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
     // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
     // console.log(this.datosEvaluacion)
@@ -434,6 +436,19 @@ calculateTotalMetricAverage(): number {
   return metricCount > 0 ? parseFloat((totalSum / metricCount).toFixed(2)) : 0;
 }
 
+
+// enviarCorreo(){
+//   const data ={
+//     to:this.datosEvaluacion.usuarioAEvaluar.correo,
+//     subject:`Evaluacion del mes de ${this.datosEvaluacion.data.mes_evaluacion}`,
+//     body:`${this.datosEvaluacion.datosUsuarioActual.nombre_usuario}  te ha evaluado en el mes de ${this.datosEvaluacion.data.mes_evaluacion} 
+//     entra a https://rhnet.cgpgroup.mx  para ver tu Evaluacion`,
+
+//   }
+//   this.capacitacionService.enviarCorreoItickets(data).subscribe((res)=>{
+//     // console.log(res)
+//   })
+// }
 
   }
 

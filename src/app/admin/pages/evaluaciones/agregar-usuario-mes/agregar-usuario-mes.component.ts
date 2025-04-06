@@ -78,7 +78,7 @@ export class AgregarUsuarioMesComponent implements OnInit {
     // console.log('llama')
     // Realiza una sola solicitud para obtener todos los usuarios
     this.adminService.obtenerUsuariosPeriodos().subscribe((res: any[]) => {
-      console.log('Datos obtenidos del backend:', res); // Verifica los datos
+      // console.log('Datos obtenidos del backend:', res); // Verifica los datos
   
       // Itera a través de las tabs
       this.tabs.forEach((tab) => {
@@ -97,7 +97,7 @@ export class AgregarUsuarioMesComponent implements OnInit {
     this.adminService.obtenerUsuariosPeriodos().subscribe((res)=>{
       // this.usuariosPeriodos = res
       this.usuariosPeriodos = res
-      console.log('mes de ',this.usuariosPeriodos)
+      // console.log('mes de ',this.usuariosPeriodos)
     })
   }
   clear(table: Table) {
@@ -151,7 +151,7 @@ asignarUsuario() {
       }
     })
   } else {
-    console.log('Faltan campos por seleccionar');
+    // console.log('Faltan campos por seleccionar');
   }
 }
 

@@ -141,7 +141,7 @@ export class EnvioEvaluacionComponent implements OnInit {
     this.http.post("https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/subirArchivoExcel.php", formData).subscribe(
         (response) => {
             console.log("Archivo enviado con éxito", response);
-            alert("Archivo enviado correctamente");
+            // alert("Archivo enviado correctamente");
         },  
         (error) => {
             console.error("Error al enviar el archivo", error);
@@ -198,7 +198,22 @@ postCapacitacion(){
   this.capacitacionesService.postCapacitacion(this.data).subscribe((res)=>{
     // console.log(res)
     // location.reload()
-    this.router.navigate(['./evaluaciones/mensaje-exitoso'])
+    this.router.navigate(['./evaluaciones/mensaje-exitoso'], {queryParams: {mes:this.datosEvaluaciones.data.mes_evaluacion} })
+    this.enviarCorreo()
+  })
+}
+
+
+enviarCorreo(){
+  const data ={
+    to:this.datosEvaluaciones.usuarioAEvaluar.correo,
+    subject:`Evaluacion del mes de ${this.datosEvaluaciones.data.mes_evaluacion}`,
+    body:`${this.datosEvaluaciones.datosUsuarioActual.nombre_usuario}  te ha evaluado en el mes de ${this.datosEvaluaciones.data.mes_evaluacion} 
+    entra a https://rhnet.cgpgroup.mx  para ver tu Evaluacion`,
+
+  }
+  this.capacitacionesService.enviarCorreoItickets(data).subscribe((res)=>{
+    // console.log(res)
   })
 }
 }

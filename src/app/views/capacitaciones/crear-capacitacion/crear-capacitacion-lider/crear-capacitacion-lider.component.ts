@@ -22,6 +22,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   mostrarMensaje: boolean = false;
   usuario: any = '';
   startIndex: number = 0;
+  datosCompletosUsuarioAEvaluar: any = {};
 
   constructor (private compatirDatos:CompartirDatosService, private capacitacionesService:CapacitacionesService,
     private http:HttpClient, private router:Router ) {}
@@ -31,6 +32,8 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     this.usuario = JSON.parse(usuarioData);
     
     this.datosEvaluacion = this.compatirDatos.getDatosPrivados()
+    console.log(this.datosEvaluacion)
+    this.obtenerDatosUusarioAEvaluar()
 
     this.capacitacionesService.obtenerEvaluaciones().subscribe(data => {
       this.evaluaciones = this.capacitacionesService.procesarExcel(data);
@@ -49,6 +52,13 @@ export class CrearCapacitacionLiderComponent implements OnInit {
       //   this.evaluaciones[evaluacionGeneralIndex].puntuacion = evaluacionFinal;  // Asignamos la evaluación calculada
       // }
     });
+  }
+
+  obtenerDatosUusarioAEvaluar(){
+    this.capacitacionesService.getinfoPuestoYDepartamentoPorId(Number(this.datosEvaluacion.data.usuario_evaluado_id)).subscribe((res)=>{
+      this.datosCompletosUsuarioAEvaluar = res
+      // console.log(res)
+    })  
   }
 
   getEvaluation(): string {
@@ -136,7 +146,7 @@ const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluaci
       (response) => {
           // console.log("Archivo enviado con éxito", response);
           this.subirEvaluacionBD()
-          alert("Archivo enviado correctamente");
+          // alert("Archivo enviado correctamente");
       },  
       (error) => {
           // console.error("Error al enviar el archivo", error);
@@ -164,6 +174,7 @@ const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluaci
     this.capacitacionesService.postCapacitacion(this.data).subscribe({
       next:(res)=>{
         //llevar a un mensaje de exito
+        // this.enviarCorreo()
       }
     })
     
@@ -173,5 +184,21 @@ const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluaci
   irAEvaluacion(){
     // redigiremos a la evaluacion de ese mes 
     this.router.navigate(['./evaluaciones/capacitacion-evaluador'], {queryParams:{mes:this.data.mes_evaluacion}} )
+  }
+
+
+
+  enviarCorreo(){
+    const data = {
+      to:this.datosCompletosUsuarioAEvaluar.correo,
+      // to:'sistemas@cgpgroup.mx',
+      subject:`Evaluacion del mes ${this.datosEvaluacion.data.mes_evaluacion} `,
+      body:`Hola ${this.datosEvaluacion.evalua_a} te han Evaluado en el mes de ${this.datosEvaluacion.data.mes_evaluacion}
+      entra a https://rhnet.cgpgroup.mx para ver los detalles`,
+
+    }
+    this.capacitacionesService.enviarCorreoItickets(data).subscribe(()=>{
+
+    })
   }
 }

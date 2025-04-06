@@ -111,8 +111,22 @@ export class CapacitacionesService {
     return this.http.get<any>(url)
   }
 
+  // obtener los periodos de evaluacion 
   obtenerPeriodosEvaluacion():Observable<any>{
-    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerPeriodosEvaluacion.php`
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtener-periodos-evaluacion.php`
     return this.http.get<any>(url)
   }
+
+  //mandar correo electronico ,
+  enviarCorreo(data:any){
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/correos/send_test_email.php`
+    return this.http.post<any>(url,data)
+  }
+  // enviar correo desde otro cpanel 
+  enviarCorreoItickets(data:any){
+    let url = `https://itickets.cgpgroup.mx/apis/emails/send_test_email.php`
+    
+    return this.http.post<any>(url,data)
+  }
+
 }
