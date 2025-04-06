@@ -18,7 +18,14 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./evaluaciones.component').then(m => m.EvaluacionesComponent),
     data: {
-      title:``
+      title:`permisos`
+    }
+  },
+  {
+    path: 'ver-evaluaciones',
+    loadComponent: () => import('./ver-evaluaciones/ver-evaluaciones.component').then(m => m.VerEvaluacionesComponent),
+    data: {
+      title:`ver evaluaciones`
     }
   },
     ]

@@ -41,11 +41,11 @@ export const navItems: INavData[] = [
           url: '/admin/evaluaciones',
           icon: ''
         },
-        // {
-        //   name: 'Crear',
-        //   url: '/admin/usuarios/crear',
-        //   icon: ''
-        // },
+        {
+          name: 'Ver Evaluaciones',
+          url: '/admin/evaluaciones/ver-evaluaciones',
+          icon: ''
+        },
       ]
     },
   // {

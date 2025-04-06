@@ -10,11 +10,14 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
-
+import { Toast } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-agregar-usuario-mes',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, TabsModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, SelectModule],
+  imports: [CommonModule, ReactiveFormsModule, ToastModule,FormsModule,TagModule, TabsModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, SelectModule, Toast],
   templateUrl: './agregar-usuario-mes.component.html',
   styleUrl: './agregar-usuario-mes.component.scss'
 })
@@ -27,15 +30,27 @@ export class AgregarUsuarioMesComponent implements OnInit {
   usuariosPeriodos: any[] = [];
 
   selectedMonth: number = 0; // Para llevar el control de la pestaña seleccionada
-  meses: string[] = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  meses: string[] = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio'];
   nombreMesActual: string = this.meses[0]; // enero por default
 
-  constructor (private adminService:AdminService) {}
+  //todo nuevo 
+  // tabs: { title: string; value: number; content: string }[] = [];
+  tabs: { title: string; value: number; content: any[] }[] = [];
+
+
+
+  constructor (private adminService:AdminService, private messageService: MessageService) {}
   ngOnInit(): void {
+    this.tabs = this.meses.map((mes, index) => ({
+      title: mes,
+      value: index,
+      content: [] // luego llenamos con los usuarios
+    }));
+
+    this.cargarUsuariosPorMes();
 
     this.obtenerUsuarios();
     this.cargarPeriodos();
-    this.obtenerUsuariosDePeriodos('enero')
 
 
   }
@@ -54,47 +69,93 @@ export class AgregarUsuarioMesComponent implements OnInit {
     this.adminService.obtenerPeriodosEvaluacion().subscribe({
       next:(res)=>{
         this.periodos = res
-        console.log('periodos',res)
+        // console.log('periodos',res)
       }
     })
 
   }
-
-
-  onTabChange(value: string | number): void {
-    const index = typeof value === 'number' ? value : this.meses.indexOf(value.toString());
-    console.log(index)
-    // console.log(this)
-    this.selectedMonth = index;
-    this.nombreMesActual = this.meses[index];
-    this.filtrarPorMes(this.nombreMesActual);
-  }
+  cargarUsuariosPorMes() {
+    // console.log('llama')
+    // Realiza una sola solicitud para obtener todos los usuarios
+    this.adminService.obtenerUsuariosPeriodos().subscribe((res: any[]) => {
+      console.log('Datos obtenidos del backend:', res); // Verifica los datos
   
-
-  asignarUsuario(){
-
+      // Itera a través de las tabs
+      this.tabs.forEach((tab) => {
+        // console.log('Filtrando para el mes:', tab.title.toLowerCase()); // Verifica el mes de cada tab
+        // Filtra los usuarios para cada tab por el mes correspondiente
+        tab.content = res.filter((usuario) => {
+          // console.log('Comparando mes:', usuario.mes.toLowerCase(), 'con', tab.title.toLowerCase()); // Verifica la comparación
+          return usuario.mes.toLowerCase() === tab.title.toLowerCase();
+        });
+  
+        // console.log('Usuarios para el mes', tab.title, ':', tab.content); // Verifica los resultados filtrados
+      });
+    });
   }
-
-  obtenerUsuariosDePeriodos(mes: string){
-    this.adminService.obtenerUsuariosPeriodos('enero').subscribe((res)=>{
+  obtenerUsuariosDePeriodos(){
+    this.adminService.obtenerUsuariosPeriodos().subscribe((res)=>{
       // this.usuariosPeriodos = res
-      this.usuariosPeriodos = res.filter((usuario:any) => usuario.mes === mes);
-
-      console.log('mes de ',mes,this.usuariosPeriodos)
+      this.usuariosPeriodos = res
+      console.log('mes de ',this.usuariosPeriodos)
     })
   }
-   filtrarPorMes(mes: string): void {
-    this.obtenerUsuariosDePeriodos(mes); // Filtra los usuarios por el mes seleccionado
-  }
-
-  cambiarEstado(periodo_id?:any, usuario_id?:any, periodo_activo?:any){
-
-  }
-
-
-  
   clear(table: Table) {
     table.clear();
 }
 
+trackByTab(index: number, tab: { value: number }) {
+  return tab.value;
 }
+// es para desactivar a alguien de un periodo en especifico
+cambiarEstado(id:string,activo:number){
+
+  const data = {
+    id:Number(id),
+    activo:activo
+  }
+
+  this.adminService.editarUsuarioPeriodo(data).subscribe({
+    next:(res)=>{
+      this.cargarUsuariosPorMes();
+      this.messageService.add({ severity: 'success', summary: 'Finalizado', detail: 'Estado Actualizado Correctamente' });
+    }
+  })
+
+
+}
+
+asignarUsuario() {
+  if (this.usuarioSeleccionado && this.periodoSeleccionado) {
+    // Aquí va la lógica para asignar el usuario al periodo
+    // console.log(`Asignando usuario ${this.usuarioSeleccionado} al periodo ${this.periodoSeleccionado}`);
+    this.adminService.agregarUsuarioAPeriodo(Number(this.usuarioSeleccionado), Number(this.periodoSeleccionado)).subscribe({
+      next:(res)=>{
+        if(res.error){
+          this.messageService.add({ severity: 'warn', summary: 'Error', detail: res.error });
+          this.cargarUsuariosPorMes();
+        }
+        else if(res.success){
+          this.messageService.add({ severity: 'success', summary: 'Exito', detail: res.success });
+          this.cargarUsuariosPorMes();
+        }
+      },
+      error:(err)=>{
+
+        this.messageService.add({ severity: 'warn', summary: 'Error', detail: err });
+
+
+      },
+      complete:()=>{
+
+      }
+    })
+  } else {
+    console.log('Faltan campos por seleccionar');
+  }
+}
+
+
+}
+
+

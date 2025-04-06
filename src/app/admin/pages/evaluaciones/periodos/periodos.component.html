@@ -1,0 +1,80 @@
+
+
+<div class="card">
+    <p-table
+        [value]="periodos"
+        showGridlines
+        [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th>Fecha Fin </th>
+                    <th>Fecha Inicio</th>
+                    <th>Activo</th>
+                    <th>Editar</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-periodo>
+                <tr>
+                    <td>{{ periodo.mes }}</td>
+                    <td>{{ periodo.anio }}</td>
+                    <td>{{ periodo.fecha_inicio |date:'dd/MM/yyyy' }}</td>
+                    <td>{{ periodo.fecha_fin | date:'dd/MM/yyyy' }}</td>
+                    <!-- <td>{{ periodo.activo }}</td> -->
+                    <td>
+                        <p-tag 
+                          [severity]="periodo.activo == 1 ? 'success' : 'danger'" 
+                          [value]="periodo.activo == 1 ? 'Activo' : 'Inactivo'">
+                        </p-tag>
+                      </td>
+                      
+                    <td> <button  class="btn btn-info" type="button" (click)="obtenerPeriodoPorId(periodo.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"> Editar </button>
+                 </td>
+                </tr>
+            </ng-template>
+    </p-table>
+</div>
+
+
+
+<form [formGroup]="this.formPeriodos">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar periodo de evaluacion del mes : {{this.periodoSeleccionado?.mes}}  </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container text-center">
+
+            <div class="row">
+                    <div class="col-md-12 mb-3 ">
+                    <label for="">Fecha Inicio </label>
+                    <input formControlName="fecha_inicio" class="form-input" type="date">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="">Fecha Fin </label>
+                        <input formControlName="fecha_fin" class="form-input" type="date">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-check form-switch">
+                            <input formControlName="activo" class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" checked>
+                            <label class="form-check-label" for="switchCheckChecked">activar / desactivar mes</label>
+                          </div>
+                    </div>
+            </div>
+            </div>
+
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" (click)="editarPeriodo()" class="btn btn-primary">Guardar Cambios</button>
+          <p-toast></p-toast>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>

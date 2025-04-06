@@ -1,47 +1,115 @@
 
 <div class="container">
-    <h2>  Usuario a un Periodo</h2>
+    <h2 class="text-center">  Usuario a un Periodo</h2>
   
-    <label>Usuario:</label>
-    <select class="form-select" [(ngModel)]="usuarioSeleccionado">
-      <option *ngFor="let usuario of usuarios" [value]="usuario?.id">
-        {{ usuario?.nombre }}
-      </option>
-    </select>
+    <div class="row">
+        <div class="col">
+            <label>Usuario:</label>
+            <select class="form-select"   form-select-sm  [(ngModel)]="usuarioSeleccionado">
+                <option [value]="" selected>Selecciona un usuario</option>
+              <option *ngFor="let usuario of usuarios" [value]="usuario?.id">
+                {{ usuario?.nombre }}
+              </option>
+            </select>
+        </div>
+        <div class="col">
 
-  
-     <label>Periodo:</label>
-    <select class="form-select" [(ngModel)]="periodoSeleccionado">
-      <option *ngFor="let periodo of periodos" [value]="periodo?.id">
-        {{ periodo?.mes }} {{ periodo?.anio }}
-      </option>
-    </select>
-  
-    <button class="btn btn-primary m-1" (click)="asignarUsuario()" [disabled]="!usuarioSeleccionado || !periodoSeleccionado">
-      Asignar Usuario
-    </button>
+            <label>Periodo:</label>
+           <select class="form-select" [(ngModel)]="periodoSeleccionado">
+             <option *ngFor="let periodo of periodos" [value]="periodo?.id">
+               {{ periodo?.mes }} {{ periodo?.anio }}
+             </option>
+           </select>
+         
+           <button class="btn btn-info m-1" (click)="asignarUsuario()" [disabled]="!usuarioSeleccionado || !periodoSeleccionado">
+             Asignar Usuarios
+           </button>
+           <p-toast/>
+
+        </div>
+    </div>
+
   
     <hr />
 
-    <h3>Activar o desactivar Periodo de evaluacion a un usuario especifico</h3>
-    <h5 class="mt-3">Usuarios del mes: {{ nombreMesActual | titlecase }}</h5>
-    <p *ngIf="usuarios && usuarios.length > 0">Total usuarios: {{ usuarios.length }}</p>
+    <!-- <div class="card">
+        <p-tabs value="0">
+          <p-tablist>
+            @for (tab of tabs; track tab.value) {
+              <p-tab [value]="tab.value">{{ tab.title }}</p-tab>
+            }
+          </p-tablist>
+      
+          <p-tabpanels>
+            @for (tab of tabs; track tab.value) {
+              <p-tabpanel [value]="tab.value">
+                <ul *ngIf="tab.content.length > 0; else sinUsuarios">
+                  <li *ngFor="let usuario of tab.content">
+                    {{ usuario.nombre }}
+                  </li>
+                </ul>
+                <ng-template #sinUsuarios>
+                  <p>No hay usuarios asignados para este mes.</p>
+                </ng-template>
+              </p-tabpanel>
+            }
+          </p-tabpanels>
+        </p-tabs>
+      </div> -->
+      
 
-    <p-tabs 
-        scrollable
-        [(value)]="selectedMonth"
-        (valueChange)="onTabChange($event)">
-  <p-tablist>
-    <p-tab *ngFor="let mes of meses; let i = index" [value]="i">
-      {{ mes | titlecase }}
-    </p-tab>
-  </p-tablist>
-
-  <p-tabpanels>
-    <p-tabpanel *ngFor="let mes of meses; let i = index">
-      <p *ngIf="selectedMonth === i">Contenido del mes: {{ mes }}</p>
-      {{i}}
-      <!-- Aquí podrías mostrar tu tabla si selectedMonth === i -->
-    </p-tabpanel>
-  </p-tabpanels>
-</p-tabs>
+      <div class="card">
+        <p-tabs [(value)]="selectedMonth">
+          <p-tablist>
+            <p-tab *ngFor="let tab of tabs; trackBy: trackByTab" [value]="tab.value">{{ tab.title }}</p-tab>
+          </p-tablist>
+      
+          <p-tabpanels>
+            <p-tabpanel *ngFor="let tab of tabs; trackBy: trackByTab" [value]="tab.value">
+              <p-table *ngIf="tab.content.length > 0; else sinUsuarios" [value]="tab.content">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Periodo</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario>
+                  <tr>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.mes }} {{ usuario.anio }}</td>
+                    <td>{{ usuario.fecha_inicio | date }}</td>
+                    <td>{{ usuario.fecha_fin | date }}</td>
+                    <!-- <td>{{ usuario.activo === '1' ? 'Sí' : 'No' }}</td> -->
+                    <td>
+                      <p-tag 
+                        [severity]="usuario.activo == 1 ? 'success' : 'danger'" 
+                        [value]="usuario.activo == 1 ? 'Activo' : 'Inactivo'">
+                      </p-tag>
+                      <!-- {{usuario?.activo}} -->
+                    </td>
+                    <!-- <button class="btn btn-success" (click)="cambiarEstado(usuario)">
+                        {{ usuario.activo === '1' ? 'Desactivar' : 'Activar' }}
+                      </button> -->
+                      <td>
+                        <button (click)="cambiarEstado(usuario.id_usuarioPeriodo  , usuario.activo==1 ? 0:1)"
+                        class="btn" 
+                        [ngClass]="usuario.activo === '1' ? 'btn-danger' : 'btn-success'">
+                        {{ usuario.activo === '1' ? 'Desactivar' : 'Activar' }}
+                      </button>
+                      
+                      </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <ng-template #sinUsuarios>
+                <p>No hay usuarios asignados para este mes.</p>
+              </ng-template>
+            </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      </div>
+      
