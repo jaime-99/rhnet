@@ -85,7 +85,7 @@ export class CrearCapacitacionComponent implements OnInit {
   getJefeDirecto(){
     this.capacitacionesService.getJefeDirecto(this.usuario.id).subscribe({
       next:(res)=>{
-        console.log(res)
+        // console.log(res)
         if(res.message){
           this.jefeDirecto = ''
           // console.log('no tiene jefe directo')

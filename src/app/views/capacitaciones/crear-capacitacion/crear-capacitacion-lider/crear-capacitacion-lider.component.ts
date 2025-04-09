@@ -32,7 +32,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     this.usuario = JSON.parse(usuarioData);
     
     this.datosEvaluacion = this.compatirDatos.getDatosPrivados()
-    console.log(this.datosEvaluacion)
+    console.log( 'datos-evaluacion-1', this.datosEvaluacion)
     this.obtenerDatosUusarioAEvaluar()
 
     this.capacitacionesService.obtenerEvaluaciones().subscribe(data => {
@@ -84,7 +84,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
       return `Desaprobado (${porcentaje.toFixed(2)}%)`; // Desaprobado si tiene menos del 40%
     }
   }
-
+  
   exportToExcel(): void {
     // Filtramos la evaluación final para incluirla en la hoja
     let evaluacionesConEvaluacionFinal = [...this.evaluaciones];
@@ -124,8 +124,11 @@ export class CrearCapacitacionLiderComponent implements OnInit {
       .replace(/\s+/g, '')  // Eliminar espacios
       .replace(/ñ/g, 'n');  // Reemplazar ñ por n
 
-const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion}-${evaluaA}.xlsx`;
+// const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion,this.datosEvaluacion.data.usuario_evaluador_id}-${evaluaA}.xlsx`;
+const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion}-${this.datosEvaluacion.data.usuario_evaluador_id}-${evaluaA}.xlsx`;
 
+
+console.log(nombreArchivo)
     const file = new File([blob], nombreArchivo, { type: blob.type });
 
       // Crear el FormData y adjuntar el archivo¡
@@ -174,7 +177,7 @@ const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluaci
     this.capacitacionesService.postCapacitacion(this.data).subscribe({
       next:(res)=>{
         //llevar a un mensaje de exito
-        // this.enviarCorreo()
+        this.enviarCorreo()
       }
     })
     

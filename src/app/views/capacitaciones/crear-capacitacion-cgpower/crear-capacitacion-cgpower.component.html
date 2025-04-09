@@ -33,7 +33,7 @@
                     Puesto: <strong> {{this.departamentoUsuario.puesto}} </strong>
                 </div>
                 <div class="col-md-12 mb-2">
-                    Nombre del Evaluador: <strong> {{this.usuario.nombre}} {{this.usuario.apellido_paterno}} {{this.usuario.apellido_materno}} </strong>
+                    Nombre del Evaluador: <strong> {{this.usuario.nombre}}  </strong>
                 </div>
                 <div class="col-md-12 mb-2">
                     <!-- Evalua a : <span> <button class="btn btn-primary">Escoger</button>  </span> -->
@@ -57,6 +57,7 @@
     </div>
 </div>
 
+  
 <!-- <div class="card">
 
     <div class="card-body">
@@ -91,6 +92,19 @@
     </div>
 </div>
 </div>
+
+<div *ngIf="evluacionesRealizadasPorMi.length>0" class="alert alert-warning">
+    <h4 class="alert-heading">Evaluaciones Hechas por mi en el mes de <strong> {{this.mes}} </strong></h4>
+    <!-- 1. Nombre : {{ evaluacion.nombre_evaluado }} <br>
+    2. Descripción : {{ evaluacion.descripcion }} <br>
+    3. Estatus : {{ evaluacion.estatus }} -->
+    <ol  class="list-group list-group-numbered" *ngFor="let evaluacion of evluacionesRealizadasPorMi">
+        <li class="list-group-item"> Nombre: {{ evaluacion.nombre_evaluado }} </li>
+        <li class="list-group-item"> Descripcion: {{ evaluacion.descripcion }} </li>
+        <li class="list-group-item"> Estatus: {{ evaluacion.estatus }} </li>
+      </ol>
+</div>
+
 </form>
 
 <div *ngIf="esLider=='Empleado'"  class="alert alert-danger">
@@ -101,9 +115,9 @@
 
 <!-- {{this.formEvaluacion.get('usuario_evaluado_id')?.value}} -->
 
-
+<!-- todo checar esto despues ulitma edicion 06/04/2024 -->
 <!-- para cuando ya tenga evaluado a una persona -->
-<div *ngIf="todasPendientes" class="alert alert-danger" >
+<!-- <div *ngIf="todasPendientes" class="alert alert-info" >
     ya has Evaluado a todos tus empleados en el mes de <strong> {{this.mes}} </strong>
         <ul class="list-group">
             <li *ngFor="let usuario of evaluacionesPendientes; let i = index"  class="list-group-item ">
@@ -116,7 +130,7 @@
 
             </li>
         </ul>
-</div>
+</div> -->
 
 <!-- simulacion de carga de archivo -->
 <div *ngIf="isLoading" class="text-center">

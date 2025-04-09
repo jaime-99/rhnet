@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
 import { DefaultLayoutComponent2 } from './admin/layout';
+import { adminGuard } from './views/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,8 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: DefaultLayoutComponent2,
+    canActivate: [adminGuard],  // Aplicamos el guard aquí
+
     children: [
       // { path: 'dashboard-admin', loadChildren: () => import('').then(m => m.routes) },
       { path: 'usuarios', loadChildren: () => import('./admin/pages/usuarios/routes').then(m => m.routes) },
@@ -85,6 +88,13 @@ export const routes: Routes = [
   {
     path: '500',
     loadComponent: () => import('./views/pages/page500/page500.component').then(m => m.Page500Component),
+    data: {
+      title: 'Page 500'
+    }
+  },
+  {
+    path: 'sin-acceso',
+    loadComponent: () => import('./views/pages/sin-acceso/sin-acceso.component').then(m => m.SinAccesoComponent),
     data: {
       title: 'Page 500'
     }

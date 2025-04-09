@@ -24,7 +24,7 @@ export class EnvioEvaluacionComponent implements OnInit {
   ngOnInit(): void {
     // console.log('desde envio de evaluacion',this.datosEvaluaciones)
     console.log('desde envio de evaluacion kpi',this.datosKpi)
-    // console.warn('promedio envio de evaluacion excel',this.datosEvaluaciones)
+    console.warn('promedio envio de evaluacion excel',this.datosEvaluaciones)
     // console.warn(this.datosKpi)
   }
 

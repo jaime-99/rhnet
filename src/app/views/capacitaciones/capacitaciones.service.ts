@@ -117,6 +117,12 @@ export class CapacitacionesService {
     return this.http.get<any>(url)
   }
 
+  // es para obtener todas las evaluaciones de todas las personas
+  obtenerTodasLasEvaluaciones(){
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/ver-todas-evaluaciones.php`
+    return this.http.get<any>(url)
+  }
+
   //mandar correo electronico ,
   enviarCorreo(data:any){
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/correos/send_test_email.php`
@@ -125,7 +131,6 @@ export class CapacitacionesService {
   // enviar correo desde otro cpanel 
   enviarCorreoItickets(data:any){
     let url = `https://itickets.cgpgroup.mx/apis/emails/send_test_email.php`
-    
     return this.http.post<any>(url,data)
   }
 

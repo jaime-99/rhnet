@@ -33,12 +33,12 @@
                 <div class="row">
                     <div class="col">
                         <h5>Evaluacion del mes de <p class="text-info"> {{this.mes}} </p> </h5>
-                        <p>Fecha Actual : 19/02/2025</p>
+                        <p>Fecha Actual :  {{obtenerFechaActual()}} </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-5">
-                <h5>Nombre del Evaluador: {{this.usuario.nombre}} {{this.usuario.apellido_paterno}} {{this.usuario.apellido_materno}} </h5>
+                <h5>Nombre del Evaluador: {{this.usuario.nombre}}  </h5>
                 <div class="row ">
                     <div class="col-md-6">
                         <p>area: {{this.datosEvaluacion?.datosUsuarioActual?.departamento}} </p>

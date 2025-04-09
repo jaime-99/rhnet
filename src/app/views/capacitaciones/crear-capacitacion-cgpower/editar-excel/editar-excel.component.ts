@@ -64,10 +64,10 @@ export class EditarExcelComponent implements OnInit {
     })
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
     this.downloadExcel()
-    console.log( 'datos desde editar excel', this.datosEvaluacion)
+    // console.log( 'datos desde editar excel', this.datosEvaluacion)
     // this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
-    // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
-    // console.log(this.datosEvaluacion)
+    console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
+    console.log(this.datosEvaluacion)
     }
 
  //todo correcto no borrar
@@ -89,10 +89,12 @@ export class EditarExcelComponent implements OnInit {
   // }
   downloadExcel() {
     const tipoEvaluacion = this.datosEvaluacion.usuarioAEvaluar.puesto;
+    // es para ver el nombre del usuario a evaluar
+    const idUsuario = this.datosEvaluacion.usuarioAEvaluar.usuario_id;
     //todo que tambien sea por la ciudad y si tiene nombre por el nombre tambien 
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
     const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
-    const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${encodedTipoEvaluacion}&timestamp=${timestamp}`;
+    const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${idUsuario}&timestamp=${timestamp}`;
     
     setTimeout(() => {
       
@@ -449,6 +451,16 @@ calculateTotalMetricAverage(): number {
 //     // console.log(res)
 //   })
 // }
+
+obtenerFechaActual(): string {
+  const hoy = new Date();
+  const dia = String(hoy.getDate()).padStart(2, '0');
+  const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+  const anio = hoy.getFullYear();
+
+  return `${dia}/${mes}/${anio}`;
+}
+
 
   }
 

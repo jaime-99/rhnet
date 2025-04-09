@@ -1,1 +1,75 @@
-<p>ver-evaluaciones works!</p>
+
+
+<h4 class="text-center">Evaluaciones Completadas</h4>
+
+
+
+<div *ngIf="this.evaluaciones.length==0" class="alert">
+    Aun no hay evaluaciones completadas
+</div>
+
+
+
+
+<p-table *ngIf="this.evaluaciones.length>=1"
+    [value]="evaluaciones"
+    showGridlines
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [sortOrder]="1"
+    sortField="id"
+    #dt1
+    [globalFilterFields]="['evaluado', 'mes_evaluacion', 'evaluador', 'id', 'tipo_evaluacion']"
+    >
+<!-- <p-dropdown 
+  [options]="meses" 
+  [(ngModel)]="mesSeleccionado" 
+  placeholder="Filtrar por mes" 
+  (onChange)="dt1.filter(mesSeleccionado, 'mes_evaluacion', 'equals')" 
+  class="mb-3 w-full md:w-14rem">
+</p-dropdown> -->
+
+    <ng-template #caption>
+        <div class="flex">
+            <p-button label="Borrar" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+            <p-iconfield iconPosition="left" class="ml-auto">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text"  [(ngModel)]="searchValue"  (input)="dt1.filterGlobal(getInputValue($event), 'contains')" placeholder="Buscar Palabra" />
+            </p-iconfield>
+        </div>
+    </ng-template>
+        <ng-template #header>
+            <tr>
+                <th   pSortableColumn="id" >
+                    ID<p-sortIcon field="id" />
+
+                </th>
+                <th  pSortableColumn="mes_evaluacion">
+                     Mes<p-sortIcon field="mes_evaluacion" />
+                    </th>
+                <th  pSortableColumn="tipo_evaluacion" mes_evaluacion="tipo_evaluacion">
+                    Tipo Evaluacion <p-sortIcon field="tipo_evaluacion" />
+                </th>
+                <th pSortableColumn="evaluador">
+                    Evaluador <p-sortIcon field="evaluador" />
+                </th>
+                <th pSortableColumn="evaluado" evaluador="evaluado">
+                    Evaluado <p-sortIcon field="evaluado" />
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-evaluacion>
+            <tr>
+                <td>{{ evaluacion.id }}</td>
+                <td>{{ evaluacion.mes_evaluacion }}</td>
+                <td>{{ evaluacion.tipo_evaluacion }}</td>
+                <td>{{ evaluacion.evaluador }} {{evaluacion.evaluador_paterno}}</td>
+                <td>{{ evaluacion.evaluado  }} {{evaluacion.evaluado_paterno}}</td>
+            </tr>
+        </ng-template>
+</p-table>

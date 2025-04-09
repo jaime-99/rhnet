@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 //servicios locales 
 import {CompartirDatosService} from './compartir-datos.service'
+import { map } from 'rxjs';
 @Component({
   selector: 'app-crear-capacitacion-cgpower',
   imports: [ToastModule,
@@ -50,6 +51,7 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
   //simulacion de carga
   isLoading: boolean = false;
 
+  evluacionesRealizadasPorMi:any[] = []
 
   constructor(private fb:FormBuilder, private capacitacionesService:CapacitacionesService, private messageService:MessageService,
     private routerActivated: ActivatedRoute,  private router:Router,
@@ -82,7 +84,8 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
     this.getJefeDirecto()
     this.getMisEmpleados()
     this.getInfoDepartamentoYPuesto()
-    this.getEvaluacionesDeMisEmpleados()
+    // this.getEvaluacionesDeMisEmpleados()
+    this.evaluacionesHechasPorMi()
   }
 
   getJefeDirecto(){
@@ -293,8 +296,7 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
   getEvaluacionesDeMisEmpleados(){
     this.capacitacionesService.getEvaluacionesMisEmpelados(this.usuario.id,this.mes).pipe().subscribe({
       next:(res)=>{
-        // console.log('evaluaciones',res)
-
+        console.log('evaluaciones de mis empleados ',res)
         // mes actual 
           const mesActualNumero = new Date().getMonth();
           const meses: string[] = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -311,11 +313,9 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
         // si la quiero evaluar en enero y ya tiene de enero evaluado que no se pueda evaluar de nuevo
         //todo pendiente sin funcionar bien , debemos filtar por mes
         this.todasPendientes = res.length > 0 && res.every  ((e:any) => e.estatus_evaluacion === 'pendiente');
-        console.log(this.todasPendientes)
-
+        // console.log(this.todasPendientes)
       }
     })
-
   }
 
   get data() {
@@ -338,7 +338,6 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
       this.router.navigate(['./evaluaciones/mensaje-exitoso'])
     })
   }
-
   //! lo nuevo
   irEvaluar(){
     // es para que vaya al template de evaluacion y se enviara los datos desde aqui
@@ -350,5 +349,18 @@ export class CrearCapacitacionCgpowerComponent implements OnInit {
         datosUsuarioActual:this.departamentoUsuario
       }
     );
+  }
+
+  // es para ver las evaluaciones que he hecho en ese mes por el ID 
+  evaluacionesHechasPorMi(){
+
+    this.capacitacionesService.getEvaluacionForId(this.usuario.id).pipe(
+      map((res:any) =>res.filter((item:any)=>item.mes_evaluacion === this.mes)),
+    ).subscribe((res)=>{
+      this.evluacionesRealizadasPorMi = res
+      console.log(res)
+    })
+
+
   }
   }
