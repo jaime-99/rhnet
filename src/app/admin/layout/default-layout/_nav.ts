@@ -46,6 +46,11 @@ export const navItems: INavData[] = [
           url: '/admin/evaluaciones/ver-evaluaciones',
           icon: ''
         },
+        {
+          name: 'Ver Formatos',
+          url: '/admin/evaluaciones/ver-formatos',
+          icon: ''
+        },
       ]
     },
   // {

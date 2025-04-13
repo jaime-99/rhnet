@@ -99,10 +99,23 @@ export class AdminService implements OnInit{
   }
   
   editarUsuarioPeriodo(data:any):Observable<any>{
-    console.log(data)
+    // console.log(data)
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/editar-activo-usuario-periodo.php`
     return this.http.put<any>(url,data)
   }
+
+  // es para subir el formato de excel a la BD
+  subirFormato(formData: FormData) {
+    return this.http.post('https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/subir_formato.php', formData);
+  }
+
+  // obtiene el formato de un usuario id por el usuarioId
+  obtenerDatosFormatoPorIdUsuario(usuario_id:any):Observable<any>{
+
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerFormatoPorIdUsuario_id.php?usuario_id=${usuario_id}`
+    return this.http.get<any>(url)
+  }
+  
 
   
 

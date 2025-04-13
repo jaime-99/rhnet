@@ -13,16 +13,14 @@
 
 <p-table *ngIf="this.evaluaciones.length>=1"
     [value]="evaluaciones"
-    showGridlines
     [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"
-    [rows]="5"
+    [rows]="10"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[5, 10, 20]"
-    [sortOrder]="1"
-    sortField="id"
     #dt1
-    [globalFilterFields]="['evaluado', 'mes_evaluacion', 'evaluador', 'id', 'tipo_evaluacion']"
+    [globalFilterFields]="['evaluado', 'mes_evaluacion', 'evaluador', 'id', 'tipo_evaluacion', 'fecha_creacion']"
+    size="small"
     >
 
     <!-- <ng-template #caption>
@@ -92,23 +90,23 @@
       
         <ng-template #header>
             <tr>
-                <th   pSortableColumn="id" >
+                <th style="width:10%"  pSortableColumn="id" >
                     ID<p-sortIcon field="id" />
-
                 </th>
-                <th  pSortableColumn="mes_evaluacion">
-                     Mes<p-sortIcon field="mes_evaluacion" />
-                    </th>
-                <th  pSortableColumn="tipo_evaluacion" mes_evaluacion="tipo_evaluacion">
-                    Tipo Evaluacion <p-sortIcon field="tipo_evaluacion" />
+                <th style="width:10%"  pSortableColumn="fecha_creacion" >
+                    Fecha<p-sortIcon field="fecha_creacion" />
                 </th>
-                <th pSortableColumn="evaluador">
-                    Evaluador <p-sortIcon field="evaluador" />
+                <th style="width:10%"> Mes</th>
+                <th style="width:10%">
+                    Tipo Evaluacion
                 </th>
-                <th pSortableColumn="evaluado" evaluador="evaluado">
-                    Evaluado <p-sortIcon field="evaluado" />
+                <th style="width:25%" >
+                    Evaluador
                 </th>
-                <th>
+                <th style="width:25%">
+                    Evaluado
+                </th>
+                <th style="width:10%">
                     Ver pdf
                 </th>
             </tr>
@@ -116,6 +114,7 @@
         <ng-template #body let-evaluacion>
             <tr>
                 <td>{{ evaluacion.id }}</td>
+                <td>{{ evaluacion.fecha_creacion | date:'dd/MM/yyyy' }}</td>
                 <td>{{ evaluacion.mes_evaluacion }}</td>
                 <td>{{ evaluacion.tipo_evaluacion }}</td>
                 <td>{{ evaluacion.evaluador }} {{evaluacion.evaluador_paterno}}</td>

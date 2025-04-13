@@ -28,6 +28,13 @@ export const routes: Routes = [
       title:`ver evaluaciones`
     }
   },
+  {
+    path: 'ver-formatos',
+    loadComponent: () => import('./formato-evaluacion/formato-evaluacion.component').then(m => m.FormatoEvaluacionComponent),
+    data: {
+      title:`Formatos`
+    }
+  },
     ]
 
 }]
