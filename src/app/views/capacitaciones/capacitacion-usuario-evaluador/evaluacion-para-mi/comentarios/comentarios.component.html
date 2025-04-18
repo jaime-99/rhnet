@@ -1,10 +1,14 @@
 
+<div *ngIf="!loading">
+
 <div *ngIf="comentarios.length > 0; else noComentarios">
     <ul class="list-group">
         <li class="list-group-item" *ngFor="let comentario of comentarios">
             <div class="d-flex justify-content-between align-items-center">
                 <strong>{{ comentario.usuario }}</strong>  
                 <span class="text-muted">{{ comentario?.fecha_creacion | date:'short' }}</span>
+                <!-- {{ comentario?.fecha_creacion | date:'short':'':'America/Mexico_City' }}    -->
+
             </div>
             <p class="mb-2">{{ comentario?.comentario }}</p>
 
@@ -13,13 +17,13 @@
               </div>
             
             <!-- Responder comentario -->
-             <div *ngIf="!comentario.respondido">
-            <button *ngIf="comentario.usuario_id !== this.usuario.id" 
+             <!-- <div *ngIf="!comentario.respondido"> -->
+            <button *ngIf="comentario.usuario_id != this.usuario.id" 
             class="btn btn-sm btn-outline-primary" 
             (click)="toggleResponder(comentario.id)">
                     Responder
                 </button>
-                </div>
+                <!-- </div> -->
 
             <!-- Área de respuesta -->
             <div *ngIf="comentario.id === comentarioSeleccionado" class="mt-2">
@@ -29,10 +33,19 @@
         </li>
     </ul>
 </div>
+</div>
+
+
+<div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
 <ng-template #noComentarios>
     <p class="text-center text-muted">No hay comentarios aún.</p>
     <textarea [formControl]="nuevoComentario" class="form-control mt-2" rows="3" placeholder="Escribe tu comentario aquí..."></textarea>
-                    <button  class="btn btn-info mt-2" (click)="agregarComentario()">Agregar Comentariooo</button>
+                    <button  class="btn btn-info mt-2" (click)="agregarComentario()">Agregar Comentario</button>
                     <p-toast />
 
 </ng-template>

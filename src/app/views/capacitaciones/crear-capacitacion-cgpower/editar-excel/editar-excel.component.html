@@ -13,20 +13,20 @@
   <div class="text-center " *ngIf="!loading">
     <p>Cargando datos...</p>
     <div class="spinner-border">
-      <span class="visually-hidden">Loading...</span>
+      <span class="visually-hidden">Cargando...</span>
     </div>
 
   </div>
 
   <div class="div" *ngIf="loading">
-    <div *ngIf="this.excelData?.length===0" class="alert alert-danger">
+    <div *ngIf="this.excelData?.length===0 && datosCargados" class="alert alert-danger">
       El usuario {{this.datosEvaluacion.usuarioAEvaluar.nombre_usuario}} no tiene kpi's actualizados por el momento. Favor de ir al departamento de RH 
     </div>
   </div>
   
 
   <div class="cargando" *ngIf="loading">
-   <div *ngIf="this.excelData?.length>0" class="card m-1">
+   <div *ngIf="this.excelData?.length>0 && datosCargados" class="card m-1">
     <div class="card-body">
         <div class="row">
             <div class="col-md-3">

@@ -89,7 +89,7 @@
       
                     <!-- Mostrar el botón "Responder" solo si el comentario no ha sido respondido -->
                     <div *ngIf="!comentario.respondido">
-                      <button *ngIf="comentario.usuario_id !== this.usuario.id" class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
+                      <button *ngIf="comentario.usuario_id != this.usuario.id" class="btn btn-sm btn-outline-primary" (click)="toggleResponder(comentario.id)">
                         Responder
                       </button>
                     </div>

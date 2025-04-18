@@ -4,10 +4,13 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { delay } from 'rxjs';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-formato-evaluacion',
-  imports: [TableModule, CommonModule, ReactiveFormsModule],
+  imports: [TableModule, CommonModule, ReactiveFormsModule, ToastModule],
   templateUrl: './formato-evaluacion.component.html',
   styleUrl: './formato-evaluacion.component.scss'
 })
@@ -19,8 +22,10 @@ export class FormatoEvaluacionComponent implements OnInit{
   datosUsuario: any = {};
   archivoSeleccionado!: File;
   formatoUsuario: any = {};
+  modalCargando: boolean = true;
 
-  constructor ( private adminService:AdminService, private fb:FormBuilder) { }
+
+  constructor ( private adminService:AdminService, private fb:FormBuilder, private messageService:MessageService) { }
   ngOnInit(): void {
 
     this.formFormato = this.fb.group({
@@ -48,12 +53,20 @@ export class FormatoEvaluacionComponent implements OnInit{
   }
 
   obtenerUsuarioPorId(id:number){
+
+    this.modalCargando = true;
     
-    this.adminService.obtenerUsuariosCompleto(id).subscribe({
+    this.adminService.obtenerUsuariosCompleto(id).pipe(
+      delay(1000)
+    ).subscribe({
       next:(res)=>{
         this.ObtenerEvaluacionPorIdUsuario(id)
         console.log(res)
-        this.datosUsuario = res.data
+        this.datosUsuario = res.data;
+        setTimeout(()=>{
+          this.modalCargando = false; // Solo mostramos cuando ya terminó de cargar
+        },300)
+
       }
     })
   }
@@ -76,7 +89,9 @@ subirArchivoEvaluacion() {
   this.adminService.subirFormato(formData).subscribe({
     next: (res: any) => {
       if (res.success) {
-        alert(res.mensaje);
+        this.messageService.add({ severity: 'success', summary: 'Exitoso', detail: res.mensaje });
+        this.obtenerUsuarioPorId(this.datosUsuario.usuario_id);
+        // alert(res.mensaje);
         this.formFormato.reset();
       } else {
         alert('Error: ' + res.mensaje);
@@ -85,6 +100,8 @@ subirArchivoEvaluacion() {
     error: err => {
       console.error(err);
       alert('Ocurrió un error en el servidor');
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrio un Error en el Servidor' });
+
     }
   });
 }

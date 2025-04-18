@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { delay } from 'rxjs';
 @Component({
   selector: 'app-comentarios',
   imports: [CommonModule, FormsModule, ReactiveFormsModule,ToastModule],
@@ -19,6 +20,8 @@ export class ComentariosComponent implements OnInit {
   comentarioSeleccionado: number | null = null;
   respuestaTexto: any = '';
   usuario: any;
+  loading: boolean = true;
+
 
   @Output() actualizarComentarios = new EventEmitter<void>();
 
@@ -42,9 +45,13 @@ export class ComentariosComponent implements OnInit {
       console.error('Error: No se ha recibido la evaluación correctamentes');
       return;
     }
-    this.capacitacionesService.verComentariosPorEvaluacionId(this.evaluacion.id).subscribe({
+    this.capacitacionesService.verComentariosPorEvaluacionId(this.evaluacion.id).pipe(
+      delay(300)
+    ).subscribe({
       next:(res)=>{
         this.comentarios = res.data
+        this.loading = false;
+
         console.log(this.usuario.id)
         console.log('comentarios',this.comentarios)
 
@@ -56,6 +63,8 @@ export class ComentariosComponent implements OnInit {
               // Asignamos al comentario original el texto "Respondido"
               comentarioRespondido.respondido = true;
             }
+          }else{
+            console.log('nunca entra ya que el comentario.responido es null')
           }
         });
       }

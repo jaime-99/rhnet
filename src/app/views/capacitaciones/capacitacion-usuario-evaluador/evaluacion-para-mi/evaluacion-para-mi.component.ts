@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators } from '@angular/forms'; 
 import { ToastModule } from 'primeng/toast';
 declare var bootstrap: any;
+import { formatDate } from '@angular/common';
 
 import * as XLSX from 'xlsx'; // Librería para leer Excel
 import { jsPDF } from 'jspdf';
@@ -39,11 +40,14 @@ export class EvaluacionParaMiComponent implements OnInit {
   ]); // Inicializado con un valor vacío
   comentarios: any;
   mostrarMensaje: boolean = false;
+  mostrarComentarios: boolean = true;
 
   constructor (private activatedRouter:ActivatedRoute, private capacitacionesService:CapacitacionesService, private http:HttpClient,
     private messageService: MessageService, private router:Router
   ) {}
   ngOnInit(): void {
+
+    console.log(new Date())
 
     const usuarioData:any = localStorage.getItem('usuario');
     this.usuario = JSON.parse(usuarioData);
@@ -69,14 +73,16 @@ export class EvaluacionParaMiComponent implements OnInit {
   }
 
   abrirModal(evaluacion:any){
+    this.evaluacionSeleccionada = null;
+    this.mostrarMensaje = false;
     this.evaluacionSeleccionada = evaluacion;
 
     // console.log(this.evaluacionSeleccionada)
 
     if(this.evaluacionSeleccionada.estatus === 'completada') {
       this.mostrarMensaje = true;
+      this.obtenerComentarios(evaluacion) //checar 
     }
-    this.obtenerComentarios(evaluacion) //checar 
   }
 
   convertImageToBase64(logoUrl: string): Promise<string> {
@@ -306,16 +312,23 @@ export class EvaluacionParaMiComponent implements OnInit {
   
   marcarPorVistoEvaluacion(){
     if(this.comentario.valid){
+      const fecha = new Date().toLocaleString('sv-SE', { timeZone: 'America/Mexico_City' }).replace(' ', 'T');
+      const fechaFormateada = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-MX');
+
 
       let datos = {
         evaluacion_id:  this.evaluacionSeleccionada?.id,
         usuario_id: this.usuario.id,
         comentario: this.comentario.value,
-        respondio_id : null
+        respondio_id : null,
+        fecha_creacion : fechaFormateada
       }
+      // console.log(datos)
       this.capacitacionesService.agregarComentarioAEvaluacion(datos).subscribe({
         next:(res)=>{
            // Agregar el nuevo comentario a la lista de comentarios local
+
+           
         const nuevoComentario = {
           id: res.data?.id || Math.random(), // Si no devuelve ID, usa uno temporal
           evaluacion_id: this.evaluacionSeleccionada?.id,
@@ -340,18 +353,20 @@ export class EvaluacionParaMiComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Enviado', detail: 'Se ha cambiado el estatus a COMPLETADA', life: 3000 });
       // console.log('update',res)
       this.evaluacionSeleccionada.estatus = 'completada'; // Actualizar localmente el estatus
+      this.mostrarMensaje = true;
 
     })
   }
 
   // es para abrir el modal de solo los comentarios
-  abrirModalComentarios() {
-    const modalElement = document.getElementById('comentariosModal');
-    if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement);
-      modal.show();
-    }
-  }
+  // abrirModalComentarios() {
+    
+  //   const modalElement = document.getElementById('comentariosModal');
+  //   if (modalElement) {
+  //     const modal = new bootstrap.Modal(modalElement);
+  //     modal.show();
+  //   }
+  // }
   
   // para cerrar el modal de los comentarios 
   cerrarModal() {
@@ -383,4 +398,13 @@ export class EvaluacionParaMiComponent implements OnInit {
     }
     this.router.navigate(['/evaluaciones/ver-area-oportunidad-evaluado'], {queryParams:{id_evaluacion:this.evaluacionSeleccionada?.id}})
   }
+
+// BORRA la evaluacion para que no se mande a los comentarios y asi cuando se abra el modal de nuevo agarre los datos de la evaluacion actual
+abrirModalComentarios() {
+  this.mostrarComentarios = false;
+  setTimeout(() => {
+    this.mostrarComentarios = true;
+  }, 0);
+}
+
 }

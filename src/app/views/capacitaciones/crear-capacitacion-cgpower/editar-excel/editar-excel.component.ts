@@ -9,6 +9,9 @@ import { EnvioEvaluacionComponent } from './envio-evaluacion/envio-evaluacion.co
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CapacitacionesService } from '../../capacitaciones.service';
+import { AdminService } from '../../../../admin/service/admin.service';
+import { Location } from '@angular/common';
+
 
 declare var bootstrap: any; // Si usas Bootstrap 5
 
@@ -45,10 +48,13 @@ export class EditarExcelComponent implements OnInit {
   currentComment: string = '';
 
   promedioGeneralMetricos: number = 0;
+  
+  formatoUsuario: any = {};
+  datosCargados: boolean = false;
   constructor (private http: HttpClient, private activatedRouter:ActivatedRoute, 
     private compartirDatosService: CompartirDatosService, private router:Router,
     private confirmationService: ConfirmationService,  private messageService: MessageService,
-    private capacitacionService:CapacitacionesService
+    private capacitacionService:CapacitacionesService, private adminService:AdminService, private location:Location
    ) {
 
   }
@@ -63,30 +69,31 @@ export class EditarExcelComponent implements OnInit {
       this.mes = res['mes']
     })
     this.datosEvaluacion = this.compartirDatosService.getDatosPrivados()
-    this.downloadExcel()
+
+    if (!this.datosEvaluacion) {
+      // Redirigir al componente anterior
+      // this.router.navigate(['./evaluaciones/evaluar']);
+      this.location.back();
+    }
+    this.obtenerExcelNuevo()
+    // this.downloadExcel()
     // console.log( 'datos desde editar excel', this.datosEvaluacion)
     // this.kpiAverage = this.calculateKpiAverage(); // Calcular al iniciar
-    console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
-    console.log(this.datosEvaluacion)
+    // console.log(this.datosEvaluacion?.usuarioAEvaluar?.puesto)
+    // console.log(this.datosEvaluacion)
     }
 
- //todo correcto no borrar
-  // downloadExcel() {
-  //   this.http.get('https://rhnet.cgpgroup.mx/archivos/evaluaciones_descargar/proxy.php', { responseType: 'arraybuffer' })
-  //     .subscribe((data: ArrayBuffer) => {
-  //       const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
-  //       const sheetName = workbook.SheetNames[0];  // Tomamos la primera hoja
-  //       const sheet = workbook.Sheets[sheetName];
+    obtenerExcelNuevo(){
 
-  //       // Convertir el contenido a formato JSON
-  //       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      this.adminService.obtenerDatosFormatoPorIdUsuario(this.datosEvaluacion.usuarioAEvaluar.usuario_id).subscribe((res)=>{
+          console.log('formato editar exceeel',res)
+          this.formatoUsuario = res
+          this.downloadExcel();
+      })
+      
+    }
 
-  //       if (jsonData.length > 0) {
-  //         this.headers = jsonData[0] as string[]; // Primera fila como encabezado
-  //         this.excelData = jsonData.slice(1);  // El resto como contenido de la tabla
-  //       }
-  //     });
-  // }
+ 
   downloadExcel() {
     const tipoEvaluacion = this.datosEvaluacion.usuarioAEvaluar.puesto;
     // es para ver el nombre del usuario a evaluar
@@ -94,7 +101,8 @@ export class EditarExcelComponent implements OnInit {
     //todo que tambien sea por la ciudad y si tiene nombre por el nombre tambien 
     const encodedTipoEvaluacion = encodeURIComponent(tipoEvaluacion);
     const timestamp = new Date().getTime(); // Añadir un timestamp único para evitar caché
-    const url = `https://magna.cgpgroup.mx/rhnet/archivos/evaluaciones_descargar/proxy2.php?tipo=${idUsuario}&timestamp=${timestamp}`;
+    const url = this.formatoUsuario.url_archivo;
+    console.log(url)
     
     setTimeout(() => {
       
@@ -148,6 +156,7 @@ export class EditarExcelComponent implements OnInit {
             }
           }
           this.loading = true
+          this.datosCargados = true; // <- aquí ya puedes mostrar contenido condicional
           this.actualizarDatos()
         });
         this.loading = true

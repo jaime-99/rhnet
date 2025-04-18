@@ -1,5 +1,5 @@
 
-<h5  class="text-center">Evaluacion del mes de  {{this.mes}} </h5>
+<!-- <h5  class="text-center">Evaluacion del mes de  {{this.mes}} </h5> -->
 
 
     <div *ngIf="this.evaluaciones.length==0" class="alert alert-danger">
@@ -91,7 +91,7 @@
 
                         <div *ngIf="mostrarMensaje"  class="alert alert-success mt-1" role="success">
                            Ya  Has Marcado por visto la Evaluacion!
-                           <button style="background-color: #0ab4df; border-color: #0ab4df;"  data-bs-toggle="modal" data-bs-target="#comentariosModal" class="btn btn-primary btn-sm ms-3">
+                           <button style="background-color: #0ab4df; border-color: #0ab4df;" (click)="abrirModalComentarios()"  data-bs-toggle="modal" data-bs-target="#comentariosModal" class="btn btn-primary btn-sm ms-3">
                             <i class="bi bi-chat-dots"></i> Ver comentarios
                         </button>
                           </div>
@@ -118,7 +118,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <app-comentarios *ngIf="evaluacionSeleccionada" [evaluacion]="evaluacionSeleccionada"
+
+                <!-- <div *ngIf="!mostrarComentarios" class="text-center my-5">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Cargando...</span>
+                    </div>
+                  </div> -->
+
+
+                <app-comentarios *ngIf="mostrarComentarios" [evaluacion]="evaluacionSeleccionada"  
                 
                 ></app-comentarios>
             </div>

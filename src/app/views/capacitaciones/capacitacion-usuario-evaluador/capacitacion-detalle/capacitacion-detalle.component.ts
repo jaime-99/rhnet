@@ -230,6 +230,8 @@ verPDF() {
     this.capacitacionoService.agregarComentarioAEvaluacion(nuevaRespuesta).subscribe({
       next:(res)=>{
 
+        this.verComentarios()
+
       }
     })
     this.comentarios.push(nuevaRespuesta); // Simulación de respuesta en la lista
