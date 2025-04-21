@@ -34,7 +34,7 @@ export class UsuariosComponent implements OnInit {
       next: (res) => {
         // Filtrar los usuarios duplicados antes de agregarlos
         const newUsers = res.filter((user:any) => 
-          !this.usuarios.some((existingUser:any) => existingUser.id === user.id)
+          !this.usuarios.some((existingUser:any) => existingUser.usuario_id === user.usuario_id)
         );
         // Añadir los nuevos usuarios sin duplicar
         this.usuarios = [...this.usuarios, ...newUsers];
@@ -50,8 +50,8 @@ export class UsuariosComponent implements OnInit {
   onSearchTextChange() {
     // Filtrar usuarios cuando cambie el texto de búsqueda
     this.filteredUsuarios = this.usuarios.filter((usuario: any) => 
-      usuario.nombre.toLowerCase().includes(this.searchText.toLowerCase()) || 
-      usuario.correo.toLowerCase().includes(this.searchText.toLowerCase())
+      usuario.usuario_nombre.toLowerCase().includes(this.searchText.toLowerCase()) || 
+      usuario.usuario_correo.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 

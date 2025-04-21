@@ -26,7 +26,7 @@
                     <label for="nombre">Jefe Directo</label>
                     <select formControlName="jefe" class="form-select">
                         <option value="">Selecciona jefe</option>
-                    <option *ngFor="let usuario of usuarios" [value]="usuario.id"> {{usuario.nombre + ' '+ usuario.apellido_paterno}} </option>
+                    <option *ngFor="let usuario of usuarios" [value]="usuario.usuario_id"> {{usuario.usuario_nombre + ' '+ usuario.usuario_apellido_paterno}} </option>
                     </select>
 
                     <label for="nombre">Departamento</label>
@@ -62,7 +62,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Actualizar Datos</button>
+                <button type="submit" [disabled]="formUsuario.invalid" class="btn btn-primary">Actualizar Datos</button>
                 <p-toast />
               </div>
             </form>

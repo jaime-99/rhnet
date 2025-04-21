@@ -134,4 +134,11 @@ export class CapacitacionesService {
     return this.http.post<any>(url,data)
   }
 
+  // Obtener Ciudades
+
+  obtenerCiudades(){
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/usuarios/getCiudades.php`
+    return this.http.get<any>(url)
+  }
+
 }

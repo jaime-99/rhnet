@@ -28,6 +28,7 @@ export class VerEvaluacionesComponent implements OnInit {
   evaluaciones:any[] = [];
   searchValue: string ='';
   mesSeleccionado: string = '';
+  ciudadSeleccionada: string = '';
   meses = [
     { label: 'Enero', value: 'Enero' },
     { label: 'Febrero', value: 'Febrero' },
@@ -43,12 +44,15 @@ export class VerEvaluacionesComponent implements OnInit {
     { label: 'Diciembre', value: 'Diciembre' },
     // agrega los demás meses
   ];
+  ciudades: any = [];
   
 
 
   constructor (private capacitacionesService:CapacitacionesService,private http: HttpClient,private messageService:MessageService){ }
   ngOnInit(): void {
     this.obtenerEvaluaciones()
+    this.obtenerCiudades();
+    
   }
 
 
@@ -65,6 +69,7 @@ export class VerEvaluacionesComponent implements OnInit {
     table.clear();
     this.searchValue = ''
     this.mesSeleccionado = '';
+    this.ciudadSeleccionada = '';
 }
 
 getInputValue(event: Event): string {
@@ -197,11 +202,17 @@ verPDF(evaluacionseleccionada:any) {
       (error) => {
         console.error('Error al descargar el archivo:', error);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al abrir el archivo. consulta con Sistemas', life: 3000 });
-
-
       }
     );
   };
+}
+
+
+obtenerCiudades(){
+  this.capacitacionesService.obtenerCiudades().subscribe((res)=>{
+    this.ciudades = res
+    console.log(this.ciudades);
+  })
 }
 
 }

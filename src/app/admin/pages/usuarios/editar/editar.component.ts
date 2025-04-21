@@ -53,12 +53,13 @@ export class EditarComponent implements OnInit {
   };
   ngOnInit(): void {
     console.log(this.usuario.id)
+    console.log('datos del usuario en editar', this.usuario)
     this.ObtenerDatos();  
   }
   // es para obtener todos los datos del usuario ordenadamente
   ObtenerDatos(){
     
-    this.adminService.obtenerUsuariosCompleto(this.usuario.id).subscribe({
+    this.adminService.obtenerUsuariosCompleto(this.usuario.usuario_id).subscribe({
       next:(res)=>{
         console.log(res)
         this.datosUsuario = res.data
@@ -146,6 +147,7 @@ export class EditarComponent implements OnInit {
       //mandar aviso de que se actualizo el usuario
       // location.reload()
       this.datosUsuario = { ...this.datosUsuario, ...usuarioData };
+      // this.ObtenerDatos();
     })
 
 }

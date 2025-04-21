@@ -58,7 +58,24 @@
                 (onChange)="dt1.filter(mesSeleccionado, 'mes_evaluacion', 'contains')" 
                 class="w-100" 
                 optionLabel="label" 
-                optionValue="value">
+                optionValue="value"
+                [filter]="true" filterBy="value"
+                [showClear]="true"
+                >
+              </p-select>
+            </div>
+            <div class="col-md-3 mb-2">
+              <p-select 
+                [options]="ciudades" 
+                [(ngModel)]="ciudadSeleccionada" 
+                placeholder="Filtrar por Ciudad" 
+                (onChange)="dt1.filter(ciudadSeleccionada, 'ciudad_evaluado', 'contains')" 
+                class="w-100" 
+                optionLabel="nombre" 
+                optionValue="nombre"
+                [filter]="true" filterBy="nombre"
+                [showClear]="true"
+                >
               </p-select>
             </div>
       
@@ -68,7 +85,7 @@
             </div>
       
             <!-- Barra de búsqueda -->
-            <div class="col-md-7 mb-2">
+            <div class="col-md-4 mb-2">
               <p-iconfield iconPosition="left" class="w-100">
                 <p-inputicon>
                   <i class="pi pi-search"></i>
@@ -91,7 +108,7 @@
         <ng-template #header>
             <tr>
                 <th style="width:10%"  pSortableColumn="id" >
-                    ID<p-sortIcon field="id" />
+                    ID
                 </th>
                 <th style="width:10%"  pSortableColumn="fecha_creacion" >
                     Fecha<p-sortIcon field="fecha_creacion" />
@@ -99,6 +116,9 @@
                 <th style="width:10%"> Mes</th>
                 <th style="width:10%">
                     Tipo Evaluacion
+                </th>
+                <th style="width:10%">
+                    Ciudad
                 </th>
                 <th style="width:25%" >
                     Evaluador
@@ -117,6 +137,7 @@
                 <td>{{ evaluacion.fecha_creacion | date:'dd/MM/yyyy' }}</td>
                 <td>{{ evaluacion.mes_evaluacion }}</td>
                 <td>{{ evaluacion.tipo_evaluacion }}</td>
+                <td>{{ evaluacion.ciudad_evaluado }}</td>
                 <td>{{ evaluacion.evaluador }} {{evaluacion.evaluador_paterno}}</td>
                 <td>{{ evaluacion.evaluado  }} {{evaluacion.evaluado_paterno}}</td>
                 <td>

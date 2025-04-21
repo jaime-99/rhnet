@@ -7,10 +7,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { delay } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-formato-evaluacion',
-  imports: [TableModule, CommonModule, ReactiveFormsModule, ToastModule],
+  imports: [TableModule, CommonModule, ReactiveFormsModule, ToastModule, InputIconModule, IconFieldModule, FormsModule, InputTextModule],
   templateUrl: './formato-evaluacion.component.html',
   styleUrl: './formato-evaluacion.component.scss'
 })
@@ -23,6 +27,7 @@ export class FormatoEvaluacionComponent implements OnInit{
   archivoSeleccionado!: File;
   formatoUsuario: any = {};
   modalCargando: boolean = true;
+  searchValue = ''
 
 
   constructor ( private adminService:AdminService, private fb:FormBuilder, private messageService:MessageService) { }
@@ -41,6 +46,7 @@ export class FormatoEvaluacionComponent implements OnInit{
   ObtenerUsuarios(){
     this.adminService.getAllUsers().subscribe((res)=>{
       this.usuarios = res
+      console.log('usuarios',this.usuarios)
     })
   }
 
@@ -48,7 +54,7 @@ export class FormatoEvaluacionComponent implements OnInit{
   ObtenerEvaluacionPorIdUsuario(id:any){
     this.adminService.obtenerDatosFormatoPorIdUsuario(id).subscribe((res)=>{
       this.formatoUsuario = res
-      console.log('formato',res)
+      // console.log('formato',res)
     })
   }
 
@@ -104,6 +110,10 @@ subirArchivoEvaluacion() {
 
     }
   });
+}
+
+getInputValue(event: Event): string {
+  return (event.target as HTMLInputElement).value;
 }
 
 
