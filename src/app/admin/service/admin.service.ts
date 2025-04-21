@@ -115,8 +115,4 @@ export class AdminService implements OnInit{
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerFormatoPorIdUsuario_id.php?usuario_id=${usuario_id}`
     return this.http.get<any>(url)
   }
-  
-
-  
-
 }
