@@ -21,35 +21,35 @@ export const navItems: INavData[] = [
       children: [
         {
           name: 'Todos',
-          url: '/admin/usuarios',
-          icon: ''
+          url: '/admin/usuarios/todos',
+          icon: 'nav-icon-bullet'
         },
         {
           name: 'Crear',
           url: '/admin/usuarios/crear',
-          icon: ''
+          icon: 'nav-icon-bullet'
         },
       ]
     },
   {
       name: 'Evaluaciones',
       url: '/evaluaciones',
-      iconComponent: { name: 'cil-cursor' },
+      iconComponent: { name: 'cil-notes' },
       children: [
         {
           name: 'permisos',
-          url: '/admin/evaluaciones',
-          icon: ''
+          url: '/admin/evaluaciones/permisos',
+          icon: 'nav-icon-bullet'
         },
         {
           name: 'Ver Evaluaciones',
           url: '/admin/evaluaciones/ver-evaluaciones',
-          icon: ''
+          icon: 'nav-icon-bullet'
         },
         {
           name: 'Ver Formatos',
           url: '/admin/evaluaciones/ver-formatos',
-          icon: ''
+          icon: 'nav-icon-bullet'
         },
       ]
     },

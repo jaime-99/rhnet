@@ -19,6 +19,7 @@ export class CrearComponent implements OnInit {
   ciudades: any = [];
   usuarios: any = [];
 
+
   constructor (private fb:FormBuilder, private adminService:AdminService,) {
     this.createUserForm = this.fb.group({
       nombre: ['', [Validators.required]],
@@ -35,6 +36,8 @@ export class CrearComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+
+    console.log(this.usuarios)
 
     this.getAllDepartamentos();
     this.getEmpresas()
@@ -76,6 +79,7 @@ export class CrearComponent implements OnInit {
   getUsuarios(){
     this.adminService.getAllUsers().subscribe((res)=>{
       this.usuarios = res 
+      console.log(this.usuarios)
     })
   }
 
@@ -99,6 +103,7 @@ export class CrearComponent implements OnInit {
     this.adminService.addUsuarioCompleto(data).subscribe({
       next:(res)=>{
         console.log(res)
+      location.reload()
       }
     })
   }

@@ -21,6 +21,7 @@ export class CambiarPasswordComponent implements OnInit {
   constructor ( private fb:FormBuilder, private adminService:AdminService, private messageService:MessageService) {}
 
   ngOnInit(): void {
+    console.log(this.usuario);
     this.formPassword = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(5)]], // Asegúrate de usar un array de validadores
       passwordRepeat: ['', [Validators.required, Validators.minLength(5)]]
@@ -37,7 +38,7 @@ export class CambiarPasswordComponent implements OnInit {
 
   cambiarContrasenia(){
     let datos = {
-      usuario_id:this.usuario.id,
+      usuario_id:this.usuario.usuario_id,
       contrasenia:this.formPassword.get('password')?.value
     }
 

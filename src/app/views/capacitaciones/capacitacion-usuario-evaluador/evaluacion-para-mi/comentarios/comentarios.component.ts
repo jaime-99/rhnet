@@ -62,6 +62,8 @@ export class ComentariosComponent implements OnInit {
             if (comentarioRespondido) {
               // Asignamos al comentario original el texto "Respondido"
               comentarioRespondido.respondido = true;
+              console.log(comentarioRespondido)
+
             }
           }else{
             console.log('nunca entra ya que el comentario.responido es null')
@@ -96,6 +98,7 @@ export class ComentariosComponent implements OnInit {
       next:(res)=>{
         // console.log(res)
         // location.reload();
+        this.obtenerComentarios();
       }
     })
 

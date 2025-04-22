@@ -17,13 +17,13 @@
               </div>
             
             <!-- Responder comentario -->
-             <!-- <div *ngIf="!comentario.respondido"> -->
+             <div *ngIf="!comentario.respondido">
             <button *ngIf="comentario.usuario_id != this.usuario.id" 
             class="btn btn-sm btn-outline-primary" 
             (click)="toggleResponder(comentario.id)">
                     Responder
                 </button>
-                <!-- </div> -->
+                </div>
 
             <!-- Área de respuesta -->
             <div *ngIf="comentario.id === comentarioSeleccionado" class="mt-2">

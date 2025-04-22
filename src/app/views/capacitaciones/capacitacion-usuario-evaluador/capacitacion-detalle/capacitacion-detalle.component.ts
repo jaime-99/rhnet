@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ɵɵtrustConstantResourceUrl } from '@angular/core';
 import { CapacitacionesService } from '../../capacitaciones.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -8,6 +8,8 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AdminService } from 'src/app/admin/service/admin.service';
+import { ToasterHostDirective } from '@coreui/angular';
 const doc = new jsPDF() as any; // Evita error de TypeScript
 
 
@@ -25,10 +27,11 @@ export class CapacitacionDetalleComponent implements OnInit {
   comentarioSeleccionado: number | null = null;
 
   respuestaTexto: string = '';
+  usuarioEvaluado: any = {};
 
   constructor(private capacitacionoService:CapacitacionesService,
     private activatedRouter:ActivatedRoute, private router:Router,
-    private http: HttpClient
+    private http: HttpClient, private adminService:AdminService
 
   ) {}
   usuario: any = '';
@@ -51,10 +54,20 @@ export class CapacitacionDetalleComponent implements OnInit {
     this.capacitacionoService.getEvaluacionForId1(Number(this.id)).subscribe({
       next:(res)=>{
         this.evaluacion = res
-        // console.warn('la evaluacion es ',res)
+        console.warn('la evaluacion es ',res)
+        this.obtenerDatosDeUsuarioEvaluado();
       }
     })
   }
+
+  obtenerDatosDeUsuarioEvaluado(){
+    this.adminService.obtenerUsuariosCompleto(this.evaluacion.usuario_evaluado_id).subscribe((res)=>{
+      this.usuarioEvaluado = res
+      console.log('usuario evaluado',this.usuarioEvaluado)
+    })
+  }
+
+
   
 verPDF() {
   if (!this.evaluacion || !this.evaluacion.archivo) {
@@ -186,6 +199,7 @@ verPDF() {
   
 
   verComentarios(){
+
     this.capacitacionoService.verComentariosPorEvaluacionId(Number(this.id)).pipe(
       
     ).subscribe((res)=>{
@@ -221,7 +235,7 @@ verPDF() {
     }
 
     const nuevaRespuesta = {
-      evaluacion_id: this.evaluacion.id,
+      evaluacion_id: Number(this.evaluacion.id),
       usuario_id: this.usuario.id, // Reemplaza con el usuario autenticado
       comentario: this.respuestaTexto,
       respondio_id:comentarioId
@@ -229,9 +243,20 @@ verPDF() {
 
     this.capacitacionoService.agregarComentarioAEvaluacion(nuevaRespuesta).subscribe({
       next:(res)=>{
-
         this.verComentarios()
 
+       // Mandar correo que respondio el comentario la que creo la evaluacion 
+        const data = {
+          to: this.usuarioEvaluado.data.usuario_correo,
+          subject: `Comentario de la Evaluacion enviada por ${this.evaluacion.nombre_evaluador} `,
+          body: `Comentario de la Evaluacion con el ID ${this.evaluacion.id} enviada por ${this.evaluacion.nombre_evaluador}.\n\nEntra a https://rhnet.cgpgroup.mx para ver detalles`
+
+        }
+        this.capacitacionoService.enviarCorreoItickets(data).subscribe({
+          next:(res)=>{
+            console.log('se envia correo')
+          }
+        })
       }
     })
     this.comentarios.push(nuevaRespuesta); // Simulación de respuesta en la lista

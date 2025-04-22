@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';  // 👈 Imp
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
   startIndex: number = 0;
   datosCompletosUsuarioAEvaluar: any = {};
 
-  constructor (private compatirDatos:CompartirDatosService, private capacitacionesService:CapacitacionesService,
+  constructor (private compatirDatos:CompartirDatosService, private capacitacionesService:CapacitacionesService,private location:Location,
     private http:HttpClient, private router:Router ) {}
   ngOnInit(): void {
 
@@ -32,7 +33,11 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     this.usuario = JSON.parse(usuarioData);
     
     this.datosEvaluacion = this.compatirDatos.getDatosPrivados()
-    console.log( 'datos-evaluacion-1', this.datosEvaluacion)
+
+    if(!this.datosEvaluacion){
+      this.location.back();
+    }
+    // console.log( 'datos-evaluacion-1', this.datosEvaluacion)
     this.obtenerDatosUusarioAEvaluar()
 
     this.capacitacionesService.obtenerEvaluaciones().subscribe(data => {
@@ -41,7 +46,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
       this.evaluaciones = this.evaluaciones.map(ev => ({
         ...ev,
         puntuacion: '❌',  // Inicialmente vacío
-        comentario: ''     // Inicialmente vacío
+        comentario: 'ninguno'     // Inicialmente vacío
       }));
       this.startIndex = this.evaluaciones.findIndex(ev => ev.__EMPTY === 'Comunicación');
 
@@ -89,7 +94,11 @@ export class CrearCapacitacionLiderComponent implements OnInit {
     // Filtramos la evaluación final para incluirla en la hoja
     let evaluacionesConEvaluacionFinal = [...this.evaluaciones];
 
-    evaluacionesConEvaluacionFinal = evaluacionesConEvaluacionFinal.filter(ev => ev.__EMPTY_1 !== 'Evaluación General');
+    // evaluacionesConEvaluacionFinal = evaluacionesConEvaluacionFinal.filter(ev => ev.__EMPTY_1 !== 'Evaluación General');
+    
+    evaluacionesConEvaluacionFinal = this.evaluaciones
+  .filter(ev => ev.__EMPTY_1 && ev.__EMPTY_1.trim() !== '' && ev.__EMPTY_1 !== 'Evaluación General' && ev.__EMPTY !== 'Áreas de Evaluacion' && ev.__EMPTY !== 'Líder evaluado');
+
 
     // Preparamos los datos que se exportarán
     const data = evaluacionesConEvaluacionFinal.map(ev => ({
@@ -128,7 +137,7 @@ export class CrearCapacitacionLiderComponent implements OnInit {
 const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluacion}-${this.datosEvaluacion.data.usuario_evaluador_id}-${evaluaA}.xlsx`;
 
 
-console.log(nombreArchivo)
+    console.log(nombreArchivo)
     const file = new File([blob], nombreArchivo, { type: blob.type });
 
       // Crear el FormData y adjuntar el archivo¡

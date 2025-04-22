@@ -15,10 +15,10 @@ export const routes: Routes = [
             pathMatch: 'full'
         },
   {
-    path: '',
+    path: 'todos',
     loadComponent: () => import('./usuarios.component').then(m => m.UsuariosComponent),
     data: {
-      title:``
+      title:`Todos`
     }
   },
   {

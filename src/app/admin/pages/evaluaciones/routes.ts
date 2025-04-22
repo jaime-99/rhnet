@@ -15,7 +15,7 @@ export const routes: Routes = [
             pathMatch: 'full'
         },
   {
-    path: '',
+    path: 'permisos',
     loadComponent: () => import('./evaluaciones.component').then(m => m.EvaluacionesComponent),
     data: {
       title:`permisos`
