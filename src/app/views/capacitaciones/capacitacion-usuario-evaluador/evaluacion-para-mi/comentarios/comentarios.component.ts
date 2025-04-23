@@ -5,6 +5,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { delay } from 'rxjs';
+import { AdminService } from 'src/app/admin/service/admin.service';
 @Component({
   selector: 'app-comentarios',
   imports: [CommonModule, FormsModule, ReactiveFormsModule,ToastModule],
@@ -28,8 +29,9 @@ export class ComentariosComponent implements OnInit {
 
 
   nuevoComentario = new FormControl('');
+  datosUsuario:any =  {};
 
-  constructor (private capacitacionesService:CapacitacionesService, private messageService:MessageService) {}
+  constructor (private capacitacionesService:CapacitacionesService, private messageService:MessageService, private adminService:AdminService) {}
 
   ngOnInit(): void {
       this.obtenerComentarios();
@@ -45,14 +47,15 @@ export class ComentariosComponent implements OnInit {
       console.error('Error: No se ha recibido la evaluación correctamentes');
       return;
     }
+    console.log('evaluacion', this.evaluacion);
     this.capacitacionesService.verComentariosPorEvaluacionId(this.evaluacion.id).pipe(
       delay(300)
     ).subscribe({
       next:(res)=>{
         this.comentarios = res.data
         this.loading = false;
-
-        console.log(this.usuario.id)
+        this.obtenerDatosUsuario()
+        // console.log(this.usuario.id)
         console.log('comentarios',this.comentarios)
 
         this.comentarios.forEach((comentario: any) => {
@@ -94,8 +97,22 @@ export class ComentariosComponent implements OnInit {
       respondio_id : comentarioId
     };
     // console.log(nuevaRespuesta);
-    this.capacitacionesService.agregarComentarioAEvaluacion(nuevaRespuesta).subscribe({
+    this.capacitacionesService.agregarComentarioAEvaluacion(nuevaRespuesta).pipe(
+      delay(100)
+    ).subscribe({
       next:(res)=>{
+        //todo enviar correo si se contesto
+        
+        const data = {
+          to:this.datosUsuario.data.usuario_correo,
+          subject:`Comentario de Evaluacion realizado por ${this.datosUsuario.data.usuario_nombre}`,
+          body:`Han comentado la Evaluacion realizada por ${this.datosUsuario.data.usuario_nombre} con el ID ${this.evaluacion.id}. \n
+          Entra a https://rhnet.cgpgroup.mx para verlos  `,
+        }
+
+        this.capacitacionesService.enviarCorreoItickets(data).subscribe(()=>{
+          
+        })
         // console.log(res)
         // location.reload();
         this.obtenerComentarios();
@@ -185,6 +202,15 @@ export class ComentariosComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo agregar el comentario', life: 3000 });
       }
     });
+  }
+
+
+  // es para obtener los datos de un usuario
+  obtenerDatosUsuario(){
+    this.adminService.obtenerUsuariosCompleto(this.evaluacion.usuario_evaluador_id).subscribe((res)=>{
+      this.datosUsuario = res
+      console.log('datos usuario',res)
+    })
   }
   
 }
