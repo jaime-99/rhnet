@@ -87,10 +87,15 @@ export class AdminService implements OnInit{
   }
   
   // es para agregar un solo usuario a un periodo de evaluacion yq ue pueda evaluar 
-  agregarUsuarioAPeriodo(usuario_id:number,periodo_id:number):Observable<any>{
-    const data = {usuario_id, periodo_id}
+  agregarUsuarioAPeriodo(usuarios_seleccionados:any[],periodo_id:any):Observable<any>{
+    const data = {usuarios_seleccionados, periodo_id}
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/agregarUsuarioAPeriodo.php`
     return this.http.post<any>(url,data)
+  }
+  //Obtiene los usuarios que estan a un periodo asignado por el mes_id
+  obtenerUsuariosDeUnPeriodo(periodo_id:number):Observable<any>{
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtener-usuarios-periodo.php?periodo_id=${periodo_id}`
+    return this.http.get<any>(url)
   }
   // es para eidtar el periodo de la tabla rh_periodos
   editarPeriodoPorId(data:any):Observable<any>{
@@ -111,8 +116,8 @@ export class AdminService implements OnInit{
 
   // obtiene el formato de un usuario id por el usuarioId
   obtenerDatosFormatoPorIdUsuario(usuario_id:any):Observable<any>{
-
     let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtenerFormatoPorIdUsuario_id.php?usuario_id=${usuario_id}`
     return this.http.get<any>(url)
   }
+
 }

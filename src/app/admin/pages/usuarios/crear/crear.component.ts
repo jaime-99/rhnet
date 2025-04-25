@@ -3,10 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';  // Importar ReactiveFormsModule
 import { AdminService } from '../../../service/admin.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-crear',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ToastModule],
   templateUrl: './crear.component.html',
   styleUrl: './crear.component.scss'
 })
@@ -18,9 +20,10 @@ export class CrearComponent implements OnInit {
   empresas: any = [];
   ciudades: any = [];
   usuarios: any = [];
+  showPassword: boolean = false;
 
 
-  constructor (private fb:FormBuilder, private adminService:AdminService,) {
+  constructor (private fb:FormBuilder, private adminService:AdminService,private messageService:MessageService) {
     this.createUserForm = this.fb.group({
       nombre: ['', [Validators.required]],
       apellido_paterno: ['', [Validators.required]],
@@ -79,7 +82,7 @@ export class CrearComponent implements OnInit {
   getUsuarios(){
     this.adminService.getAllUsers().subscribe((res)=>{
       this.usuarios = res 
-      console.log(this.usuarios)
+      // console.log(this.usuarios)
     })
   }
 
@@ -99,12 +102,36 @@ export class CrearComponent implements OnInit {
       jefe_id: parseInt(this.createUserForm.get('jefe_id')?.value, 10) || null
     }
 
-    console.log(data)
-    this.adminService.addUsuarioCompleto(data).subscribe({
-      next:(res)=>{
-        console.log(res)
-      location.reload()
-      }
-    })
-  }
+    if(this.createUserForm.valid){
+
+      this.adminService.addUsuarioCompleto(data).subscribe({
+        next:(res)=>{
+
+
+        
+          if(res.success){
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: res.success, life: 3000 });
+
+          }
+          else if(res.error){
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error, life: 3000 });
+
+          }
+          // console.log(res)
+        // location.reload()
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error inesperado.', life: 3000 });
+        }
+        
+      })
+    }
+    }
+
+
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    }
+
+    // console.log(data)
 }

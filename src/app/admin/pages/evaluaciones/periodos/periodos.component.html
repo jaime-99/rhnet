@@ -39,7 +39,7 @@
 
 
 <form [formGroup]="this.formPeriodos">
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -58,6 +58,22 @@
                         <label for="">Fecha Fin </label>
                         <input formControlName="fecha_fin" class="form-input" type="date">
                     </div>
+                    <div class="col-12 mb-3">
+                      <div class="form-check form-switch">
+                          <input (change)="toggleSelect()" formControlName="es_general" class="form-check-input" type="checkbox" id="switchGeneral">
+                          <label class="form-check-label" for="switchGeneral">Activar para todos los usuarios</label>
+                      </div>
+
+                      <div *ngIf="!formPeriodos.get('es_general')?.value">
+                        <label>Asignar a usuarios específicos:</label>
+                      
+                          <p-multiselect   optionValue="usuario_id" [options]="usuarios"   formControlName="usuarios_seleccionados" optionLabel="usuario_nombre" placeholder="Seleccionar usuarios" [maxSelectedLabels]="3" styleClass="w-full md:w-80" />
+
+      
+                      </div>
+                      </div>
+                  
+                  
                     <div class="col-12 mb-3">
                         <div class="form-check form-switch">
                             <input formControlName="activo" class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" checked>

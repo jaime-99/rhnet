@@ -246,12 +246,19 @@ verPDF() {
         this.verComentarios()
 
        // Mandar correo que respondio el comentario la que creo la evaluacion 
-        const data = {
-          to: this.usuarioEvaluado.data.usuario_correo,
-          subject: `Comentario de la Evaluacion enviada por ${this.evaluacion.nombre_evaluador} `,
-          body: `Comentario de la Evaluacion con el ID ${this.evaluacion.id} enviada por ${this.evaluacion.nombre_evaluador}.\n\nEntra a https://rhnet.cgpgroup.mx para ver detalles`
-
-        }
+       const data = {
+        to: this.usuarioEvaluado.data.usuario_correo,
+        subject: `Nuevo comentario en tu evaluación por parte de ${this.evaluacion.nombre_evaluador}`,
+        body: `Estimado(a),
+      
+      Se ha agregado un comentario a la evaluación con ID ${this.evaluacion.id}, enviada por ${this.evaluacion.nombre_evaluador}.
+      
+      Puedes acceder a la plataforma para consultar los detalles: https://rhnet.cgpgroup.mx
+      
+      Atentamente,  
+      Sistema de Evaluación - CGP Group`,
+      };
+      
         this.capacitacionoService.enviarCorreoItickets(data).subscribe({
           next:(res)=>{
             console.log('se envia correo')

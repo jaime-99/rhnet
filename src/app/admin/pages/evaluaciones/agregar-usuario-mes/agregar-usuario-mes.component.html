@@ -2,7 +2,7 @@
 <div class="container">
     <h2 class="text-center">  Usuario a un Periodo</h2>
   
-    <div class="row">
+    <!-- <div class="row">
         <div class="col">
             <label>Usuario:</label>
             <select class="form-select"   form-select-sm  [(ngModel)]="usuarioSeleccionado">
@@ -27,7 +27,7 @@
            <p-toast/>
 
         </div>
-    </div>
+    </div> -->
 
   
     <hr />
@@ -58,7 +58,7 @@
       </div> -->
       
 
-      <div class="card">
+      <!-- <div class="card">
         <p-tabs [(value)]="selectedMonth">
           <p-tablist>
             <p-tab *ngFor="let tab of tabs; trackBy: trackByTab" [value]="tab.value">{{ tab.title }}</p-tab>
@@ -83,17 +83,13 @@
                     <td>{{ usuario.mes }} {{ usuario.anio }}</td>
                     <td>{{ usuario.fecha_inicio | date }}</td>
                     <td>{{ usuario.fecha_fin | date }}</td>
-                    <!-- <td>{{ usuario.activo === '1' ? 'Sí' : 'No' }}</td> -->
                     <td>
                       <p-tag 
                         [severity]="usuario.activo == 1 ? 'success' : 'danger'" 
                         [value]="usuario.activo == 1 ? 'Activo' : 'Inactivo'">
                       </p-tag>
-                      <!-- {{usuario?.activo}} -->
                     </td>
-                    <!-- <button class="btn btn-success" (click)="cambiarEstado(usuario)">
-                        {{ usuario.activo === '1' ? 'Desactivar' : 'Activar' }}
-                      </button> -->
+                   
                       <td>
                         <button (click)="cambiarEstado(usuario.id_usuarioPeriodo  , usuario.activo==1 ? 0:1)"
                         class="btn" 
@@ -111,5 +107,5 @@
             </p-tabpanel>
           </p-tabpanels>
         </p-tabs>
-      </div>
+      </div> -->
       

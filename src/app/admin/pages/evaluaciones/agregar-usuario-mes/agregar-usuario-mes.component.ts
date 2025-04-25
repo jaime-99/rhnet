@@ -47,10 +47,10 @@ export class AgregarUsuarioMesComponent implements OnInit {
       content: [] // luego llenamos con los usuarios
     }));
 
-    this.cargarUsuariosPorMes();
+    // this.cargarUsuariosPorMes();
 
-    this.obtenerUsuarios();
-    this.cargarPeriodos();
+    // this.obtenerUsuarios();
+    // this.cargarPeriodos();
 
 
   }
@@ -125,35 +125,35 @@ cambiarEstado(id:string,activo:number){
 
 }
 
-asignarUsuario() {
-  if (this.usuarioSeleccionado && this.periodoSeleccionado) {
-    // Aquí va la lógica para asignar el usuario al periodo
-    // console.log(`Asignando usuario ${this.usuarioSeleccionado} al periodo ${this.periodoSeleccionado}`);
-    this.adminService.agregarUsuarioAPeriodo(Number(this.usuarioSeleccionado), Number(this.periodoSeleccionado)).subscribe({
-      next:(res)=>{
-        if(res.error){
-          this.messageService.add({ severity: 'warn', summary: 'Error', detail: res.error });
-          this.cargarUsuariosPorMes();
-        }
-        else if(res.success){
-          this.messageService.add({ severity: 'success', summary: 'Exito', detail: res.success });
-          this.cargarUsuariosPorMes();
-        }
-      },
-      error:(err)=>{
+// asignarUsuario() {
+//   if (this.usuarioSeleccionado && this.periodoSeleccionado) {
+//     // Aquí va la lógica para asignar el usuario al periodo
+//     // console.log(`Asignando usuario ${this.usuarioSeleccionado} al periodo ${this.periodoSeleccionado}`);
+//     this.adminService.agregarUsuarioAPeriodo(Number(this.usuarioSeleccionado), Number(this.periodoSeleccionado)).subscribe({
+//       next:(res)=>{
+//         if(res.error){
+//           this.messageService.add({ severity: 'warn', summary: 'Error', detail: res.error });
+//           this.cargarUsuariosPorMes();
+//         }
+//         else if(res.success){
+//           this.messageService.add({ severity: 'success', summary: 'Exito', detail: res.success });
+//           this.cargarUsuariosPorMes();
+//         }
+//       },
+//       error:(err)=>{
 
-        this.messageService.add({ severity: 'warn', summary: 'Error', detail: err });
+//         this.messageService.add({ severity: 'warn', summary: 'Error', detail: err });
 
 
-      },
-      complete:()=>{
+//       },
+//       complete:()=>{
 
-      }
-    })
-  } else {
-    // console.log('Faltan campos por seleccionar');
-  }
-}
+//       }
+//     })
+//   } else {
+//     // console.log('Faltan campos por seleccionar');
+//   }
+// }
 
 
 }

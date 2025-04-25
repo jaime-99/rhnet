@@ -1,17 +1,21 @@
 
 
-<h4 class="text-center">Evaluaciones Completadas</h4>
+<h4 *ngIf="this.loading" class="text-center">Evaluaciones Completadas</h4>
 
-
-
-<div *ngIf="this.evaluaciones.length==0" class="alert">
-    Aun no hay evaluaciones completadas
+<div class="d-flex justify-content-center">
+  <div *ngIf="!loading" class="spinner-grow text-info" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
 </div>
 
+<!-- <div *ngIf="!this.loading && this.evaluaciones.length==0" class="alert">
+    Aun no hay evaluaciones completadas
+</div> -->
 
 
 
-<p-table *ngIf="this.evaluaciones.length>=1"
+
+<p-table *ngIf="this.loading"
     [value]="evaluaciones"
     [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"

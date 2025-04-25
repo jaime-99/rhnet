@@ -112,8 +112,8 @@ export class CapacitacionesService {
   }
 
   // obtener los periodos de evaluacion 
-  obtenerPeriodosEvaluacion():Observable<any>{
-    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtener-periodos-evaluacion.php`
+  obtenerPeriodosEvaluacion(usuario_id:number):Observable<any>{
+    let url = `https://magna.cgpgroup.mx/rhnet/endpoints/capacitaciones/obtener-periodos-evaluacion.php?usuario_id=${usuario_id}`
     return this.http.get<any>(url)
   }
 

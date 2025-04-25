@@ -17,6 +17,7 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-ver-evaluaciones',
@@ -45,6 +46,7 @@ export class VerEvaluacionesComponent implements OnInit {
     // agrega los demás meses
   ];
   ciudades: any = [];
+  loading: boolean = false;
   
 
 
@@ -57,9 +59,14 @@ export class VerEvaluacionesComponent implements OnInit {
 
 
   obtenerEvaluaciones(){
-    this.capacitacionesService.obtenerTodasLasEvaluaciones().subscribe({
+    this.capacitacionesService.obtenerTodasLasEvaluaciones().pipe(
+      delay(400),
+    ).subscribe({
       next:(res)=>{
         this.evaluaciones = res
+        if(this.evaluaciones.length>0){
+          this.loading = true;
+        }
         // console.log(this.evaluaciones.length)
       }
     })

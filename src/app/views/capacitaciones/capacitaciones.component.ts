@@ -30,7 +30,7 @@ export class CapacitacionesComponent implements OnInit {
     this.usuario = JSON.parse(usuarioData);
     this.obtenerMes()
     this.obtenerEvaluacionesPorUsuario();
-    this.obtenerPeriodosValidos();
+    this.obtenerPeriodosValidos(this.usuario.id);
 
   }
 
@@ -74,13 +74,14 @@ export class CapacitacionesComponent implements OnInit {
     });
   }
 
-  obtenerPeriodosValidos() {
-    this.capacitacionesService.obtenerPeriodosEvaluacion().subscribe((periodos) => {
+  obtenerPeriodosValidos(usuarioId:number) {
+    console.log(usuarioId)
+    this.capacitacionesService.obtenerPeriodosEvaluacion(Number(usuarioId)).subscribe((periodos) => {
       this.periodosValidos = periodos;
       const hoy = new Date();
       // console.log(hoy)
       // Filtramos los meses que estén dentro del periodo válido
-      console.log('meses habilitados', this.periodosValidos)
+      // console.log('meses habilitados', this.periodosValidos)
       this.mesesHabilitados = periodos
         .filter((p: any) => {
           const inicio = new Date(p.fecha_inicio);
@@ -91,7 +92,7 @@ export class CapacitacionesComponent implements OnInit {
         })
         .map((p: any) => p.mes.toLowerCase()); // para comparar con tu array `meses`
   
-      console.log(this.mesesHabilitados);  // Verifica los meses habilitados
+      console.log('meses habilitados',this.mesesHabilitados);  // Verifica los meses habilitados
     });
   }
   

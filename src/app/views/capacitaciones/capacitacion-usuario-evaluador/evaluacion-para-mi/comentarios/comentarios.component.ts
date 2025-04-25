@@ -56,7 +56,7 @@ export class ComentariosComponent implements OnInit {
         this.loading = false;
         this.obtenerDatosUsuario()
         // console.log(this.usuario.id)
-        console.log('comentarios',this.comentarios)
+        // console.log('comentarios',this.comentarios)
 
         this.comentarios.forEach((comentario: any) => {
           if (comentario.respondio_id) {
@@ -90,6 +90,9 @@ export class ComentariosComponent implements OnInit {
       return;
     }
 
+    console.log('datos del usuario,',this.datosUsuario)
+    // return;
+
     const nuevaRespuesta = {
       evaluacion_id: this.evaluacion.id,
       usuario_id: this.usuario.id, // Reemplaza con el usuario autenticado
@@ -104,14 +107,21 @@ export class ComentariosComponent implements OnInit {
         //todo enviar correo si se contesto
         
         const data = {
-          to:this.datosUsuario.data.usuario_correo,
-          subject:`Comentario de Evaluacion realizado por ${this.datosUsuario.data.usuario_nombre}`,
-          body:`Han comentado la Evaluacion realizada por ${this.datosUsuario.data.usuario_nombre} con el ID ${this.evaluacion.id}. \n
-          Entra a https://rhnet.cgpgroup.mx para verlos  `,
-        }
+          to: this.datosUsuario.data.usuario_correo,
+          subject: `Nuevo comentario en evaluación por parte de ${this.datosUsuario.data.usuario_nombre}`,
+          body: `Estimado(a),
+        
+        La persona ${this.datosUsuario.data.usuario_nombre} ha realizado un comentario sobre la evaluación con ID ${this.evaluacion.id}, correspondiente al mes de ${this.evaluacion.mes_evaluacion}.
+        
+        Por favor, accede a la plataforma para consultar el comentario: https://rhnet.cgpgroup.mx
+        
+        Atentamente,  
+        Sistema de Evaluación - RHNet`,
+        };
+        
 
         this.capacitacionesService.enviarCorreoItickets(data).subscribe(()=>{
-          
+
         })
         // console.log(res)
         // location.reload();

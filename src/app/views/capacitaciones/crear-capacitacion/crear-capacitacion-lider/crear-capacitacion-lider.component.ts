@@ -201,14 +201,28 @@ const nombreArchivo = `Evaluacion-lider-${this.datosEvaluacion.data.mes_evaluaci
 
 
   enviarCorreo(){
-    const data = {
-      to:this.datosCompletosUsuarioAEvaluar.correo,
-      // to:'sistemas@cgpgroup.mx',
-      subject:`Evaluacion del mes ${this.datosEvaluacion.data.mes_evaluacion} `,
-      body:`Hola ${this.datosEvaluacion.evalua_a} te han Evaluado en el mes de ${this.datosEvaluacion.data.mes_evaluacion}
-      entra a https://rhnet.cgpgroup.mx para ver los detalles`,
+    // const data = {
+    //   to:this.datosCompletosUsuarioAEvaluar.correo,
+    //   // to:'sistemas@cgpgroup.mx',
+    //   subject:`Evaluacion del mes ${this.datosEvaluacion.data.mes_evaluacion} `,
+    //   body:`Hola ${this.datosEvaluacion.evalua_a} te han Evaluado en el mes de ${this.datosEvaluacion.data.mes_evaluacion}
+    //   entra a https://rhnet.cgpgroup.mx para ver los detalles`,
 
-    }
+    // }
+    const data = {
+      to: this.datosCompletosUsuarioAEvaluar.correo,
+      // to: 'sistemas@cgpgroup.mx',
+      subject: `Evaluación correspondiente al mes de ${this.datosEvaluacion.data.mes_evaluacion}`,
+      body: `Estimado(a) ${this.datosEvaluacion.evalua_a},
+    
+    Has sido evaluado(a) en el mes de ${this.datosEvaluacion.data.mes_evaluacion}.
+    
+    Por favor, ingresa a la plataforma para consultar los detalles: https://rhnet.cgpgroup.mx
+    
+    Atentamente,  
+    Sistema de Evaluación - CGP Group`,
+    };
+    
     this.capacitacionesService.enviarCorreoItickets(data).subscribe(()=>{
 
     })

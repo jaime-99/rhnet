@@ -1,23 +1,27 @@
-<div class="container mt-2">
-    <h2>Crear Nuevo Usuario</h2>
+<div class="container mt-1">
+    <h2 class="text-center">Crear Nuevo Usuario</h2>
 
     <div class="card">
         <div class="card-body">
-
-        
-
-    
     <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">  
       <!-- Nombre -->
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input id="nombre" type="text" class="form-control" formControlName="nombre">
-        <div *ngIf="createUserForm.get('nombre')?.invalid && createUserForm.get('nombre')?.touched" class="text-danger">
-          El nombre es obligatorio.
+
+
+      <div class="row">
+        <div class="col-md-6">
+          
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input id="nombre" type="text" class="form-control" formControlName="nombre">
+            <div *ngIf="createUserForm.get('nombre')?.invalid && createUserForm.get('nombre')?.touched" class="text-danger">
+              El nombre es obligatorio.
+            </div>
+          </div>
         </div>
-      </div>
   
       <!-- Apellido Paterno -->
+      <div class="col-md-6">
+
       <div class="mb-3">
         <label for="apellido_paterno" class="form-label">Apellido Paterno</label>
         <input id="apellido_paterno" type="text" class="form-control" formControlName="apellido_paterno">
@@ -25,103 +29,146 @@
           El apellido paterno es obligatorio.
         </div>
       </div>
+      </div>
+
   
       <!-- Apellido Materno -->
-      <div class="mb-3">
-        <label for="apellido_materno" class="form-label">Apellido Materno</label>
-        <input id="apellido_materno" type="text" class="form-control" formControlName="apellido_materno">
-        <div *ngIf="createUserForm.get('apellido_materno')?.invalid && createUserForm.get('apellido_materno')?.touched" class="text-danger">
-          El apellido materno es obligatorio.
-        </div>
-      </div>
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="apellido_materno" class="form-label">Apellido Materno</label>
+           <input id="apellido_materno" type="text" class="form-control" formControlName="apellido_materno">
+           <div *ngIf="createUserForm.get('apellido_materno')?.invalid && createUserForm.get('apellido_materno')?.touched" class="text-danger">
+             El apellido materno es obligatorio.
+           </div>
+         </div>
+       </div>
+
+
   
       <!-- Correo -->
-      <div class="mb-3">
-        <label for="correo" class="form-label">Correo</label>
-        <input id="correo" type="email" class="form-control" formControlName="correo">
-        <div *ngIf="createUserForm.get('correo')?.invalid && createUserForm.get('correo')?.touched" class="text-danger">
-          Debe ingresar un usuario.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="usuario" class="form-label">Usuario</label>
-        <input id="usuario" type="usuario" class="form-control" formControlName="usuario">
-        <div *ngIf="createUserForm.get('usuario')?.invalid && createUserForm.get('usuario')?.touched" class="text-danger">
-          Debe ingresar un usuario válido.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <input id="password" type="password" class="form-control" formControlName="password">
-        <div *ngIf="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched" class="text-danger">
-          Debe ingresar un valor válido.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="ciudad" class="form-label">Ciudad</label>
-        <select id="ciudad" class="form-control" formControlName="ciudad">
-            <option value="" disabled selected>Seleccione una Ciudad</option>
-            <option *ngFor="let ciudad of ciudades"
-             [value]="ciudad.id"> {{ciudad?.nombre}} 
-          </option>
-          </select>
-        <div *ngIf="createUserForm.get('ciudad')?.invalid && createUserForm.get('ciudad')?.touched" class="text-danger">
-          Debe ingresar la ciudad.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="empresa" class="form-label">Empresa</label>
-        <select id="empresa" class="form-control" formControlName="empresa">
-            <option value="" disabled selected>Seleccione una Empresa</option>
-            <option *ngFor="let empresa of empresas"
-             [value]="empresa.id"> {{empresa?.nombre}} 
-          </option>
-          </select>
-        <div *ngIf="createUserForm.get('empresa')?.invalid && createUserForm.get('empresa')?.touched" class="text-danger">
-          Debe ingresar la empresa.
-        </div>
-      </div>
+       <div class="col-md-6">
+         <div class="mb-3">
+           <label for="correo" class="form-label">Correo</label>
+           <input id="correo" type="email" class="form-control" formControlName="correo">
+           <div *ngIf="createUserForm.get('correo')?.invalid && createUserForm.get('correo')?.touched" class="text-danger">
+             Debe ingresar un usuario.
+           </div>
+         </div>
+
+       </div>
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="usuario" class="form-label">Usuario</label>
+           <input id="usuario" type="usuario" class="form-control" formControlName="usuario">
+           <div *ngIf="createUserForm.get('usuario')?.invalid && createUserForm.get('usuario')?.touched" class="text-danger">
+             Debe ingresar un usuario válido.
+           </div>
+         </div>
+       </div>
+
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="password" class="form-label">Contraseña</label>
+           <!-- <input id="password" type="password" class="form-control" formControlName="password"> -->
+           <div class="input-group">
+             <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" formControlName="password">
+             <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+               {{ showPassword ? 'Ocultar' : 'Ver' }}
+             </button>
+           </div>
+           <div *ngIf="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched" class="text-danger">
+             Debe ingresar un valor válido.
+           </div>
+         </div>
+       </div>
+
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="ciudad" class="form-label">Ciudad</label>
+           <select id="ciudad" class="form-control" formControlName="ciudad">
+               <option value="" disabled selected>Seleccione una Ciudad</option>
+               <option *ngFor="let ciudad of ciudades"
+                [value]="ciudad.id"> {{ciudad?.nombre}} 
+             </option>
+             </select>
+           <div *ngIf="createUserForm.get('ciudad')?.invalid && createUserForm.get('ciudad')?.touched" class="text-danger">
+             Debe ingresar la ciudad.
+           </div>
+         </div>
+       </div>
+
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="empresa" class="form-label">Empresa</label>
+           <select id="empresa" class="form-control" formControlName="empresa">
+               <option value="" disabled selected>Seleccione una Empresa</option>
+               <option *ngFor="let empresa of empresas"
+                [value]="empresa.id"> {{empresa?.nombre}} 
+             </option>
+             </select>
+           <div *ngIf="createUserForm.get('empresa')?.invalid && createUserForm.get('empresa')?.touched" class="text-danger">
+             Debe ingresar la empresa.
+           </div>
+         </div>
+       </div>
   
       <!-- Departamento -->
-      <div class="mb-3">
-        <label for="departamento_id" class="form-label">Departamento</label>
-        <select (change)="onDepartamentoChange($event)" id="departamento_id" class="form-control" formControlName="departamento_id">
-          <option value="" disabled selected>Seleccione un Departamento</option>
-          <option *ngFor="let departamento of departamentos"
-           [value]="departamento.id"> {{departamento?.nombre}} 
-        </option>
-          <!-- Agrega más opciones según los departamentos disponibles -->
-        </select>
-        <div *ngIf="createUserForm.get('departamento_id')?.invalid && createUserForm.get('departamento_id')?.touched" class="text-danger">
-          El departamento es obligatorio.
-        </div>
-      </div>
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="departamento_id" class="form-label">Departamento</label>
+           <select (change)="onDepartamentoChange($event)" id="departamento_id" class="form-control" formControlName="departamento_id">
+             <option value="" disabled selected>Seleccione un Departamento</option>
+             <option *ngFor="let departamento of departamentos"
+              [value]="departamento.id"> {{departamento?.nombre}} 
+           </option>
+             <!-- Agrega más opciones según los departamentos disponibles -->
+           </select>
+           <div *ngIf="createUserForm.get('departamento_id')?.invalid && createUserForm.get('departamento_id')?.touched" class="text-danger">
+             El departamento es obligatorio.
+           </div>
+         </div>
+       </div>
   
       <!-- Puesto -->
-      <div class="mb-3">
-        <label for="puesto_id" class="form-label">Puesto</label>
-        <select id="puesto_id" class="form-control" formControlName="puesto_id">
-          <option value="" disabled selected>Seleccione un Puesto</option>
-          <option *ngFor="let puesto of puestos" [value]="puesto.id">{{ puesto.nombre }}</option>
-          <!-- Agrega más opciones según los puestos disponibles -->
-        </select>
-        <div *ngIf="createUserForm.get('puesto_id')?.invalid && createUserForm.get('puesto_id')?.touched" class="text-danger">
-          El puesto es obligatorio.
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="jefe_id" class="form-label">Jefe Directo</label>
-        <select id="jefe_id" class="form-control" formControlName="jefe_id">
-          <option value="" disabled selected>Seleccione un Jefe Directo</option>
-          <option *ngFor="let usuario of usuarios" [value]="usuario.usuario_id">{{ usuario.usuario_nombre}}</option> 
-           <!-- Agrega más opciones según los puestos disponibles -->
-        </select>
-        <div *ngIf="createUserForm.get('jefe_id')?.invalid && createUserForm.get('jefe_id')?.touched" class="text-danger">
-          El jefe  es obligatorio.
-        </div>
-      </div>
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="puesto_id" class="form-label">Puesto</label>
+           <select id="puesto_id" class="form-control" formControlName="puesto_id">
+             <option value="" disabled selected>Seleccione un Puesto</option>
+             <option *ngFor="let puesto of puestos" [value]="puesto.id">{{ puesto.nombre }}</option>
+             <!-- Agrega más opciones según los puestos disponibles -->
+           </select>
+           <div *ngIf="createUserForm.get('puesto_id')?.invalid && createUserForm.get('puesto_id')?.touched" class="text-danger">
+             El puesto es obligatorio.
+           </div>
+         </div>
+       </div>
+
+       <div class="col-md-6">
+
+         <div class="mb-3">
+           <label for="jefe_id" class="form-label">Jefe Directo</label>
+           <select id="jefe_id" class="form-control" formControlName="jefe_id">
+             <option value="" disabled selected>Seleccione un Jefe Directo</option>
+             <option *ngFor="let usuario of usuarios" [value]="usuario.usuario_id">{{ usuario.usuario_nombre}}</option> 
+              <!-- Agrega más opciones según los puestos disponibles -->
+           </select>
+           <div *ngIf="createUserForm.get('jefe_id')?.invalid && createUserForm.get('jefe_id')?.touched" class="text-danger">
+             El jefe  es obligatorio.
+           </div>
+         </div>
+       </div>
+       </div>
   
-      <button type="submit" class="btn btn-primary">Crear Usuario</button>
+      <button type="submit" style="background-color: #0ab4df; border-color: #0ab4df;" [disabled]="createUserForm.invalid" class="btn btn-primary">Crear Usuario</button>
+      <p-toast />
     </form>
     </div>
     </div>
