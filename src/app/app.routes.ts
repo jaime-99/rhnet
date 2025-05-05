@@ -32,6 +32,10 @@ export const routes: Routes = [
         path: 'vacaciones',
         loadChildren: () => import('./views/vacaciones/routes').then((m)=>m.routes)
       },
+      {
+        path: 'capacitaciones',
+        loadChildren: () => import('./views/capacitaciones-2/routes').then((m)=>m.routes)
+      },
       // {
       //   path: 'base',
       //   loadChildren: () => import('./views/base/routes').then((m) => m.routes)
@@ -79,7 +83,8 @@ export const routes: Routes = [
         loadChildren: () => import('./admin/pages/dashboard/routes').then((m) => m.routes)
       },
       { path: 'usuarios', loadChildren: () => import('./admin/pages/usuarios/routes').then(m => m.routes) },
-      { path: 'evaluaciones', loadChildren: () => import('./admin/pages/evaluaciones/routes').then(m => m.routes) }
+      { path: 'evaluaciones', loadChildren: () => import('./admin/pages/evaluaciones/routes').then(m => m.routes) },
+      { path: 'capacitaciones', loadChildren: () => import('./admin/pages/capacitaciones/routes').then(m => m.routes) }
     ]
   },
   {

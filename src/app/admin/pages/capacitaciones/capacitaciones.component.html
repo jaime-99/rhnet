@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Avances Capacitación CGPowers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .avance-recibido {
+      background-color: lightgreen;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+    }
+    .avance-no-recibido {
+      background-color: crimson;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-weight: bold;
+    }
+    .vacaciones {
+      font-size: 0.9rem;
+      color: darkred;
+      font-weight: bold;
+    }
+    .curso-label {
+      border-radius: 20px;
+      padding: 5px 15px;
+      display: inline-block;
+      margin: 5px;
+    }
+    .curso1 { background-color: hotpink; color: white; }
+    .curso2 { background-color: fuchsia; color: white; }
+    .curso3 { background-color: yellowgreen; }
+    .curso4 { background-color: deepskyblue; color: white; }
+    .curso5 { background-color: darkorange; color: white; }
+  </style>
+</head>
+<body class="container py-4">
+  <h2 class="text-center mb-4">AVANCES CAPACITACIÓN<br><strong>CGPOWERS</strong></h2>
+
+  <table class="table table-bordered text-center align-middle">
+    <thead class="table-primary">
+      <tr>
+        <!-- <th>RH</th> -->
+        <th>
+            <select [(ngModel)]="departamentoSeleccionado" (change)="filtrarUsuarios()" class="form-select form-select-sm">
+              <option [ngValue]="null">-- Departamento --</option>
+              <option *ngFor="let depto of departamentos" [ngValue]="depto.id">
+                {{ depto.nombre }}
+              </option>
+            </select>
+          </th>
+          
+        <th>05 Mar</th>
+        <th>12 Mar</th>
+        <th>19 Mar</th>
+        <th>26 Mar</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let usuario of usuariosFiltrados">
+            <td>{{ usuario.usuario_nombre }}</td>
+            <!-- <td><div class="avance-no-recibido">X</div></td> -->
+            <td>
+                <button class="avance-no-recibido btn p-0 border-0" (click)="abrirModal(usuario)">
+                  X
+                </button>
+              </td>
+            <td><div class="avance-no-recibido">X</div></td>
+            <td><div class="avance-recibido">✓</div></td>
+            <td><div class="avance-no-recibido">X</div></td>
+          </tr>
+          
+      <!-- <tr>
+        <td>Claudia Melisa Garcia Urrieta</td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td></td>
+        <td></td>
+      </tr> -->
+      <!-- <tr>
+        <td>Imelda Maricruz Patlán López</td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td class="vacaciones">N/A<br>VACACIONES</td>
+        <td></td>
+        <td></td>
+      </tr> -->
+      <!-- <tr>
+        <td>Verónica del Carmen Macías Hernández</td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-recibido">✓</div></td>
+        <td><div class="avance-no-recibido">X</div></td>
+        <td></td>
+        <td></td>
+      </tr> -->
+    </tbody>
+  </table>
+
+  <div class="text-center mb-4">
+    <span class="curso-label curso1">ADMINISTRACIÓN DE LA CAPACITACIÓN Y DESARROLLO DE LOS RECURSOS HUMANOS (PROCADIST)</span>
+    <span class="curso-label curso2">ONBOARDING Y ROTACIÓN 0 (ACADEMY)</span>
+    <span class="curso-label curso3">ACTUALIZACIÓN PARA LA REFORMA LABORAL (STPS)</span>
+    <span class="curso-label curso4">CURSO DE DESARROLLO DEL TALENTO HUMANO EDUTIN</span>
+    <span class="curso-label curso5">DERECHO LABORAL EDUTIN</span>
+  </div>
+
+  <div class="text-center">
+    <div class="d-inline-block avance-recibido me-2">✓</div> AVANCE RECIBIDO
+    <div class="d-inline-block avance-no-recibido mx-2">X</div> AVANCE NO RECIBIDO
+  </div>
+
+
+
+
+
+
+  <div class="modal fade" id="opcionesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Opciones para {{ usuarioSeleccionado?.usuario_nombre }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Aquí tus opciones -->
+           
+          <button class="btn btn-success w-100 mb-2">Marcar como Recibido</button>
+          <button class="btn btn-danger w-100">Eliminar Avance</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+ 
+</body>
+</html>

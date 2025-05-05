@@ -12,7 +12,16 @@
     Aun no hay evaluaciones completadas
 </div> -->
 
+<p-tabs value="0">
+  <p-tablist>
+      <p-tab value="0">Evaluaciones Individuales</p-tab>
+      <p-tab value="1">Evaluaciones Bimestrales</p-tab>
 
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+
+    
 
 
 <p-table *ngIf="this.loading"
@@ -151,4 +160,15 @@
         </ng-template>
 
 </p-table>
+
+</p-tabpanel>
+
+<p-tabpanel value="1">
+
+  <app-evaluaciones-bimestrales></app-evaluaciones-bimestrales>
+
+
+  </p-tabpanel>
+
+  </p-tabpanels>
 <p-toast />

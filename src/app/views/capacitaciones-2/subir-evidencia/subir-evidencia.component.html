@@ -1,0 +1,90 @@
+
+
+
+
+    <!-- <div class="row">
+    
+        <div class="col-6">
+            <label for="formFile" class="form-label">Subir Archivo (jpg o pdf)</label>
+            <input (change)="onFileSelected($event)" class="form-control" type="file" id="formFile">
+        </div>
+    
+    </div> -->
+
+    <div *ngIf="evidenciaActual?.length<1" class="div">
+
+    <!-- <div *ngIf="!loading && !cargando" class="card shadow-lg p-4"> -->
+      <div class="card shadow-lg p-4" style=" margin: auto;  border-radius: 15px;">
+
+
+        <div class="card-body">
+
+            <h4 class="card-title text-center text-primary mb-3">Subida de Evidencia de Capacitacion</h4>
+            <p>Capacitacion: <strong>Curso de Excel</strong>  </p>
+            <p>Fecha Actual: <strong> {{fechaActual | date:'dd/MM/yyyy'}}  </strong>  </p>
+            <p>Fecha a la que pertenece la Evidencia: <strong> {{fecha | date:'dd/MM/yyyy'}}  </strong>  </p>
+            <div class="mb-3">
+                <label for="formFile" class="form-label fw-bold">Seleccionar Archivo (PDF,JPG)</label>
+                <input (change)="onFileSelected($event)" class="form-control" type="file" id="formFile">
+            </div>  
+
+            <!-- <button type="button" (click)="subirArchivo()" class="btn btn-success">Subir Evidencia</button> -->
+            <div class="d-grid">
+              <button type="button" type="pdf,jpg" (click)="subirArchivo()" class="btn btn-success btn-lg">Subir Evidencia</button>
+            </div>
+        </div>
+        </div>
+
+        </div>
+
+        <p-toast />
+        <div *ngIf="cargando" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+
+
+
+
+        <div *ngIf="evidenciaActual?.length>0"  class="div">
+        <div class="alert alert-success">
+            ya has Subido la Evaluacion de este dia 
+        </div>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Fecha de subida : {{this.evidenciaActual[0]?.fecha_subida | date:'dd/MM/yyyy'}} </li>
+            <li class="list-group-item">Fecha de Capacitacion : {{this.evidenciaActual[0]?.fecha_capacitacion | date:'dd/MM/yyyy'}} </li>
+            <li class="list-group-item">Nombre de Capacitacion : {{this.evidenciaActual[0]?.nombre_capacitacion}}
+            <li class="list-group-item">Archivo Subido : <span> <button type="button" (click)="abrirModal()" class="btn btn-success">Ver Evidencia</button>  </span>
+          </ul> 
+        </div>
+
+
+
+        <!-- Modal para ver la evidencia -->
+<div class="modal fade" id="evidenciaModal" tabindex="-1" aria-labelledby="evidenciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- modal grande -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="evidenciaModalLabel">Evidencia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body text-center">
+  
+          <!-- Mostrar imagen o PDF -->
+          <ng-container *ngIf="esImagen; else mostrarPDF">
+            <img [src]="archivoUrl" class="img-fluid" alt="Evidencia" />
+          </ng-container>
+  
+          <ng-template #mostrarPDF>
+            <iframe [src]="archivoUrl" width="100%" height="500px"></iframe>
+          </ng-template>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+        

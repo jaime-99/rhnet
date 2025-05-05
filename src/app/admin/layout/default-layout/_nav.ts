@@ -53,6 +53,23 @@ export const navItems: INavData[] = [
         },
       ]
     },
+    {
+      name: 'Capacitaciones',
+      url: '/capacitaciones',
+      iconComponent: { name: 'cil-notes' },
+      children: [
+        {
+          name: 'Todos',
+          url: '/admin/capacitaciones/capacitaciones',
+          icon: 'nav-icon-bullet'
+        },
+        {
+          name: 'Asignar',
+          url: '/admin/capacitaciones/asignar-cursos',
+          icon: 'nav-icon-bullet'
+        },
+      ]
+    },
   // {
   //   name: 'Typography',
   //   url: '/theme/typography',

@@ -18,10 +18,15 @@ import autoTable from 'jspdf-autotable';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { delay } from 'rxjs';
+import { TabsModule } from 'primeng/tabs';
+import { EvaluacionesBimestralesComponent} from './evaluaciones-bimestrales/evaluaciones-bimestrales.component'
 
 @Component({
   selector: 'app-ver-evaluaciones',
-  imports: [TableModule, CommonModule,ToastModule,FormsModule,DropdownModule, ButtonModule, TagModule,SelectModule,MultiSelectModule , InputTextModule,IconFieldModule, InputIconModule],
+  imports: [TableModule, CommonModule,ToastModule,
+    FormsModule,DropdownModule, ButtonModule,
+     TagModule,SelectModule,MultiSelectModule , InputTextModule,TabsModule,
+     IconFieldModule, InputIconModule, EvaluacionesBimestralesComponent],
   templateUrl: './ver-evaluaciones.component.html',
   styleUrl: './ver-evaluaciones.component.scss'
 })

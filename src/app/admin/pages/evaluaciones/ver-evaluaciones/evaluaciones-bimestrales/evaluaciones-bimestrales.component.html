@@ -1,0 +1,164 @@
+<p>evaluaciones-bimestrales works!</p>
+
+
+
+
+<p-table
+    [value]="usuarios"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    #dt1
+    [globalFilterFields]="['usuario_nombre', 'usuario_id']"
+    size="small"
+    >
+
+   
+    <ng-template #caption>
+        <div class="container mb-3">
+          <div class="row align-items-center">
+      
+            <!-- Selector de mes -->
+            <div class="col-md-3 mb-2">
+              <!-- <p-select 
+                [options]="meses" 
+                [(ngModel)]="mesSeleccionado" 
+                placeholder="Filtrar por mes" 
+                (onChange)="dt1.filter(mesSeleccionado, 'mes_evaluacion', 'contains')" 
+                class="w-100" 
+                optionLabel="label" 
+                optionValue="value"
+                [filter]="true" filterBy="value"
+                [showClear]="true"
+                >
+              </p-select> -->
+            </div>
+            <div class="col-md-3 mb-2">
+              <!-- <p-select 
+                [options]="ciudades" 
+                [(ngModel)]="ciudadSeleccionada" 
+                placeholder="Filtrar por Ciudad" 
+                (onChange)="dt1.filter(ciudadSeleccionada, 'ciudad_evaluado', 'contains')" 
+                class="w-100" 
+                optionLabel="nombre" 
+                optionValue="nombre"
+                [filter]="true" filterBy="nombre"
+                [showClear]="true"
+                >
+              </p-select> -->
+            </div>
+      
+            <!-- Botón de borrar -->
+            <!-- <div class="col-md-2 mb-2">
+              <p-button label="Borrar" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" class="w-100" />
+            </div> -->
+      
+            <!-- Barra de búsqueda -->
+            <!-- <div class="col-md-4 mb-2">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input 
+                  pInputText 
+                  type="text" 
+                  [(ngModel)]="searchValue"  
+                  (input)="dt1.filterGlobal(getInputValue($event), 'contains')" 
+                  placeholder="Buscar palabra" 
+                  class="form-control" />
+              </p-iconfield>
+            </div> -->
+      
+          </div>
+        </div>
+      </ng-template>
+      
+      
+        <ng-template #header>
+            <tr>
+                <th style="width:10%"  pSortableColumn="id" >
+                    ID
+                </th>
+                <!-- <th style="width:10%"  pSortableColumn="fecha_creacion" >
+                    Fecha<p-sortIcon field="fecha_creacion" />
+                </th> -->
+                <th style="width:25%" >
+                    Nombre
+                </th>
+                <th style="width:25%">
+                    Ciudad
+                </th>
+                <th style="width:10%">
+                    Ver Evaluacion Bimestral
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-usuario>
+            <tr>
+                <td>{{ usuario.usuario_id }}</td>
+                <td>{{ usuario.usuario_nombre }}</td>
+                <td>{{ usuario.ciudad_nombre }}</td>
+                <td>
+                     <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="verPDF(usuario)" style="background-color:#0ab4df; border:#0ab4df;" class="btn btn-info btn-small">Evaluacion Bimestral </button> 
+                 </td>
+            </tr>
+        </ng-template>
+
+</p-table>
+
+<p-toast></p-toast>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Evaluaciones Bimestrales</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="list-group">
+                <!-- <a  class="list-group-item list-group-item-action active" aria-current="true">
+                  The current link item
+                </a> -->
+                <!-- <a  class="list-group-item list-group-item-action">Enero - Febrero</a> -->
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Enero - Febrero
+                  </button>
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Marzo - Abril
+                  </button>
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Mayo - Junio
+                  </button>
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Julio - Agosto
+                  </button>
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Septiembre - Octubre
+                  </button>
+                <button (click)="verPDFDoble()" type="button" class="list-group-item list-group-item-action">
+                    Noviembre - Diciembre
+                  </button>
+                <!-- <a lass="list-group-item list-group-item-action disabled" aria-disabled="true">A disabled link item</a> -->
+              </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+        </div>
+      </div>
+    </div>
+  </div>

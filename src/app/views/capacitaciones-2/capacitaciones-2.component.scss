@@ -1,0 +1,28 @@
+::ng-deep .fc-daygrid-day {
+    position: relative;
+  }
+  
+  ::ng-deep .fc-event {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  ::ng-deep .fc-daygrid-day-number {
+    font-weight: bold;
+  }
+  
+
+  ::ng-deep .fc {
+    // background-color: white !important;
+  }
+  
+//   ::ng-deep .fc .fc-button-primary {
+//     background-color: red ;
+//     // border-color;
+//     // color
+//   }
